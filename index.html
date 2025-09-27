@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Battery System Laboratory</title>
+  <!-- 🔹 Font Awesome 불러오기 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: "Noto Sans KR", "Arial", sans-serif;
+      line-height: 1.6;
+      scroll-behavior: smooth;
+      background: 
+        linear-gradient(rgba(245, 245, 245, 0.85), rgba(245, 245, 245, 0.85)),
+        url("https://img.hankyung.com/photo/202405/AA.36677880.1.jpg") no-repeat center/cover;
+    }
+
+    header {
+      background-color: #01022c;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1em 2em;
+    }
+    .logo { font-weight: bold; font-size: 1.5em; }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 1em;
+      position: relative;
+      cursor: pointer;
+    }
+    nav a::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: -3px;
+      width: 0; height: 2px;
+      background: #66ccff;
+      transition: width 0.3s;
+    }
+    nav a:hover::after { width: 100%; }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+                  url("https://cdn.imweb.me/upload/S201903265c99a2aabdcfe/51ae98732c1b6.png") 
+                  no-repeat center/cover;
+      height: 75vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      padding: 2em;
+    }
+    .hero-logo {
+      max-height: 90px;
+      margin-bottom: 1em;
+      opacity: 0.8;
+      animation: fadeInDown 1s ease-out;
+    }
+    .hero h1 { font-size: 2.8em; margin-bottom: 0.3em; animation: fadeInDown 1.2s ease-out; }
+    .hero p { font-size: 1.2em; margin-bottom: 1.5em; animation: fadeInUp 1.5s ease-out; }
+    .hero a {
+      background: #66ccff; color: white;
+      padding: 0.8em 1.5em; border-radius: 30px;
+      text-decoration: none; font-weight: bold;
+      transition: background 0.3s;
+      animation: fadeInUp 1.8s ease-out;
+    }
+    .hero a:hover { background: #3399ff; }
+
+    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+    main { padding: 2em; max-width: 1100px; margin: auto; }
+    h2 { color: #003366; margin-top: 1.5em; text-align: center; }
+
+    /* News Section */
+    #news { margin-top: 3em; }
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: minmax(150px, auto);
+      gap: 1em;
+    }
+    .news-card {
+      color: white;
+      padding: 1.2em;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      transition: transform 0.2s;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      position: relative;
+      overflow: hidden;
+    }
+    .news-card:hover { transform: translateY(-5px); }
+
+    /* 카드별 스타일 */
+    .news-card:nth-child(1) {
+      background: linear-gradient(135deg, #005f99, #3399ff);
+      grid-column: span 2; grid-row: span 2;
+    }
+    .news-card:nth-child(1)::after {
+      content: "";
+      background: url("https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/KAIST_logo.svg/2048px-KAIST_logo.svg.png") no-repeat top right / 350px;
+      opacity: 0.2; 
+      position: absolute;
+      top: 10px; right: 10px;
+      width: 350px; height: 350px;
+      pointer-events: none;
+    }
+    .news-card:nth-child(2) { background: linear-gradient(135deg, #007acc, #66ccff); }
+    .news-card:nth-child(3) { background: linear-gradient(135deg, #3399ff, #99ccff); }
+    .news-card:nth-child(4) { background: linear-gradient(135deg, #004c80, #3399cc); grid-row: span 2; }
+    .news-card:nth-child(5) { background: linear-gradient(135deg, #66b2ff, #99d6ff); }
+
+    .news-date { font-size: 0.85em; opacity: 0.9; }
+    .news-title { font-size: 1.2em; font-weight: bold; margin: 0.3em 0; }
+    .news-desc { font-size: 0.95em; line-height: 1.4; }
+
+    .more-link { margin-top: 1em; text-align: right; }
+    .more-link a { color: #003366; font-weight: bold; text-decoration: none; }
+    .more-link a:hover { text-decoration: underline; }
+
+    footer {
+      background-color: #003366;
+      color: white; text-align: center;
+      padding: 1em; margin-top: 2em;
+    }
+
+    /* 🔹 Research Interests (원형 다이나믹 스타일) */
+    .interest-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr); /* ✅ 4개 한 줄 배치 */
+      justify-items: center;
+      gap: 2em;
+      margin-top: 2em;
+    }
+
+    .interest-circle {
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: white;
+      border: 5px solid #007acc;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+    }
+    .interest-circle i {
+      font-size: 2.5em;
+      margin-bottom: 0.6em;
+      color: #007acc;
+    }
+    .interest-circle h3 {
+      font-size: 1.1em;
+      margin: 0;
+      color: #003366;
+    }
+    .interest-circle:hover {
+      transform: scale(1.15);
+      background: #007acc;
+      color: white;
+    }
+    .interest-circle:hover i,
+    .interest-circle:hover h3 { color: white; }
+
+    /* 🔹 Research 페이지 이동 버튼 */
+    .research-btn {
+      display: block;
+      margin: 2em auto 0;
+      padding: 0.8em 2em;
+      background: #007acc;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 30px;
+      font-size: 1.1em;
+      text-align: center;
+      text-decoration: none;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .research-btn:hover {
+      background: #005f99;
+      transform: translateY(-3px);
+    }
+
+    /* Modal Popup */
+    .modal {
+      display: none; position: fixed;
+      z-index: 1000; left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .modal-content {
+      background: white; padding: 2em; border-radius: 12px;
+      max-width: 600px; width: 80%; text-align: left;
+      position: relative; animation: fadeInUp 0.5s ease-in-out;
+    }
+    .modal h2 { text-align: center; margin-top: 0; }
+    .close-btn {
+      position: absolute; top: 10px; right: 15px;
+      font-size: 1.5em; color: #333; cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Battery System Laboratory</div>
+    <nav>
+      <a id="home-link">Home</a>
+      <a href="member.html">Member</a>
+      <a href="publication.html">Publication</a>
+      <a href="research.html">Research</a>
+      <a href="counterpart.html">Counterpart</a>
+      <a href="news.html">News</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <img src="https://mo.kaist.ac.kr/wp-content/uploads/2022/08/logo_new-1-e1661933714657.png" 
+         alt="KAIST Mobility Logo" class="hero-logo">
+    <h1>Battery System Laboratory</h1>
+    <p>KAIST CCS Graduate School of Mobility</p>
+    <a href="#research">Explore Research</a>
+  </section>
+
+  <main>
+    <!-- Latest News -->
+    <section id="news">
+      <h2>Latest News</h2>
+      <div class="news-grid" id="latest-news"></div>
+      <div class="more-link"><a href="news.html">More News →</a></div>
+    </section>
+
+    <!-- Research Interests -->
+    <section id="research" class="research-interests">
+      <h2>RESEARCH INTERESTS</h2>
+      <div class="interest-grid">
+        <div class="interest-circle">
+          <i class="fas fa-battery-full"></i>
+          <h3>Experiment & Analysis</h3>
+        </div>
+        <div class="interest-circle">
+          <i class="fas fa-cogs"></i>
+          <h3>Simulation & Prediction</h3>
+        </div>
+        <div class="interest-circle">
+          <i class="fas fa-atom"></i>
+          <h3>Design & Optimization</h3>
+        </div>
+        <div class="interest-circle">
+          <i class="fas fa-chart-line"></i>
+          <h3>Control & Demonstration</h3>
+        </div>
+      </div>
+      <!-- 🔹 Research 페이지 이동 버튼 -->
+      <a href="research.html" class="research-btn">View Full Research →</a>
+    </section>
+  </main>
+
+  <footer><p>&copy; 2025 Battery System Laboratory</p></footer>
+
+  <!-- Modal Popup -->
+  <div class="modal" id="welcome-modal">
+    <div class="modal-content">
+      <span class="close-btn" id="close-modal">&times;</span>
+      <h2>Welcome</h2>
+      <p>
+        We are recruiting graduate students (Master's/Ph.D.) interested in research on secondary batteries, 
+        next-generation batteries, and related battery systems (e.g., electric vehicles) in our lab.
+      </p>
+      <p><strong>Professor e-mail:</strong> yoonklee@kaist.ac.kr | yoonkoolee@gmail.com</p>
+    </div>
+  </div>
+
+  <script>
+    // Hero 버튼 스크롤
+    document.querySelector('.hero a').addEventListener('click', function(e) {
+      e.preventDefault();
+      document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // 최신 5개 뉴스 로드
+    fetch('news.html')
+      .then(res => res.text())
+      .then(data => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(data, 'text/html');
+        const items = doc.querySelectorAll('.news-item');
+        const latest = Array.from(items).slice(0, 5);
+        const container = document.getElementById('latest-news');
+        latest.forEach((item) => {
+          const date = item.querySelector('.news-date')?.innerText || '';
+          const title = item.querySelector('.news-title')?.innerText || '';
+          const desc = item.querySelector('.news-desc')?.innerText || '';
+          const card = document.createElement('div');
+          card.className = 'news-card';
+          card.innerHTML = `<div class="news-date">${date}</div><div class="news-title">${title}</div><div class="news-desc">${desc}</div>`;
+          container.appendChild(card);
+        });
+      });
+
+    // Modal 제어
+    const homeLink = document.getElementById('home-link');
+    const modal = document.getElementById('welcome-modal');
+    const closeBtn = document.getElementById('close-modal');
+    homeLink.addEventListener('click', () => { modal.style.display = 'flex'; });
+    closeBtn.addEventListener('click', () => { modal.style.display = 'none'; });
+    window.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
+
+    // 페이지 로드 시 자동으로 팝업 띄우기
+    window.addEventListener('load', () => {
+      modal.style.display = 'flex';
+    });
+  </script>
+</body>
+</html>

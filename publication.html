@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Publication - Battery System Laboratory</title>
+  <style>
+    body { 
+      margin: 0; 
+      font-family: "Noto Sans KR", Arial, sans-serif; 
+      background-color: #f8f9fa; 
+      line-height: 1.6; 
+    }
+    header { 
+      background-color: #01022c; 
+      color: white; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      padding: 1em 2em; 
+    }
+    .logo { font-weight: bold; font-size: 1.5em; }
+    nav a { 
+      color: white; 
+      text-decoration: none; 
+      margin-left: 20px; 
+      position: relative; 
+    }
+    nav a::after { 
+      content:""; 
+      position: absolute; 
+      bottom: -3px; 
+      left: 0; 
+      width: 0; 
+      height: 2px; 
+      background: #66ccff; 
+      transition: width 0.3s; 
+    }
+    nav a:hover::after { width: 100%; }
+
+    /* Hero Section */
+    .hero { 
+      position: relative; 
+      background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), 
+                  url("https://cdn.imweb.me/upload/S201903265c99a2aabdcfe/51ae98732c1b6.png") 
+                  no-repeat center/cover; 
+      height: 45vh; 
+      display: flex; 
+      flex-direction: column; 
+      justify-content: center; 
+      align-items: center; 
+      text-align: center; 
+      color: white; 
+    }
+    .hero-logo { 
+      max-height: 80px; 
+      margin-bottom: 1em; 
+      opacity: 0.85; 
+      animation: fadeInDown 1s ease-out;
+    }
+    .hero h1 { 
+      font-size: 2.5em; 
+      margin-bottom: 0.3em;
+      animation: fadeInDown 1.2s ease-out;
+    }
+    .hero p { 
+      font-size: 1.2em; 
+      animation: fadeInUp 1.5s ease-out;
+    }
+
+    main { padding: 2em; max-width: 1000px; margin: auto; }
+    h2 { color: #003366; margin-top: 1.5em; }
+
+    /* Tab 버튼 스타일 */
+    .tab-container {
+      text-align: center;
+      margin: 2em 0;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      background: #e6f0ff;
+      border: 1px solid #003366;
+      color: #003366;
+      padding: 0.6em 1.2em;
+      margin: 0.3em;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    .tab-btn.active {
+      background: #003366;
+      color: white;
+    }
+
+    .pub-item { 
+      margin: 1em 0; 
+      padding: 1em; 
+      background: white; 
+      border-radius: 8px; 
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1); 
+      animation: fadeInUp 0.6s ease-in-out;
+    }
+    .pub-title { font-weight: bold; margin-bottom: 0.3em; }
+    .pub-links a { 
+      margin-right: 10px; 
+      font-size: 0.9em; 
+      color: #003366; 
+      text-decoration: none; 
+    }
+    .pub-links a:hover { text-decoration: underline; }
+
+    .no-pub {
+      text-align: center;
+      padding: 2em;
+      color: #666;
+      font-style: italic;
+    }
+
+    footer { 
+      background-color: #003366; 
+      color: white; 
+      text-align: center; 
+      padding: 1em; 
+      margin-top: 2em; 
+    }
+
+    /* Animations */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 리스트 숨김 */
+    .pub-list { display: none; }
+    .pub-list.active { display: block; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Battery System Laboratory</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="member.html">Member</a>
+      <a href="publication.html">Publication</a>
+      <a href="research.html">Research</a>
+      <a href="counterpart.html">Counterpart</a>
+      <a href="news.html">News</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <img src="https://mo.kaist.ac.kr/wp-content/uploads/2022/08/logo_new-1-e1661933714657.png" 
+         alt="KAIST Mobility Logo" class="hero-logo">
+    <h1>Publications</h1>
+    <p>Journal Article, Conference and Presentations</p>
+  </section>
+
+  <main>
+    <h2>Selected Publications</h2>
+
+    <!-- 연도별 탭 버튼 (2013~2025) -->
+    <div class="tab-container">
+      <button class="tab-btn active" data-year="2025">2025</button>
+      <button class="tab-btn" data-year="2024">2024</button>
+      <button class="tab-btn" data-year="2023">2023</button>
+      <button class="tab-btn" data-year="2022">2022</button>
+      <button class="tab-btn" data-year="2021">2021</button>
+      <button class="tab-btn" data-year="2020">2020</button>
+      <button class="tab-btn" data-year="2019">2019</button>
+      <button class="tab-btn" data-year="2018">2018</button>
+      <button class="tab-btn" data-year="2017">2017</button>
+      <button class="tab-btn" data-year="2016">2016</button>
+      <button class="tab-btn" data-year="2015">2015</button>
+      <button class="tab-btn" data-year="2014">2014</button>
+      <button class="tab-btn" data-year="2013">2013</button>
+    </div>
+
+    <!-- 2025 -->
+    <div class="pub-list active" id="year-2025">
+      <div class="pub-item">[23] S.B.Kim, Y.Kim, Y.K. Lee*, J.Song* (2025). Advanced multiscale modeling of potassium-ion batteries... Small Structures. <a href="https://doi.org/10.1002/sstr.202400640">[DOI]</a></div>
+      <div class="pub-item">[22] J. Park†, H. Lim†, S. Kim, J. Song*, Y.K. Lee* (2025). Modeling and validation of EV performance... IEEE Trans. Transport. Electrification. <a href="https://doi.org/10.1109/TTE.2024.3392208">[DOI]</a></div>
+    </div>
+
+    <!-- 2024 -->
+    <div class="pub-list" id="year-2024">
+      <div class="pub-item">[21] Shin, Y.K. Lee* (2024). Multi-scale mechanical-electrochemical coupled modeling... J. Power Sources. <a href="https://doi.org/10.1016/j.jpowsour.2024.234064">[DOI]</a></div>
+      <div class="pub-item">[20] Lee, Kim, Sung, Choi* (2024). Multiphysics modeling of initial pressure... J. Energy Storage. <a href="https://doi.org/10.1016/j.est.2024.110431">[DOI]</a></div>
+      <div class="pub-item">[19] Lee, Shin* (2024). Simulation of composite solid-state battery... J. Energy Storage. <a href="https://doi.org/10.1016/j.est.2023.110051">[DOI]</a></div>
+    </div>
+
+    <!-- 2023 -->
+    <div class="pub-list" id="year-2023">
+      <div class="pub-item">[18] Lee, Kang*, Lee* (2023). Shared autonomous EV system design... J. Cleaner Production. <a href="https://doi.org/10.1016/j.jclepro.2023.138795">[DOI]</a></div>
+      <div class="pub-item">[17] Lee, Kang* (2023). Optimization of module structure... J. Energy Storage. <a href="https://doi.org/10.1016/j.est.2023.108650">[DOI]</a></div>
+      <div class="pub-item">[16] Lee* (2023). Optimization framework for composite electrodes... J. Electrochem. Soc. <a href="https://doi.org/10.1149/1945-7111/acdd28">[DOI]</a></div>
+      <div class="pub-item">[15] Lee*, Jeon, Jeon (2023). Modeling of Li metal batteries... J. Electrochem. Soc. <a href="https://doi.org/10.1149/1945-7111/acd962">[DOI]</a></div>
+    </div>
+
+    <!-- 2022 -->
+    <div class="pub-list" id="year-2022">
+      <div class="pub-item">[14] Lee* (2022). Effect of porous cathode structure... J. Energy Storage. <a href="https://doi.org/10.1016/j.est.2022.104788">[DOI]</a></div>
+      <div class="pub-item">[13] Lee, Lee, Kang* (2022). Multi-scale design optimization of EVs... J. Cleaner Production. <a href="https://doi.org/10.1016/j.jclepro.2022.133235">[DOI]</a></div>
+      <div class="pub-item">[12] Lee, Park, Shin* (2022). Cathode microstructure analysis... J. Power Sources. <a href="https://doi.org/10.1016/j.jpowsour.2022.232050">[DOI]</a></div>
+      <div class="pub-item">[11] Shin†, Lee†, Lu* (2022). Structural degradation of graphite... J. Power Sources. <a href="https://doi.org/10.1016/j.jpowsour.2022.231223">[DOI]</a></div>
+      <div class="pub-item">[10] Lee, Shin* (2022). Stress generation in solid-state batteries... Electrochim. Acta. <a href="https://doi.org/10.1016/j.electacta.2021.139639">[DOI]</a></div>
+    </div>
+
+    <!-- 2021 -->
+    <div class="pub-list" id="year-2021">
+      <div class="pub-item">[9] Lee* (2021). Transition metal ions on SEI layer... J. Power Sources. <a href="https://doi.org/10.1016/j.jpowsour.2020.229270">[DOI]</a></div>
+      <div class="pub-item">[8] Lee, Song, Park* (2021). Coupled mechanical-electrochemical modeling... Electrochim. Acta. <a href="https://doi.org/10.1016/j.electacta.2021.138682">[DOI]</a></div>
+      <div class="pub-item">[7] Kim, Chae, Lee, Choi, Lee, Song* (2021). Nanorobot cluster manipulation... Sci. Reports. <a href="https://doi.org/10.1038/s41598-021-98957-y">[DOI]</a></div>
+    </div>
+
+    <!-- 2020 -->
+    <div class="pub-list" id="year-2020">
+      <div class="no-pub">No publications available</div>
+    </div>
+
+    <!-- 2019 -->
+    <div class="pub-list" id="year-2019">
+      <div class="pub-item">[6] Lee, Park, Lu* (2019). Dissolution in Li-ion batteries... J. Electrochem. Soc. <a href="https://doi.org/10.1149/2.0111908jes">[DOI]</a></div>
+      <div class="pub-item">[5] Lee* (2019). Effect of active material, additives, binder... Energies. <a href="https://doi.org/10.3390/en12040658">[DOI]</a></div>
+    </div>
+
+    <!-- 2018 -->
+    <div class="pub-list" id="year-2018">
+      <div class="no-pub">No publications available</div>
+    </div>
+
+    <!-- 2017 -->
+    <div class="pub-list" id="year-2017">
+      <div class="pub-item">[4] Lee, Park, Lu* (2017). Manganese deposition and side reactions... J. Electrochem. Soc. <a href="https://doi.org/10.1149/2.1851712jes">[DOI]</a></div>
+    </div>
+
+    <!-- 2016 -->
+    <div class="pub-list" id="year-2016">
+      <div class="pub-item">[3] Lee, Park, Lu* (2016). Electronic/bonding properties of spinel... J. Electrochem. Soc. <a href="https://doi.org/10.1149/2.0991607jes">[DOI]</a></div>
+    </div>
+
+    <!-- 2015 -->
+    <div class="pub-list" id="year-2015">
+      <div class="no-pub">No publications available</div>
+    </div>
+
+    <!-- 2014 -->
+    <div class="pub-list" id="year-2014">
+      <div class="no-pub">No publications available</div>
+    </div>
+
+    <!-- 2013 -->
+    <div class="pub-list" id="year-2013">
+      <div class="pub-item">[2] Lin#, Park#, Liu#, Lee, Sastry#, Lu* (2013). Capacity fade model for Li-ion... J. Electrochem. Soc. <a href="https://doi.org/10.1149/2.040310jes">[DOI]</a></div>
+      <div class="pub-item">[1] Park#, Kalnaus#, Han#, Lee, Less#, Dudney#, Daniel#, Sastry* (2013). In situ AFM study on LixCoO2... J. Power Sources. <a href="https://doi.org/10.1016/j.jpowsour.2012.09.017">[DOI]</a></div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Battery System Laboratory</p>
+  </footer>
+
+  <script>
+    const buttons = document.querySelectorAll(".tab-btn");
+    const lists = document.querySelectorAll(".pub-list");
+
+    buttons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        buttons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        lists.forEach(list => list.classList.remove("active"));
+        document.getElementById("year-" + btn.dataset.year).classList.add("active");
+      });
+    });
+  </script>
+</body>
+</html>

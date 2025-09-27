@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>News - Battery System Laboratory</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Noto Sans KR", Arial, sans-serif;
+      background-color: #f8f9fa;
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+
+    header {
+      background-color: #01022c;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1em 2em;
+    }
+
+    .logo { font-weight: bold; font-size: 1.5em; }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 1em;
+      position: relative;
+    }
+    nav a::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: -3px;
+      width: 0; height: 2px;
+      background: #66ccff;
+      transition: width 0.3s;
+    }
+    nav a:hover::after { width: 100%; }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+                  url("https://cdn.imweb.me/upload/S201903265c99a2aabdcfe/51ae98732c1b6.png") 
+                  no-repeat center/cover;
+      height: 45vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+    }
+    .hero-logo { 
+      max-height: 80px; margin-bottom: 1em; opacity: 0.85; 
+      animation: fadeInDown 1s ease-out;
+    }
+    .hero h1 { 
+      font-size: 2.5em; margin-bottom: 0.3em; 
+      animation: fadeInDown 1.2s ease-out;
+    }
+    .hero p { 
+      font-size: 1.2em; 
+      animation: fadeInUp 1.5s ease-out;
+    }
+
+    main {
+      padding: 2em;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    h2 { 
+      color: #003366; 
+      margin-top: 1.5em; 
+      text-align: center;
+      animation: fadeInDown 1.5s ease-in-out;
+    }
+
+    /* Tab 메뉴 */
+    .tab-container {
+      text-align: center;
+      margin: 2em 0;
+      border-bottom: 2px solid #ddd;
+    }
+    .tab-btn {
+      background: none;
+      border: none;
+      color: #003366;
+      font-size: 1.2em;
+      font-weight: bold;
+      margin: 0 1em;
+      padding: 0.5em;
+      cursor: pointer;
+      position: relative;
+    }
+    .tab-btn::after {
+      content: "";
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 3px;
+      background: #66ccff;
+      transition: width 0.3s;
+    }
+    .tab-btn.active::after {
+      width: 100%;
+    }
+    .tab-btn:hover { color: #66ccff; }
+
+    /* News 아이템 */
+    .news-item {
+      background: white;
+      border-radius: 8px;
+      padding: 1em 1.5em;
+      margin: 1em 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      animation: fadeInUp 1s ease-in-out;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .news-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    .news-date { font-size: 0.9em; color: #666; }
+    .news-title { font-size: 1.2em; font-weight: bold; margin-top: 0.3em; }
+    .news-desc { margin-top: 0.5em; line-height: 1.5; }
+
+    /* Gallery */
+    .gallery-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5em;
+      margin-top: 1em;
+    }
+    .gallery-item {
+      background: white;
+      border-radius: 8px;
+      padding: 1em;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      animation: fadeInUp 1s ease-in-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .gallery-item img {
+      max-width: 100%;
+      border-radius: 6px;
+      margin-top: 0.5em;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .gallery-item img:hover { transform: scale(1.03); }
+    .gallery-date { font-size: 0.9em; color: #666; }
+    .gallery-title { font-size: 1.1em; font-weight: bold; margin-top: 0.3em; }
+
+    /* 모달 */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      max-width: 80%;
+      max-height: 80%;
+    }
+    .modal-content img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+    .modal-close {
+      position: absolute;
+      top: 20px; right: 30px;
+      font-size: 2em;
+      color: white;
+      cursor: pointer;
+    }
+
+    footer {
+      background-color: #003366;
+      color: white;
+      text-align: center;
+      padding: 1em;
+      margin-top: 2em;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Battery System Laboratory</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="member.html">Member</a>
+      <a href="publication.html">Publication</a>
+      <a href="research.html">Research</a>
+      <a href="counterpart.html">Counterpart</a>
+      <a href="news.html">News</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <img src="https://mo.kaist.ac.kr/wp-content/uploads/2022/08/logo_new-1-e1661933714657.png" 
+         alt="KAIST Mobility Logo" class="hero-logo">
+    <h1>News</h1>
+    <p>Latest updates from our lab</p>
+  </section>
+
+  <main>
+    <!-- Tab 메뉴 -->
+    <div class="tab-container">
+      <button class="tab-btn active" data-target="news">News</button>
+      <button class="tab-btn" data-target="gallery">Gallery</button>
+    </div>
+
+    <!-- News Content -->
+    <div id="news" class="tab-content active">
+      <h2>Recent News</h2>
+      <div class="news-item"><div class="news-date">09/01/2025</div><div class="news-title">Greeting! New Member</div><div class="news-desc">Dain joined our group as a M.S. course student. Welcome!</div></div>
+      <div class="news-item"><div class="news-date">06/25/2025</div><div class="news-title">Greeting! New Member</div><div class="news-desc">Donghae joined our group as an intern. Welcome!</div></div>
+      <div class="news-item"><div class="news-date">06/12/2025</div><div class="news-title">Report</div><div class="news-desc">Jeu Shin's domestic patent has been filed.<br><em>"Accelerated Lithium-Ion Battery Degradation Prediction Method Through Control of Side Reaction Rate, Prediction System Utilizing Said Method, and Computer-Readable Recording Medium."</em><br>Congratulations!</div></div>
+      <div class="news-item"><div class="news-date">05/27/2025</div><div class="news-title">Event</div><div class="news-desc">We held our lab's first seminar at KAIST Munji Campus!<br>Prof. Jonghyun Park (Missouri S&T) and Prof. Jimin Oh (Kyungpook National University) joined as speakers, sharing insights on secondary batteries.</div></div>
+      <div class="news-item"><div class="news-date">03/01/2025</div><div class="news-title">Greeting! New Member</div><div class="news-desc">Yeonghwan started his Ph.D. course. Keep it up!</div></div>
+      <div class="news-item"><div class="news-date">03/2025</div><div class="news-title">Greeting! New Member</div><div class="news-desc">Dr. Dongmin Kim joined our group as a postdoc. Welcome!</div></div>
+      <div class="news-item"><div class="news-date">09/2024</div><div class="news-title">Report</div><div class="news-desc">Our research was featured in the Research Webzine, <strong>KAIST Breakthroughs 2024 Fall Vol. 23</strong>. Congratulations!<br><span class="news-link"><a href="https://breakthroughs.kaist.ac.kr/sub02/view/id/524" target="_blank">Read more</a></span></div></div>
+      <div class="news-item"><div class="news-date">09/02/2024</div><div class="news-title">Greeting! New Member</div><div class="news-desc">Dongwook joined our group as a M.S. course student. Welcome!</div></div>
+      <div class="news-item"><div class="news-date">07/2024</div><div class="news-title">Report</div><div class="news-desc">A discussion between our lab's professor and our department's professor on future mobility was featured in <strong>KAISTian Newsletter 2024 Spring&Summer</strong>.<br><span class="news-link"><a href="https://www.kaist.ac.kr/kr/html/kaist/01050301.html" target="_blank">Read PDF</a></span></div></div>
+      <div class="news-item"><div class="news-date">05/23/2024</div><div class="news-title">Greeting! New Member</div><div class="news-desc">Yeonghwan joined our group as an intern. Welcome!</div></div>
+    </div>
+
+    <!-- Gallery Content -->
+    <div id="gallery" class="tab-content">
+      <h2>Gallery</h2>
+      <div class="gallery-list">
+        <div class="gallery-item">
+          <div class="gallery-date">09/05/2025</div>
+          <div class="gallery-title">Professor's Birthday!!</div>
+          <img src="images\250905Gallery.png" alt="Professor Yoonkoo Lee's Birthday Party with BSL!">
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-date">08/08/2025</div>
+          <div class="gallery-title">Pre-URP Farewell Dinner</div>
+          <img src="images\250808Gallery.jpg" alt="Last night with Pre-URP students from Science Highschool">
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal -->
+  <div class="modal" id="imageModal">
+    <span class="modal-close" id="closeModal">&times;</span>
+    <div class="modal-content"><img id="modalImg" src="" alt=""></div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Battery System Laboratory</p>
+  </footer>
+
+  <script>
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    const tabContents = document.querySelectorAll(".tab-content");
+    tabButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        tabButtons.forEach(b => b.classList.remove("active"));
+        tabContents.forEach(c => c.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById(btn.dataset.target).classList.add("active");
+      });
+    });
+
+    const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("modalImg");
+    const closeModal = document.getElementById("closeModal");
+    document.querySelectorAll(".gallery-item img").forEach(img => {
+      img.addEventListener("click", () => {
+        modal.style.display = "flex";
+        modalImg.src = img.src;
+      });
+    });
+    closeModal.addEventListener("click", () => { modal.style.display = "none"; });
+    window.addEventListener("click", (e) => { if (e.target === modal) modal.style.display = "none"; });
+  </script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Member - Battery System Laboratory</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Noto Sans KR", Arial, sans-serif;
+      background-color: #f8f9fa;
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+
+    header {
+      background-color: #01022c;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1em 2em;
+    }
+
+    .logo { font-weight: bold; font-size: 1.5em; }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 1em;
+      position: relative;
+    }
+    nav a::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: -3px;
+      width: 0; height: 2px;
+      background: #66ccff;
+      transition: width 0.3s;
+    }
+    nav a:hover::after { width: 100%; }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+                  url("https://cdn.imweb.me/upload/S201903265c99a2aabdcfe/51ae98732c1b6.png") 
+                  no-repeat center/cover;
+      height: 45vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+    }
+    .hero-logo {
+      max-height: 80px;
+      margin-bottom: 1em;
+      opacity: 0.85;
+      animation: fadeInDown 1s ease-out;
+    }
+    .hero h1 { font-size: 2.5em; margin-bottom: 0.3em; animation: fadeInDown 1.2s ease-out; }
+    .hero p { font-size: 1.2em; animation: fadeInUp 1.5s ease-out; }
+
+    main {
+      padding: 2em;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    h2 { color: #003366; text-align: center; margin: 1.5em 0; }
+
+    /* Member card layout */
+    .member-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5em;
+      margin-top: 1em;
+    }
+
+    .member-card {
+      background: white;
+      border-radius: 10px;
+      padding: 1em;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      align-items: flex-start;
+      gap: 1em;
+      animation: fadeInUp 1s ease-in-out;
+
+      height: 220px;   /* ✅ 모든 카드 높이 동일하게 고정 */
+    }
+    .member-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    /* 사진 스타일 */
+    .member-photo {
+      width: 90px;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 8px;
+      flex-shrink: 0;
+      background: #ddd;
+    }
+
+    /* 텍스트 스타일 */
+    .member-info {
+      flex: 1;
+      font-size: 0.9em;
+      overflow-y: auto; /* ✅ 내용이 넘칠 경우 스크롤 */
+    }
+    .member-info h3 {
+      margin: 0;
+      font-size: 1.1em;
+      color: #003366;
+    }
+    .member-info p {
+      margin: 0.3em 0;
+    }
+    .member-info strong { color: #01022c; }
+
+    /* 반응형 */
+    @media (max-width: 768px) {
+      .member-grid { grid-template-columns: 1fr; }
+      .member-card { flex-direction: column; align-items: center; text-align: center; height: auto; }
+      .member-photo { margin-bottom: 0.5em; }
+    }
+
+    footer {
+      background-color: #003366;
+      color: white;
+      text-align: center;
+      padding: 1em;
+      margin-top: 2em;
+    }
+
+    /* Fade Animations */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Battery System Laboratory</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="member.html">Member</a>
+      <a href="publication.html">Publication</a>
+      <a href="research.html">Research</a>
+      <a href="counterpart.html">Counterpart</a>
+      <a href="news.html">News</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <img src="https://mo.kaist.ac.kr/wp-content/uploads/2022/08/logo_new-1-e1661933714657.png" 
+         alt="KAIST Mobility Logo" class="hero-logo">
+    <h1>Our Members</h1>
+    <p>KAIST CCS Graduate School of Mobility</p>
+  </section>
+
+  <main>
+    <h2>Postdoctoral Researcher</h2>
+    <div class="member-grid">
+      <div class="member-card">
+        <img src="https://via.placeholder.com/90x110" alt="Profile Photo" class="member-photo">
+        <div class="member-info">
+          <h3>Dongmin Kim</h3>
+          <p><strong>E-mail:</strong> kspp8795@kaist.ac.kr</p>
+          <p><strong>Education:</strong> Ph.D., CCS Graduate School of Mobility, KAIST</p>
+          <p><strong>Research:</strong> Battery management system, Analysis of driving characteristics</p>
+        </div>
+      </div>
+    </div>
+
+    <h2>Ph.D. Candidates</h2>
+    <div class="member-grid">
+      <div class="member-card">
+        <img src="images/yeonghwan.jpg" alt="Profile Photo" class="member-photo">
+        <div class="member-info">
+          <h3>Yeonghwan Jang <span style="font-size:0.9em; color:#666;">(Lab Leader)</span></h3>
+          <p><strong>E-mail:</strong> yeonghwan@kaist.ac.kr</p>
+          <p><strong>Education:</strong> 2025.03 - Ph.D. course, CCS Graduate School of Mobility, KAIST</p>
+          <p><strong>Research:</strong> Design of lithium metal battery</p>
+        </div>
+      </div>
+    </div>
+
+    <h2>M.S. Candidates</h2>
+    <div class="member-grid">
+      <div class="member-card">
+        <img src="images/dongwook.jpg" alt="Profile Photo" class="member-photo">
+        <div class="member-info">
+          <h3>Dongwook Kim</h3>
+          <p><strong>E-mail:</strong> dongwook.kim@kaist.ac.kr</p>
+          <p><strong>Education:</strong> 2024.09 - M.S. course, CCS Graduate School of Mobility, KAIST</p>
+          <p><strong>Research:</strong> Analysis of thermal runaway (propagation)</p>
+        </div>
+      </div>
+
+      <div class="member-card">
+        <img src="images/dain.JPG" alt="Profile Photo" class="member-photo">
+        <div class="member-info">
+          <h3>Dain Kim</h3>
+          <p><strong>E-mail:</strong> dyne_2@kaist.ac.kr</p>
+          <p><strong>Education:</strong> 2025.09 - M.S. course, CCS Graduate School of Mobility, KAIST</p>
+          <p><strong>Research:</strong> Battery module/pack analysis</p>
+        </div>
+      </div>
+
+      <div class="member-card">
+        <img src="images\donghae.jpg" alt="Profile Photo" class="member-photo">
+        <div class="member-info">
+          <h3>Donghae Kim</h3>
+          <p><strong>E-mail:</strong> eastsea517@kaist.ac.kr</p>
+          <p><strong>Education:</strong> 2020.03 - 2026.02 B.S. course, Electronic Engineering, Chungbuk National University</p>
+          <p>2026.03 - M.S. course, CCS Graduate School of Mobility, KAIST</p>
+          <p><strong>Research:</strong> Battery management system (Active balancing)</p>
+        </div>
+      </div>
+    </div>
+
+    <h2>Intern</h2>
+    <div class="member-grid">
+      <div class="member-card">
+        <img src="images/jeu.jpg" alt="Profile Photo" class="member-photo">
+        <div class="member-info">
+          <h3>Jeu Shin</h3>
+          <p><strong>E-mail:</strong> jshin01@kaist.ac.kr</p>
+          <p><strong>Research:</strong> Li-ion battery degradation</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Battery System Laboratory</p>
+  </footer>
+</body>
+</html>

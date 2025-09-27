@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Principal Investigator - Battery System Laboratory</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Noto Sans KR", Arial, sans-serif;
+      background-color: #f8f9fa;
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: #01022c;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1em 2em;
+    }
+
+    .logo { font-weight: bold; font-size: 1.5em; }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 1em;
+      position: relative;
+    }
+    nav a::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: -3px;
+      width: 0; height: 2px;
+      background: #66ccff;
+      transition: width 0.3s;
+    }
+    nav a:hover::after { width: 100%; }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+                  url("https://cdn.imweb.me/upload/S201903265c99a2aabdcfe/51ae98732c1b6.png") 
+                  no-repeat center/cover;
+      height: 45vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+    }
+    .hero-logo {
+      max-height: 70px;
+      margin-bottom: 1em;
+      opacity: 0.85;
+      animation: fadeInDown 1s ease-out;
+    }
+    .hero h1 { 
+      font-size: 2.2em; 
+      margin-bottom: 0.3em;
+      animation: fadeInDown 1.2s ease-out;
+    }
+    .hero p { 
+      font-size: 1.1em;
+      animation: fadeInUp 1.5s ease-out;
+    }
+
+    main {
+      padding: 2em;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    h2 {
+      color: #003366;
+      border-bottom: 2px solid #003366;
+      display: inline-block;
+      margin-top: 1.5em;
+      margin-bottom: 0.8em;
+    }
+
+    .profile-card {
+      background: white;
+      border-radius: 12px;
+      padding: 2em;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+      margin-bottom: 2em;
+      animation: fadeInUp 1s ease-in-out;
+      display: flex;
+      align-items: flex-start;
+      gap: 2em;
+    }
+
+    .profile-card img {
+      max-width: 200px;
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+
+    .profile-text {
+      text-align: left;
+      flex: 1;
+    }
+
+    .profile-text h3 {
+      color: #003366;
+      margin-top: 0;
+    }
+
+    .profile-text p {
+      margin: 0.4em 0;
+    }
+
+    .profile-card ul {
+      text-align: left;
+      margin: 0.5em 0 1em 1.2em;
+    }
+
+    footer {
+      background-color: #003366;
+      color: white;
+      text-align: center;
+      padding: 1em;
+      margin-top: 3em;
+    }
+
+    /* Fade Animations */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 반응형 */
+    @media (max-width: 768px) {
+      .profile-card {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+      }
+      .profile-text {
+        text-align: center;
+      }
+    }
+
+    /* 책갈피 스타일 버튼 (우측 고정) */
+    .bookmark-buttons {
+      position: fixed;
+      top: 65%;
+      right: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      z-index: 1000;
+    }
+    .bookmark-buttons a {
+      display: block;
+      background: linear-gradient(135deg, #003366, #3399ff);
+      color: white;
+      padding: 1em 1.6em;
+      border-radius: 10px 0 0 10px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1em;
+      transform: translateX(5%);  /* ✅ 기본 상태: 글자 다 보이도록 */
+      transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+    }
+    .bookmark-buttons a:hover {
+      transform: translateX(0) scale(1.08); /* ✅ hover 시 더 튀어나옴 + 확대 */
+      box-shadow: 0 5px 14px rgba(0,0,0,0.4);
+      background: linear-gradient(135deg, #3399ff, #66ccff); /* ✅ hover 시 그라데이션 변경 */
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Battery System Laboratory</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="member.html">Member</a>
+      <a href="publication.html">Publication</a>
+      <a href="research.html">Research</a>
+      <a href="counterpart.html">Counterpart</a>
+      <a href="news.html">News</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <img src="https://mo.kaist.ac.kr/wp-content/uploads/2022/08/logo_new-1-e1661933714657.png" 
+         alt="KAIST Mobility Logo" class="hero-logo">
+    <h1>Principal Investigator</h1>
+    <p>KAIST CCS Graduate School of Mobility</p>
+  </section>
+
+  <main>
+    <div class="profile-card">
+      <img src="https://mo.kaist.ac.kr/wp-content/uploads/2024/02/%EA%B0%9C%EC%9D%B8%EC%82%AC%EC%A7%84-682d277370a06.jpg" 
+           alt="Professor Yoon Koo Lee">
+      <div class="profile-text">
+        <h2>Professor</h2>
+        <h3>Yoon Koo Lee</h3>
+        <p><strong>Contact Info</strong></p>
+        <p><strong>E-mail:</strong> yoonklee@kaist.ac.kr, yoonkoolee@gmail.com</p>
+        <p><strong>Address:</strong> Department of CCS Graduate School of Mobility, KAIST,<br>
+           F434, Faculty wing, KAIST, 193, Munji-ro, Yuseong-gu, Daejeon, Republic of Korea</p>
+        <p><strong>Office Number:</strong> +82 042-350-1762</p>
+      </div>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-text">
+        <h2>Professional Experiences</h2>
+        <ul>
+          <li><strong>KAIST</strong>
+            <ul>
+              <li>Associate Professor, CCS Graduate School of Mobility (Mar. 2024 – Present)</li>
+              <li>Adjunct Professor, Division of Future Vehicle (Sep. 2025 – Present)</li>
+            </ul>
+          </li>
+          <li><strong>Hanbat National University</strong>
+            <ul>
+              <li>Assistant Professor, Mechanical Engineering (Mar. 2020 – Feb. 2024)</li>
+            </ul>
+          </li>
+          <li><strong>LG Chem</strong>
+            <ul>
+              <li>Professional (책임), Battery R&D (Mar. 2015 – Feb. 2020)</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-text">
+        <h2>Education Background</h2>
+        <ul>
+          <li><strong>Ph.D. in Mechanical Engineering</strong> – Jan. 2015  
+            University of Michigan - Ann Arbor, MI, USA  
+            <br><em>Dissertation:</em> “Effects of Transition Metal Dissolution and Deposition on Li-ion Batteries: A Multi-Scale Approach”  
+            (Advisor: Dr. Wei Lu)
+          </li>
+          <li><strong>M.S. in Mechanical Engineering</strong> – Dec. 2010  
+            University of Michigan - Ann Arbor, MI, USA
+          </li>
+          <li><strong>B.S. in Mechanical Engineering</strong> – Aug. 2009  
+            Seoul National University - Seoul, Republic of Korea
+          </li>
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <!-- 책갈피 버튼 -->
+  <div class="bookmark-buttons">
+    <a href="researchers.html">Researchers</a>
+    <a href="alumni.html">Alumni</a>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Battery System Laboratory</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Research - Battery System Laboratory</title>
+  <style>
+    body { 
+      margin: 0; 
+      font-family: "Noto Sans KR", Arial, sans-serif; 
+      background-color: #f8f9fa; 
+      line-height: 1.6; 
+    }
+
+    header { 
+      background-color: #01022c; 
+      color: white; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      padding: 1em 2em; 
+    }
+
+    .logo { font-weight: bold; font-size: 1.5em; }
+    nav a { 
+      color: white; 
+      text-decoration: none; 
+      margin-left: 20px; 
+      position: relative; 
+    }
+    nav a::after { 
+      content:""; 
+      position: absolute; 
+      bottom: -3px; 
+      left: 0; 
+      width: 0; 
+      height: 2px; 
+      background: #66ccff; 
+      transition: width 0.3s; 
+    }
+    nav a:hover::after { width: 100%; }
+
+    /* Hero Section */
+    .hero { 
+      position: relative; 
+      background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), 
+                  url("https://cdn.imweb.me/upload/S201903265c99a2aabdcfe/51ae98732c1b6.png") 
+                  no-repeat center/cover; 
+      height: 45vh; 
+      display: flex; 
+      flex-direction: column; 
+      justify-content: center; 
+      align-items: center; 
+      text-align: center; 
+      color: white; 
+    }
+    .hero-logo { 
+      max-height: 80px; 
+      margin-bottom: 1em; 
+      opacity: 0.85; 
+      animation: fadeInDown 1s ease-out;
+    }
+    .hero h1 { 
+      font-size: 2.8em; 
+      margin-bottom: 0.3em; 
+      animation: fadeInDown 1.2s ease-out;
+    }
+    .hero p { 
+      font-size: 1.2em; 
+      animation: fadeInUp 1.5s ease-out;
+    }
+
+    /* Research Navigation Tabs */
+    .research-tabs {
+      display: flex;
+      justify-content: center;
+      background: #01273b;  
+      padding: 0.8em 0;
+      gap: 2em;
+      margin: 0;  
+      position: sticky;   
+      top: 0;             
+      z-index: 999;       
+    }
+    .research-tab {
+      color: white;
+      font-weight: bold;
+      font-size: 1.1em;
+      text-align: center;
+      padding: 0.5em 1.5em;
+      cursor: pointer;
+      position: relative;
+      transition: color 0.3s;
+    }
+    .research-tab span {
+      display: block;
+      font-size: 0.9em;
+      font-weight: normal;
+      opacity: 0.9;
+    }
+    .research-tab:hover { color: #66ccff; }
+    .research-tab.active::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 12px solid transparent;
+      border-right: 12px solid transparent;
+      border-top: 12px solid white;
+    }
+
+    /* Research Content */
+    .research-content {
+      display: none;
+      max-width: 1000px;
+      margin: 2em auto;
+      padding: 1.5em;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      animation: fadeInUp 0.6s ease-in-out;
+    }
+    .research-content.active { display: block; }
+    .research-content h2 { color: #003366; margin-top: 0; }
+    .research-content ul { margin-top: 1em; padding-left: 1.2em; }
+    .research-content li { margin-bottom: 0.5em; }
+
+    /* Research Images Grid */
+    .research-images {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1em;
+      margin-top: 1.5em;
+    }
+    .research-images img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    footer { 
+      background-color: #003366; 
+      color: white; 
+      text-align: center; 
+      padding: 1em; 
+      margin-top: 2em; 
+    }
+
+    /* Animations */
+    @keyframes fadeInDown { 
+      from { opacity: 0; transform: translateY(-30px); } 
+      to { opacity: 1; transform: translateY(0); } 
+    }
+    @keyframes fadeInUp { 
+      from { opacity: 0; transform: translateY(30px); } 
+      to { opacity: 1; transform: translateY(0); } 
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Battery System Laboratory</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="member.html">Member</a>
+      <a href="publication.html">Publication</a>
+      <a href="research.html">Research</a>
+      <a href="counterpart.html">Counterpart</a>
+      <a href="news.html">News</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <img src="https://mo.kaist.ac.kr/wp-content/uploads/2022/08/logo_new-1-e1661933714657.png" 
+         alt="KAIST Mobility Logo" class="hero-logo">
+    <h1>Research</h1>
+    <p>Exploring Batteries & Energy Mobility Systems</p>
+  </section>
+
+  <!-- Research Tabs -->
+  <div class="research-tabs">
+    <div class="research-tab active" data-target="EA">Experiment & Analysis <span>(실험 및 분석)</span></div>
+    <div class="research-tab" data-target="SP">Simulation & Prediction <span>(시뮬레이션 및 예측)</span></div>
+    <div class="research-tab" data-target="DO">Design & Optimization <span>(설계 및 최적화)</span></div>
+    <div class="research-tab" data-target="CD">Control & Demonstration <span>(제어 및 실증)</span></div>
+  </div>
+
+  <!-- Research Contents -->
+  <div id="EA" class="research-content active">
+    <h2>Experiment & Analysis (실험 및 분석)</h2>
+    <p>
+      We evaluate battery materials, cells, modules, packs, and systems under realistic operating conditions. 
+      A wide range of techniques—including EIS, SEM/EDS, TEM, AFM, ICP, XRD, and XPS, etc.—are employed to analyze electrochemical and structural properties. 
+      Through these methods, we quantify performance changes and identify the mechanisms of degradation.
+    </p>
+    <ul>
+      <li>Battery material, cell, module, pack and system evaluation</li>
+      <li>Electrochemical and structural diagnostics</li>
+      <li>Failure mechanisms and degradation analysis</li>
+    </ul>
+    <div class="research-images">
+      <img src="https://drive.google.com/file/d/1KiLnP-kd4qHzj8c-2--a-qAG9E37rPHM/view?usp=drive_link" alt="Research Image 1">
+      <img src="images/research2.jpg" alt="Research Image 2">
+      <img src="images/research3.jpg" alt="Research Image 3">
+      <img src="images/research4.jpg" alt="Research Image 4">
+    </div>
+    <p>
+      We evaluate battery materials, cells, modules, packs, and systems under realistic operating conditions. 
+      A wide range of techniques—including EIS, SEM/EDS, TEM, AFM, ICP, XRD, and XPS, etc.—are employed to analyze electrochemical and structural properties. 
+      Through these methods, we quantify performance changes and identify the mechanisms of degradation.
+    </p>
+    <div class="research-images">
+      <img src="images/research1.jpg" alt="Research Image 1">
+      <img src="images/research2.jpg" alt="Research Image 2">
+      <img src="images/research3.jpg" alt="Research Image 3">
+      <img src="images/research4.jpg" alt="Research Image 4">
+    </div>
+  </div>
+
+  <div id="SP" class="research-content">
+    <h2>Simulation & Prediction (시뮬레이션 및 예측)</h2>
+    <p>
+      We develop physics-based multi-scale and multi-physics models, and AI-based models, spanning from materials to packs and systems. 
+      These models support degradation and lifetime prediction, electrochemical, mechanical, and thermal analyses, etc. 
+      Our approach enables accelerated understanding of complex battery behaviors and systematic exploration of diverse operating scenarios, while providing predictive insights across scales.
+    </p>
+    <ul>
+      <li>Multi-scale, multi-physics modeling</li>
+      <li>Degradation prediction and lifetime estimation</li>
+      <li>System-level simulations under real-world conditions</li>
+    </ul>
+    <div class="research-images">
+      <img src="images/research5.jpg" alt="Research Image 5">
+      <img src="images/research6.jpg" alt="Research Image 6">
+      <img src="images/research7.jpg" alt="Research Image 7">
+      <img src="images/research8.jpg" alt="Research Image 8">
+    </div>
+    <p>
+      We develop physics-based multi-scale and multi-physics models, and AI-based models, spanning from materials to packs and systems. 
+      These models support degradation and lifetime prediction, electrochemical, mechanical, and thermal analyses, etc. 
+      Our approach enables accelerated understanding of complex battery behaviors and systematic exploration of diverse operating scenarios, while providing predictive insights across scales.
+    </p>
+    <ul>
+      <li>Multi-scale, multi-physics modeling</li>
+      <li>Degradation prediction and lifetime estimation</li>
+      <li>System-level simulations under real-world conditions</li>
+    </ul>
+    <div class="research-images">
+      <img src="images/research5.jpg" alt="Research Image 5">
+      <img src="images/research6.jpg" alt="Research Image 6">
+      <img src="images/research7.jpg" alt="Research Image 7">
+      <img src="images/research8.jpg" alt="Research Image 8">
+    </div>
+  </div>
+
+  <div id="DO" class="research-content">
+    <h2>Design & Optimization (설계 및 최적화)</h2>
+    <p>
+      We build design and optimization frameworks for cells, modules, packs, and systems using data from experiments and simulations. 
+      These frameworks balance performance, safety, and cost under engineering constraints through physics-based methods. 
+      Our approach identifies how characteristics and behavior may change from cells to systems, guiding designs that are valid and applicable across cell, module, pack, and system levels.
+    </p>
+    <ul>
+      <li>Battery cell, module, and pack design frameworks</li>
+      <li>Physics-based multi-scale, multi-physics optimization</li>
+      <li>Balancing performance, safety, and cost trade-offs</li>
+    </ul>
+    <div class="research-images">
+      <img src="images/research9.jpg" alt="Research Image 9">
+      <img src="images/research10.jpg" alt="Research Image 10">
+      <img src="images/research11.jpg" alt="Research Image 11">
+      <img src="images/research12.jpg" alt="Research Image 12">
+    </div>
+    <p>
+      We build design and optimization frameworks for cells, modules, packs, and systems using data from experiments and simulations. 
+      These frameworks balance performance, safety, and cost under engineering constraints through physics-based methods. 
+      Our approach identifies how characteristics and behavior may change from cells to systems, guiding designs that are valid and applicable across cell, module, pack, and system levels.
+    </p>
+    <ul>
+      <li>Battery cell, module, and pack design frameworks</li>
+      <li>Physics-based multi-scale, multi-physics optimization</li>
+      <li>Balancing performance, safety, and cost trade-offs</li>
+    </ul>
+    <div class="research-images">
+      <img src="images/research9.jpg" alt="Research Image 9">
+      <img src="images/research10.jpg" alt="Research Image 10">
+      <img src="images/research11.jpg" alt="Research Image 11">
+      <img src="images/research12.jpg" alt="Research Image 12">
+    </div>
+  </div>
+
+  <div id="CD" class="research-content">
+    <h2>Control & Demonstration (제어 및 실증)</h2>
+    <p>
+      We develop control strategies and BMS algorithms for estimation, balancing, and fault diagnosis. 
+      These methods are demonstrated and validated at the module, pack, and system levels under real-world operating conditions. 
+      Our field studies extend across EVs, ESS, UAM, and advanced mobility platforms, etc., including grid-connected systems and Battery-in-the-Loop System (BILS) test.
+    </p>
+    <ul>
+      <li>Battery management system (BMS) algorithm development</li>
+      <li>Fault diagnosis and health monitoring</li>
+      <li>Field demonstrations in EV, ESS, and mobility platforms</li>
+    </ul>
+    <div class="research-images">
+      <img src="images/research13.jpg" alt="Research Image 13">
+      <img src="images/research14.jpg" alt="Research Image 14">
+      <img src="images/research15.jpg" alt="Research Image 15">
+      <img src="images/research16.jpg" alt="Research Image 16">
+    </div>
+    <p>
+      We develop control strategies and BMS algorithms for estimation, balancing, and fault diagnosis. 
+      These methods are demonstrated and validated at the module, pack, and system levels under real-world operating conditions. 
+      Our field studies extend across EVs, ESS, UAM, and advanced mobility platforms, etc., including grid-connected systems and Battery-in-the-Loop System (BILS) test.
+    </p>
+    <ul>
+      <li>Battery management system (BMS) algorithm development</li>
+      <li>Fault diagnosis and health monitoring</li>
+      <li>Field demonstrations in EV, ESS, and mobility platforms</li>
+    </ul>
+    <div class="research-images">
+      <img src="images/research13.jpg" alt="Research Image 13">
+      <img src="images/research14.jpg" alt="Research Image 14">
+      <img src="images/research15.jpg" alt="Research Image 15">
+      <img src="images/research16.jpg" alt="Research Image 16">
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Battery System Laboratory</p>
+  </footer>
+
+  <script>
+    const tabs = document.querySelectorAll('.research-tab');
+    const contents = document.querySelectorAll('.research-content');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const targetId = tab.getAttribute('data-target');
+        contents.forEach(c => c.classList.remove('active'));
+        document.getElementById(targetId).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
