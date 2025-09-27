@@ -89,10 +89,12 @@
     .alumni-card {
       background: white;
       border-radius: 10px;
-      padding: 1.5em;
+      padding: 1.2em;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       transition: transform 0.2s, box-shadow 0.2s;
-      text-align: left;
+      display: flex;
+      align-items: flex-start;
+      gap: 1em;
       animation: fadeInUp 1s ease-in-out;
     }
     .alumni-card:hover {
@@ -100,18 +102,40 @@
       box-shadow: 0 6px 12px rgba(0,0,0,0.15);
     }
 
-    .alumni-card h3 {
+    /* 사진 스타일 */
+    .alumni-photo {
+      width: 90px;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 8px;
+      flex-shrink: 0;
+      background: #ddd;
+    }
+
+    /* 텍스트 영역 */
+    .alumni-info {
+      flex: 1;
+      font-size: 0.9em;
+    }
+    .alumni-info h3 {
       margin-top: 0;
       color: #003366;
+      font-size: 1.1em;
     }
-    .alumni-card p { margin: 0.4em 0; }
-    .alumni-card strong { color: #01022c; }
+    .alumni-info p { margin: 0.3em 0; }
+    .alumni-info strong { color: #01022c; }
 
     /* 반응형 */
     @media (max-width: 768px) {
       .alumni-grid {
         grid-template-columns: 1fr;
       }
+      .alumni-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .alumni-photo { margin-bottom: 0.5em; }
     }
 
     footer {
@@ -122,7 +146,7 @@
       margin-top: 2em;
     }
 
-    /* 🔹 Fade Animations */
+    /* Fade Animations */
     @keyframes fadeInDown {
       from { opacity: 0; transform: translateY(-30px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -157,42 +181,59 @@
   <main>
     <h2>Our Alumni</h2>
     <div class="alumni-grid">
+      
       <div class="alumni-card">
-        <h3>Hyunwoo Lim</h3>
-        <p><strong>E-mail:</strong> imhsky02@gmail.com</p>
-        <p><strong>Education:</strong> 2023.03 - 2025.02 M.S., Mechanical Engineering, Hanbat National University</p>
-        <p><strong>Research:</strong> Li-ion battery swelling</p>
+        <img src="images/alum_hyunwoo.jpg" alt="Hyunwoo Lim" class="alumni-photo">
+        <div class="alumni-info">
+          <h3>Hyunwoo Lim</h3>
+          <p><strong>E-mail:</strong> imhsky02@gmail.com</p>
+          <p><strong>Education:</strong> 2023.03 - 2025.02 M.S., Mechanical Engineering, Hanbat National University</p>
+          <p><strong>Research:</strong> Li-ion battery swelling</p>
+        </div>
       </div>
 
       <div class="alumni-card">
-        <h3>Chae-eun Sung</h3>
-        <p><strong>E-mail:</strong> 0708sung@gmail.com</p>
-        <p><strong>Education:</strong> 2023.03 - 2025.02 M.S., Mechanical Engineering, Hanbat National University</p>
-        <p><strong>Research:</strong> Design of solid state battery system</p>
+        <img src="images/alum_chaeeun.jpg" alt="Chae-eun Sung" class="alumni-photo">
+        <div class="alumni-info">
+          <h3>Chae-eun Sung</h3>
+          <p><strong>E-mail:</strong> 0708sung@gmail.com</p>
+          <p><strong>Education:</strong> 2023.03 - 2025.02 M.S., Mechanical Engineering, Hanbat National University</p>
+          <p><strong>Research:</strong> Design of solid state battery system</p>
+        </div>
       </div>
 
       <div class="alumni-card">
-        <h3>Seonghyeon Jeon</h3>
-        <p><strong>E-mail:</strong> jeon190610@gmail.com</p>
-        <p><strong>Education:</strong> 2018.03 - 2024.08 B.S., Mechanical Engineering, Hanbat National University</p>
-        <p><strong>Research:</strong> Lithium metal battery analysis</p>
+        <img src="images/alum_sunghyun.png" alt="Seonghyeon Jeon" class="alumni-photo">
+        <div class="alumni-info">
+          <h3>Seonghyeon Jeon</h3>
+          <p><strong>E-mail:</strong> jeon190610@gmail.com</p>
+          <p><strong>Education:</strong> 2018.03 - 2024.08 B.S., Mechanical Engineering, Hanbat National University</p>
+          <p><strong>Research:</strong> Lithium metal battery analysis</p>
+        </div>
       </div>
 
       <div class="alumni-card">
-        <h3>Changmin Kim</h3>
-        <p><strong>E-mail:</strong> chchain.kim@samsung.com</p>
-        <p><strong>Education:</strong> 2018.03 - 2024.02 B.S., Mechanical Engineering, Hanbat National University</p>
-        <p><strong>Research:</strong> Lithium-ion battery swelling</p>
-        <p><strong>Current:</strong> Samsung SDI (2024 ~)</p>
+        <img src="images/alum_changmin.jpg" alt="Changmin Kim" class="alumni-photo">
+        <div class="alumni-info">
+          <h3>Changmin Kim</h3>
+          <p><strong>E-mail:</strong> chchain.kim@samsung.com</p>
+          <p><strong>Education:</strong> 2018.03 - 2024.02 B.S., Mechanical Engineering, Hanbat National University</p>
+          <p><strong>Research:</strong> Lithium-ion battery swelling</p>
+          <p><strong>Current:</strong> Samsung SDI (2024 ~)</p>
+        </div>
       </div>
 
       <div class="alumni-card">
-        <h3>Juhyun Park</h3>
-        <p><strong>E-mail:</strong> pjuh09146@gmail.com</p>
-        <p><strong>Education:</strong> 2021.03 - 2023.02 M.S., Mechanical Engineering, Hanbat National University</p>
-        <p><strong>Research:</strong> EV Conversion & EV performance prediction model development</p>
-        <p><strong>Current:</strong> Institute of Vehicle Engineering (2023 ~)</p>
+        <img src="images/alum_juhyun.png" alt="Juhyun Park" class="alumni-photo">
+        <div class="alumni-info">
+          <h3>Juhyun Park</h3>
+          <p><strong>E-mail:</strong> pjuh09146@gmail.com</p>
+          <p><strong>Education:</strong> 2021.03 - 2023.02 M.S., Mechanical Engineering, Hanbat National University</p>
+          <p><strong>Research:</strong> EV Conversion & EV performance prediction model development</p>
+          <p><strong>Current:</strong> Institute of Vehicle Engineering (2023 ~)</p>
+        </div>
       </div>
+
     </div>
   </main>
 
