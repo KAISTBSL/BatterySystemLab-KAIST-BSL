@@ -1,51 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="<http://www.sitemaps.org/schemas/sitemap/0.9>">
   
   <!-- 메인 페이지 -->
   <url>
-    <loc>https://ashibong.github.io/REPOSITORY/</loc>
+    <loc><https://ashibong.github.io/REPOSITORY></loc>
     <lastmod>2025-09-29</lastmod>
     <priority>1.0</priority>
   </url>
 
   <!-- 서브 페이지들 -->
   <url>
-    <loc>https://ashibong.github.io/REPOSITORY/index.html</loc>
+    <loc><https://ashibong.github.io/REPOSITORY/index.html></loc>
     <lastmod>2025-09-29</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ashibong.github.io/REPOSITORY/member.html</loc>
+    <loc><https://ashibong.github.io/REPOSITORY/member.html></loc>
     <lastmod>2025-09-29</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ashibong.github.io/REPOSITORY/publication.html</loc>
+    <loc><https://ashibong.github.io/REPOSITORY/publication.html></loc>
     <lastmod>2025-09-29</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ashibong.github.io/REPOSITORY/research.html</loc>
+    <loc><https://ashibong.github.io/REPOSITORY/research.html></loc>
     <lastmod>2025-09-29</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ashibong.github.io/REPOSITORY/counterpart.html</loc>
+    <loc><https://ashibong.github.io/REPOSITORY/counterpart.html></loc>
     <lastmod>2025-09-29</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ashibong.github.io/REPOSITORY/news.html</loc>
+    <loc><https://ashibong.github.io/REPOSITORY/news.html></loc>
     <lastmod>2025-09-29</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ashibong.github.io/REPOSITORY/alumni.html</loc>
+    <loc><https://ashibong.github.io/REPOSITORY/alumni.html></loc>
     <lastmod>2025-09-29</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ashibong.github.io/REPOSITORY/researchers.html</loc>
+    <loc><https://ashibong.github.io/REPOSITORY/researchers.html></loc>
     <lastmod>2025-09-29</lastmod>
     <priority>0.8</priority>
   </url>
