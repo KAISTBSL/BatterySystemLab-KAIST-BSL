@@ -127,19 +127,23 @@
     .research-content li { margin-bottom: 0.5em; }
 
     /* Research Images Grid */
+    /* Research Images Grid */
     .research-images {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 1em;
       margin-top: 1.5em;
     }
+
     .research-images img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
+      width: 90%;              /* 🔹 약간 줄여서 여백 확보 */
+      height: 350px;       /* 🔹 400px → 350px 정도로 낮춤 */
+      object-fit: contain;     /* 🔹 비율 유지하면서 축소 */
       border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      margin: 0 auto;          /* 🔹 가운데 정렬 */
     }
+
 
     footer { 
       background-color: #003366; 
@@ -224,20 +228,17 @@
   <div id="SP" class="research-content">
     <h2>Simulation & Prediction (시뮬레이션 및 예측)</h2>
     <p>
-      We develop physics-based multi-scale and multi-physics models, and AI-based models, spanning from materials to packs and systems. 
-      These models support degradation and lifetime prediction, electrochemical, mechanical, and thermal analyses, etc. 
-      Our approach enables accelerated understanding of complex battery behaviors and systematic exploration of diverse operating scenarios, while providing predictive insights across scales.
+      Our aim is to deeply investigate and predict the phenomenon of thermal runaway (TR)—a core safety issue in lithium-ion batteries—and its propagation mechanisms. A high-precision simulation model will be developed, enabling the observation of the entire process from initiation to propagation of thermal runaway in a virtual environment. Through this approach, the physical and chemical characteristics of each stage will be quantitatively analyzed. Ultimately, this research aims to provide key predictive technologies for establishing battery system design and safety standards, thereby making a significant contribution to the enhancement of battery safety.
     </p>
     <ul>
-      <li>Multi-scale, multi-physics modeling</li>
-      <li>Degradation prediction and lifetime estimation</li>
-      <li>System-level simulations under real-world conditions</li>
+      <li>Thermal Runaway and Propagation Mechanism</li>
+      <li>Simulate Alltime Process of Thermal Runaway</li>
     </ul>
     <div class="research-images">
-      <img src="images/research5.jpg" alt="Research Image 5">
-      <img src="images/research6.jpg" alt="Research Image 6">
-      <img src="images/research7.jpg" alt="Research Image 7">
-      <img src="images/research8.jpg" alt="Research Image 8">
+      <img src="images\SP_Research1-1.gif" alt="Research Image 5">
+      <img src="images\SP_Research1-2.png" alt="Research Image 6">
+      <img src="images\SP_Research1-3.png" alt="Research Image 7">
+      <img src="images\SP_Research1-4.png" alt="Research Image 8">
     </div>
     <p>
       We develop physics-based multi-scale and multi-physics models, and AI-based models, spanning from materials to packs and systems. 
@@ -296,20 +297,19 @@
   <div id="CD" class="research-content">
     <h2>Control & Demonstration (제어 및 실증)</h2>
     <p>
-      We develop control strategies and BMS algorithms for estimation, balancing, and fault diagnosis. 
-      These methods are demonstrated and validated at the module, pack, and system levels under real-world operating conditions. 
-      Our field studies extend across EVs, ESS, UAM, and advanced mobility platforms, etc., including grid-connected systems and Battery-in-the-Loop System (BILS) test.
-    </p>
+      We develop control strategies and BMS algorithms for estimation, balancing, and fault diagnosis.
+      These methods are demonstrated and validated at the module, pack, and system levels under real-world operating conditions.
+      Our field studies extend across EVs, ESS, UAM, and advanced mobility platforms
     <ul>
       <li>Battery management system (BMS) algorithm development</li>
       <li>Fault diagnosis and health monitoring</li>
-      <li>Field demonstrations in EV, ESS, and mobility platforms</li>
+      <li>AI applied BMS topology with advanced balancing strategies</li>
     </ul>
     <div class="research-images">
-      <img src="images/research13.jpg" alt="Research Image 13">
-      <img src="images/research14.jpg" alt="Research Image 14">
-      <img src="images/research15.jpg" alt="Research Image 15">
-      <img src="images/research16.jpg" alt="Research Image 16">
+      <img src="images\CD_Research1-1.png" alt="Research Image 13">
+      <img src="images\CD_Research1-2.png" alt="Research Image 14">
+      <img src="images\CD_Research1-3.png" alt="Research Image 15">
+      <img src="images\CD_Research1-4.png" alt="Research Image 16">
     </div>
     <p>
       We develop control strategies and BMS algorithms for estimation, balancing, and fault diagnosis. 
