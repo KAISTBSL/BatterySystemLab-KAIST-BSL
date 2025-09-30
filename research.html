@@ -110,6 +110,49 @@
       border-top: 12px solid white;
     }
 
+    /* 드롭다운 스타일 */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropbtn {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 1em;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: white;
+      min-width: 160px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      border-radius: 5px;
+      z-index: 1000;
+    }
+
+    .dropdown-content a {
+      color: #01022c;
+      padding: 10px 14px;
+      text-decoration: none;
+      display: block;
+      font-size: 0.95em;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #f1f1f1;
+      color: #007acc;
+    }
+
+    /* 마우스 올렸을 때 드롭다운 표시 */
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
     /* Research Content */
     .research-content {
       display: none;
@@ -127,21 +170,35 @@
     .research-content li { margin-bottom: 0.5em; }
 
     /* Research Images Grid */
-    /* Research Images Grid */
     .research-images {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 1em;
       margin-top: 1.5em;
     }
-
     .research-images img {
-      width: 90%;              /* 🔹 약간 줄여서 여백 확보 */
-      height: 350px;       /* 🔹 400px → 350px 정도로 낮춤 */
+      width: 490px;              /* 🔹 약간 줄여서 여백 확보 */
+      height: 490px;       /* 🔹 400px → 350px 정도로 낮춤 */
       object-fit: contain;     /* 🔹 비율 유지하면서 축소 */
       border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
       margin: 0 auto;          /* 🔹 가운데 정렬 */
+    }
+    .research-Wimages img {
+      width: 1000px;              /* 🔹 약간 줄여서 여백 확보 */
+      height: 490px;       /* 🔹 400px → 350px 정도로 낮춤 */
+      object-fit: contain;     /* 🔹 비율 유지하면서 축소 */
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      margin: 0.5em auto;          /* 🔹 가운데 정렬 */
+    }
+    .research-Himages img {
+      width: 490px;              /* 🔹 약간 줄여서 여백 확보 */
+      height: 1000px;       /* 🔹 400px → 350px 정도로 낮춤 */
+      object-fit: contain;     /* 🔹 비율 유지하면서 축소 */
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      margin: 0.5em auto;          /* 🔹 가운데 정렬 */
     }
 
 
@@ -169,13 +226,24 @@
     <div class="logo">Battery System Laboratory</div>
     <nav>
       <a href="index.html">Home</a>
-      <a href="member.html">Member</a>
+
+      <!-- 🔽 드롭다운 메뉴 -->
+      <div class="dropdown">
+        <a class="dropbtn">Member ▾</a>
+        <div class="dropdown-content">
+          <a href="member.html">PI</a>
+          <a href="researchers.html">Researchers</a>
+          <a href="alumni.html">Alumni</a>
+        </div>
+      </div>
+
       <a href="publication.html">Publication</a>
       <a href="research.html">Research</a>
       <a href="counterpart.html">Counterpart</a>
       <a href="news.html">News</a>
     </nav>
   </header>
+
 
   <!-- Hero -->
   <section class="hero">
@@ -197,20 +265,17 @@
   <div id="EA" class="research-content active">
     <h2>Experiment & Analysis (실험 및 분석)</h2>
     <p>
-      We evaluate battery materials, cells, modules, packs, and systems under realistic operating conditions. 
-      A wide range of techniques—including EIS, SEM/EDS, TEM, AFM, ICP, XRD, and XPS, etc.—are employed to analyze electrochemical and structural properties. 
-      Through these methods, we quantify performance changes and identify the mechanisms of degradation.
+      <b>Lithium-ion Battery Analysis</b>
     </p>
-    <ul>
-      <li>Battery material, cell, module, pack and system evaluation</li>
-      <li>Electrochemical and structural diagnostics</li>
-      <li>Failure mechanisms and degradation analysis</li>
-    </ul>
-    <div class="research-images">
-      <img src="images\EA_Research1.png" alt="Research Image 1">
-      <img src="images/research2.jpg" alt="Research Image 2">
-      <img src="images/research3.jpg" alt="Research Image 3">
-      <img src="images/research4.jpg" alt="Research Image 4">
+    <p>
+      This study focuses on the comprehensive analysis of commercial lithium-ion batteries (LIBs) through both electrochemical characterization and internal material investigations. In particular, degraded cells subjected to charge–discharge cycling were examined using advanced analytical techniques such as scanning electron microscopy (SEM), X-ray diffraction (XRD), transmission electron microscopy (TEM), and X-ray photoelectron spectroscopy (XPS). These methods enabled systematic identification of microstructural and compositional changes in electrodes and materials, thereby providing critical insights into the degradation mechanisms of LIBs. By correlating electrochemical performance deterioration with physicochemical property changes, reliable diagnostic indicators of cell degradation are established. The outcomes of this research are expected to serve as a valuable foundation for lifetime prediction and performance improvement strategies, ultimately contributing to the development of safe and high-reliability energy storage systems.
+    </p>
+    <p>
+      Lead by <b>Yeonghwan Jang</b>
+    </p>
+    <div class="research-Wimages">
+      <img src="images\EA_Research1-1.jpg" alt="Research Image 1">
+      <img src="images\EA_Research1-2.jpg" alt="Research Image 2">
     </div>
     <p>
       We evaluate battery materials, cells, modules, packs, and systems under realistic operating conditions. 
@@ -228,53 +293,71 @@
   <div id="SP" class="research-content">
     <h2>Simulation & Prediction (시뮬레이션 및 예측)</h2>
     <p>
-      Our aim is to deeply investigate and predict the phenomenon of thermal runaway (TR)—a core safety issue in lithium-ion batteries—and its propagation mechanisms. A high-precision simulation model will be developed, enabling the observation of the entire process from initiation to propagation of thermal runaway in a virtual environment. Through this approach, the physical and chemical characteristics of each stage will be quantitatively analyzed. Ultimately, this research aims to provide key predictive technologies for establishing battery system design and safety standards, thereby making a significant contribution to the enhancement of battery safety.
+      <b>AI-based SOH Estimation</b>
     </p>
-    <ul>
-      <li>Thermal Runaway and Propagation Mechanism</li>
-      <li>Simulate Alltime Process of Thermal Runaway</li>
-    </ul>
-    <div class="research-images">
-      <img src="images\SP_Research1-1.gif" alt="Research Image 5">
-      <img src="images\SP_Research1-2.png" alt="Research Image 6">
-      <img src="images\SP_Research1-3.png" alt="Research Image 7">
-      <img src="images\SP_Research1-4.png" alt="Research Image 8">
-    </div>
     <p>
-      We develop physics-based multi-scale and multi-physics models, and AI-based models, spanning from materials to packs and systems. 
-      These models support degradation and lifetime prediction, electrochemical, mechanical, and thermal analyses, etc. 
-      Our approach enables accelerated understanding of complex battery behaviors and systematic exploration of diverse operating scenarios, while providing predictive insights across scales.
+      This study develops an AI-based framework for the accurate estimation of the state of health (SoH) in lithium-ion batteries (LIBs). A comprehensive database reflecting real-world operating conditions, including variations in temperature, charge/discharge profiles, and usage history, was constructed. The dataset was divided into training and validation sets, and machine learning algorithms were employed to capture nonlinear degradation patterns. The proposed model effectively accounts for current, voltage, and state-of-charge (SoC) conditions, and its predictive performance was evaluated using root mean square error (RMSE) metrics. Moreover, full-cycle SoH estimation was performed and validated against experimental ground truths, confirming the reliability of the model. The findings demonstrate that the proposed approach can contribute to the development of precise diagnostic tools for enhancing battery performance and safety, and can be further applied to the design of high-reliability battery management systems (BMS) and next-generation energy storage technologies.
+    </p>
+    <p>
+      Lead by <b>Yeonghwan Jang</b>
+    </p>
+    <div class="research-Wimages">
+      <img src="images\SP_Research1-1.jpg" alt="Research Image 5">
+      <img src="images\SP_Research1-2.jpg" alt="Research Image 6">
+    </div>
+
+    <p>
+      <b>Battery Degradation Modeling</b>
+    </p>
+    <p>
+      We develop accelerated degradation modeling frameworks for lithium-ion batteries that couple electrochemical and side reaction mechanisms. These frameworks capture SEI growth, transition-metal dissolution, solvent oxidation, and salt decomposition, among other mechanisms, enabling the prediction of long-term aging with reduced computational cost. Through advanced acceleration strategies, our approach maintains accuracy while significantly reducing simulation time, allowing efficient evaluation of cell- and system-level performance.
+    </p>
+    <p>
+      Lead by <b>Jeu Shin</b>
     </p>
     <ul>
-      <li>Multi-scale, multi-physics modeling</li>
-      <li>Degradation prediction and lifetime estimation</li>
-      <li>System-level simulations under real-world conditions</li>
+      <li>Electrochemical-side reaction coupled degradation modeling</li>
+      <li>Acceleration of long-term cycling simulations through advanced numerical strategies</li>
+      <li>Balancing accuracy and computation speed for multi-scale battery design and optimization</li>
     </ul>
-    <div class="research-images">
-      <img src="images/research5.jpg" alt="Research Image 5">
-      <img src="images/research6.jpg" alt="Research Image 6">
-      <img src="images/research7.jpg" alt="Research Image 7">
-      <img src="images/research8.jpg" alt="Research Image 8">
+    <div class="research-Wimages">
+      <img src="images\SP_Research2-1.jpg" alt="Research Image 5">
+    </div>
+
+    <p>
+      <b>Lithium Metal Batteries Dendrite Simulation</b>
+    </p>
+    <p>
+      Lithium(Li) metal batteries (LMBs) are considered promising candidates for next-generation energy storage systems owing to their exceptionally high theoretical capacity and low electrochemical potential. However, the uncontrolled growth of Li dendrites remains a critical challenge, leading to severe safety risks and shortened cycle life. 
+      In this study, a simulation-based model was developed to observe and investigate dendrite growth in lithium metal batteries. The model enables analysis of dendrite behavior under various operating conditions, such as current and voltage, and is employed to identify strategies for suppressing Li dendrite formation. The findings provide fundamental insights into enhancing the performance and safety of LMBs and can serve as a basis for establishing design and control strategies for next-generation high–energy-density batteries.
+    </p>
+    <p>
+      Lead by <b>Yeonghwan Jang</b>
+    </p>
+    <div class="research-Wimages">
+      <img src="images\SP_Research3-1.jpg" alt="Research Image 5">
+      <img src="images\SP_Research3-2.jpg" alt="Research Image 6">
     </div>
   </div>
 
   <div id="DO" class="research-content">
     <h2>Design & Optimization (설계 및 최적화)</h2>
     <p>
-      We build design and optimization frameworks for cells, modules, packs, and systems using data from experiments and simulations. 
-      These frameworks balance performance, safety, and cost under engineering constraints through physics-based methods. 
-      Our approach identifies how characteristics and behavior may change from cells to systems, guiding designs that are valid and applicable across cell, module, pack, and system levels.
+      <b>Multi-Scale Optimization</b>
+    </p>
+    <p>
+      We develop multi-scale optimization frameworks that integrate cell-level physics with vehicle and operational-level performance. These frameworks incorporate degradation-coupled models at the cell scale, link them into vehicle-level constraints, and extend to fleet and charging strategies at the operation scale. By integrating design variables and engineering constraints across all levels, we enable holistic optimization of battery and mobility systems.
+    </p>
+    <p>
+      Lead by <b>Jeu Shin</b>
     </p>
     <ul>
-      <li>Battery cell, module, and pack design frameworks</li>
-      <li>Physics-based multi-scale, multi-physics optimization</li>
-      <li>Balancing performance, safety, and cost trade-offs</li>
+      <li>Cell scale: Physics-based, high-fidelity models incorporating degradation and electrochemical dynamics</li>
+      <li>Vehicle scale: Performance-driven design considering range, power, and pack configuration</li>
+      <li>Operation scale: Fleet and charging coordination with cost–service trade-offs</li>
     </ul>
-    <div class="research-images">
-      <img src="images/research9.jpg" alt="Research Image 9">
-      <img src="images/research10.jpg" alt="Research Image 10">
-      <img src="images/research11.jpg" alt="Research Image 11">
-      <img src="images/research12.jpg" alt="Research Image 12">
+    <div class="research-Wimages">
+      <img src="images\DO_Research1-1.jpg" alt="Research Image 9">
     </div>
     <p>
       We build design and optimization frameworks for cells, modules, packs, and systems using data from experiments and simulations. 
@@ -297,19 +380,23 @@
   <div id="CD" class="research-content">
     <h2>Control & Demonstration (제어 및 실증)</h2>
     <p>
+      <b>Battery Management System</b>
+    </p>
+    <p>
       We develop control strategies and BMS algorithms for estimation, balancing, and fault diagnosis.
       These methods are demonstrated and validated at the module, pack, and system levels under real-world operating conditions.
       Our field studies extend across EVs, ESS, UAM, and advanced mobility platforms
+    <p>
+      Lead by <b>Donghae Kim</b>
+    </p>
     <ul>
       <li>Battery management system (BMS) algorithm development</li>
       <li>Fault diagnosis and health monitoring</li>
       <li>AI applied BMS topology with advanced balancing strategies</li>
     </ul>
-    <div class="research-images">
+    <div class="research-Wimages">
       <img src="images\CD_Research1-1.png" alt="Research Image 13">
       <img src="images\CD_Research1-2.png" alt="Research Image 14">
-      <img src="images\CD_Research1-3.png" alt="Research Image 15">
-      <img src="images\CD_Research1-4.png" alt="Research Image 16">
     </div>
     <p>
       We develop control strategies and BMS algorithms for estimation, balancing, and fault diagnosis. 
