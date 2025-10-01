@@ -284,7 +284,7 @@
       <a href="publication.html">Publication</a>
       <a href="research.html">Research</a>
       <a href="counterpart.html">Counterpart</a>
-      <a href="news.html">News</a>
+      <a href="news.html">Board</a>
     </nav>
   </header>
 
@@ -292,7 +292,7 @@
   <section class="hero">
     <img src="https://mo.kaist.ac.kr/wp-content/uploads/2022/08/logo_new-1-e1661933714657.png" 
          alt="KAIST Mobility Logo" class="hero-logo">
-    <h1>News</h1>
+    <h1>Board</h1>
     <p>Latest updates from our lab</p>
   </section>
 
@@ -325,7 +325,7 @@
         <div class="gallery-item">
           <div class="gallery-date">09/29/2025</div>
           <div class="gallery-title">BSL Dinner Party</div>
-          <img src="images\250929Gallery.jpg" alt="Professor Yoonkoo Lee's Birthday Party with BSL!">
+          <img src="images\250929Gallery.png" alt="Professor Yoonkoo Lee's Birthday Party with BSL!">
         </div>
         <div class="gallery-item">
           <div class="gallery-date">09/05/2025</div>
@@ -335,12 +335,12 @@
         <div class="gallery-item">
           <div class="gallery-date">09/02/2025</div>
           <div class="gallery-title">BSL @ KAIST Carrier Fair</div>
-          <img src="images\250902Gallery.jpg" alt="Professor Yoonkoo Lee's Birthday Party with BSL!">
+          <img src="images\250902Gallery.png" alt="Professor Yoonkoo Lee's Birthday Party with BSL!">
         </div>
         <div class="gallery-item">
           <div class="gallery-date">08/29/2025</div>
           <div class="gallery-title">Alpha Male Dain KIM</div>
-          <img src="images\250829Gallery.jpg" alt="Professor Yoonkoo Lee's Birthday Party with BSL!">
+          <img src="images\250829Gallery.png" alt="Professor Yoonkoo Lee's Birthday Party with BSL!">
         </div>
         <div class="gallery-item">
           <div class="gallery-date">08/10/2025</div>
@@ -355,7 +355,7 @@
         <div class="gallery-item">
           <div class="gallery-date">08/01/2025</div>
           <div class="gallery-title">Table Tennis Competition</div>
-          <img src="images\250801Gallery.jpg" alt="Last night with Pre-URP students from Science Highschool">
+          <img src="images\250801Gallery.png" alt="Last night with Pre-URP students from Science Highschool">
         </div>
         <div class="gallery-item">
           <div class="gallery-date">07/28/2025</div>
@@ -388,17 +388,24 @@
       });
     });
 
-    const modal = document.getElementById("imageModal");
     const modalImg = document.getElementById("modalImg");
     const closeModal = document.getElementById("closeModal");
+
+    // 이미지 클릭 시 모달 표시
     document.querySelectorAll(".gallery-item img").forEach(img => {
       img.addEventListener("click", () => {
         modal.style.display = "flex";
         modalImg.src = img.src;
       });
     });
+
+    // 모달 닫기 버튼 클릭 시 모달 닫기
     closeModal.addEventListener("click", () => { modal.style.display = "none"; });
-    window.addEventListener("click", (e) => { if (e.target === modal) modal.style.display = "none"; });
+
+    // 모달 외부 클릭 시 닫기
+    window.addEventListener("click", (e) => { 
+      if (e.target === modal) modal.style.display = "none"; 
+    });
   </script>
 </body>
 </html>

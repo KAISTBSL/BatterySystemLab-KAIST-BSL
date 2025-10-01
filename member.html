@@ -192,35 +192,6 @@
       display: block;
     }
 
-
-    /* 책갈피 스타일 버튼 (우측 고정) */
-    .bookmark-buttons {
-      position: fixed;
-      top: 65%;
-      right: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      z-index: 1000;
-    }
-    .bookmark-buttons a {
-      display: block;
-      background: linear-gradient(135deg, #003366, #3399ff);
-      color: white;
-      padding: 1em 1.6em;
-      border-radius: 10px 0 0 10px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 1em;
-      transform: translateX(5%);  /* ✅ 기본 상태: 글자 다 보이도록 */
-      transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.25);
-    }
-    .bookmark-buttons a:hover {
-      transform: translateX(0) scale(1.08); /* ✅ hover 시 더 튀어나옴 + 확대 */
-      box-shadow: 0 5px 14px rgba(0,0,0,0.4);
-      background: linear-gradient(135deg, #3399ff, #66ccff); /* ✅ hover 시 그라데이션 변경 */
-    }
   </style>
 </head>
 <body>
@@ -242,7 +213,7 @@
       <a href="publication.html">Publication</a>
       <a href="research.html">Research</a>
       <a href="counterpart.html">Counterpart</a>
-      <a href="news.html">News</a>
+      <a href="news.html">Board</a>
     </nav>
   </header>
 
@@ -313,12 +284,6 @@
       </div>
     </div>
   </main>
-
-  <!-- 책갈피 버튼 -->
-  <div class="bookmark-buttons">
-    <a href="researchers.html">Researchers</a>
-    <a href="alumni.html">Alumni</a>
-  </div>
 
   <footer>
     <p>&copy; 2025 Battery System Laboratory</p>
