@@ -18,7 +18,21 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1em 2em;
+      padding: 0 2em;          /* 위아래 padding 제거 → 높이 고정 효과 */
+      height: 80px;            /* ✅ 상단 바 높이 고정 */
+    }
+
+    .logo {
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 96px; 
+      height: 96px;
+      object-fit: contain;     /* ✅ 비율 유지하면서 들어가도록 */
     }
 
     .logo { font-weight: bold; font-size: 1.5em; }
@@ -181,6 +195,18 @@
       margin-top: 2em;
     }
 
+    .logo {
+      font-weight: bold;
+      font-size: 1.5em;
+      display: flex;          /* 문구와 아이콘을 가로 정렬 */
+      align-items: center;
+      gap: 10px;              /* 문구와 아이콘 사이 간격 */
+    }
+
+    .logo-icon {
+      width: 96px;
+      height: 96px;
+    }
     /* Fade Animations */
     @keyframes fadeInDown {
       from { opacity: 0; transform: translateY(-30px); }
@@ -194,7 +220,10 @@
 </head>
 <body>
   <header>
-    <div class="logo">Battery System Laboratory</div>
+    <div class="logo">
+      Battery System Laboratory
+      <img src="images/mainlogo.png" alt="Lab Logo" class="logo-icon">
+    </div>
     <nav>
       <a href="index.html">Home</a>
 

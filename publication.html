@@ -10,14 +10,29 @@
       background-color: #f8f9fa; 
       line-height: 1.6; 
     }
-    header { 
-      background-color: #01022c; 
-      color: white; 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
-      padding: 1em 2em; 
+    header {
+      background-color: #01022c;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2em;          /* 위아래 padding 제거 → 높이 고정 효과 */
+      height: 80px;            /* ✅ 상단 바 높이 고정 */
     }
+
+    .logo {
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 96px; 
+      height: 96px;
+      object-fit: contain;     /* ✅ 비율 유지하면서 들어가도록 */
+    }
+
     .logo { font-weight: bold; font-size: 1.5em; }
     nav a { 
       color: white; 
@@ -136,6 +151,8 @@
     }
 
     .pub-item { 
+      display: flex;                 /* 🔹 가로 배치 */
+      align-items: flex-start;
       margin: 1em 0; 
       padding: 1em; 
       background: white; 
@@ -143,7 +160,32 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.1); 
       animation: fadeInUp 0.6s ease-in-out;
     }
-    .pub-title { font-weight: bold; margin-bottom: 0.3em; }
+    .pub-img {
+      height: 150px;
+      width: 150px;               /* 🔹 이미지 크기 고정 */
+      margin-right: 1em;
+    }
+    .pub-img img {
+      width: 100%;
+      border-radius: 6px;
+      object-fit: cover;
+    }
+    .pub-details {
+      flex: 1;                       /* 🔹 오른쪽은 남는 공간 다 사용 */
+    }
+    .pub-title {
+      font-weight: bold;
+      margin-bottom: 0.4em;
+    }
+    .pub-meta {
+      font-style: italic;
+      color: #444;
+      margin-bottom: 0.6em;
+    }
+    .pub-authors {
+      margin-top: 0.4em;
+      font-size: 0.95em;
+    }
     .pub-links a { 
       margin-right: 10px; 
       font-size: 0.9em; 
@@ -167,6 +209,19 @@
       margin-top: 2em; 
     }
 
+    .logo {
+      font-weight: bold;
+      font-size: 1.5em;
+      display: flex;          /* 문구와 아이콘을 가로 정렬 */
+      align-items: center;
+      gap: 10px;              /* 문구와 아이콘 사이 간격 */
+    }
+
+    .logo-icon {
+      width: 96px;
+      height: 96px;
+    }
+
     /* Animations */
     @keyframes fadeInDown {
       from { opacity: 0; transform: translateY(-30px); }
@@ -184,7 +239,10 @@
   </head>
   <body>
     <header>
-    <div class="logo">Battery System Laboratory</div>
+      <div class="logo">
+        Battery System Laboratory
+        <img src="images/mainlogo.png" alt="Lab Logo" class="logo-icon">
+      </div>
     <nav>
       <a href="index.html">Home</a>
 
@@ -224,81 +282,656 @@
       <button class="tab-btn" data-year="2022">2022</button>
       <button class="tab-btn" data-year="2021">2021</button>
       <button class="tab-btn" data-year="2020">2020</button>
-      <button class="tab-btn" data-year="2019">2019</button>
-      <button class="tab-btn" data-year="2018">2018</button>
-      <button class="tab-btn" data-year="2017">2017</button>
-      <button class="tab-btn" data-year="2016">2016</button>
-      <button class="tab-btn" data-year="2015">2015</button>
-      <button class="tab-btn" data-year="2014">2014</button>
-      <button class="tab-btn" data-year="2013">2013</button>
+      <button class="tab-btn" data-year="before 2020">before 2020</button>
     </div>
 
     <!-- Overall 섹션 추가 -->
     <div class="pub-list active" id="year-overall">
-      <div class="pub-item">[23] S.B.Kim, Y.Kim, Y.K. Lee*, J.Song*, “Advanced multiscale modeling of potassium-ion batteries for interplay of electrochemical and mechanical behavior across Scales”, Small Structures (IF: 13.9), 2400640 (2025) <a href="https://doi.org/10.1002/sstr.202400640">[DOI]</a></div>
-      <div class="pub-item">[22] J. Park†, H. Lim†, S. Kim, J. Song*, Y.K. Lee*, “Modeling and validation of driving performance of electric vehicle converted from internal combustion engine vehicle”, IEEE Transactions on Transportation Electrification (IF: 7.0), 11 (1), 486-498 (2025)<a href="https://doi.org/10.1109/TTE.2024.3392208">[DOI]</a></div>
-      <div class="pub-item">[21] J. Shin, Y.K. Lee*, “Multi-scale mechanical-electrochemical coupled modeling of stress generation and its impact on different battery cell geometries”, Journal of Power Sources (IF:9.2), 595, 234064 (2024)<a href="https://doi.org/10.1016/j.jpowsour.2024.234064">[DOI]</a></div>
-      <div class="pub-item">[20] Y.K. Lee, J. Kim, C. Sung, J.Choi*, “Multiphysics modeling of the influence of initial pressure on mechanical and electrochemical performance of all-solid-state batteries”, Journal of Energy Storage (IF:9.4), 82, 110431 (2024)<a href="https://doi.org/10.1016/j.est.2024.110431">[DOI]</a></div>
-      <div class="pub-item">[19] Y.K. Lee,  H. Shin*#, “Modeling and simulation of a composite solid-state battery: The effects of stack pressure on electrochemical and mechanical behavior”, Journal of Energy Storage (IF:9.4), 78, 110051 (2024)<a href="https://doi.org/10.1016/j.est.2023.110051">[DOI]</a></div>
-      <div class="pub-item">[18] U. Lee, N. Kang*, Y.K. Lee*,  “Shared autonomous electric vehicle system design and optimization under dynamic battery degradation considering varying load conditions” Journal of Cleaner Production (IF:11.1), 138795 (2023)<a href="https://doi.org/10.1016/j.jclepro.2023.138795">[DOI]</a></div>
-      <div class="pub-item">[17] U. Lee, N. Kang*, Y.K. Lee*,  “Optimization of module structure considering mechanical and thermal safety of pouch cell lithium-ion batteries using a reliability-based design optimization approach” Journal of Energy Storage (IF:9.4), 72, 108650 (2023)<a href="https://doi.org/10.1016/j.est.2023.108650">[DOI]</a></div>
-      <div class="pub-item">[16] Y.K. Lee*, “An optimization framework for enhancing cycle life of composite positive electrodes in lithium-ion batteries via composition ratio optimization”, Journal of the Electrochemical Society (IF:4.371),170, 060528 (2023)<a href="https://doi.org/10.1149/1945-7111/acdd28">[DOI]</a></div>
-      <div class="pub-item">[15] Y.K. Lee*, S. Jeon, Y.Jeon, “Modeling of electrochemical performance and its relation to mechanical responses of li metal batteries”, Journal of the Electrochemical Society (IF:4.371),170, 060520 (2023)<a href="https://doi.org/10.1149/1945-7111/acd962">[DOI]</a></div>
-      <div class="pub-item">[18] U. Lee, N. Kang*, Y.K. Lee*,  “Shared autonomous electric vehicle system design and optimization under dynamic battery degradation considering varying load conditions” Journal of Cleaner Production (IF:11.1), 138795 (2023)<a href="https://doi.org/10.1016/j.jclepro.2023.138795">[DOI]</a></div>
-      <div class="pub-item">[17] U. Lee, N. Kang*, Y.K. Lee*,  “Optimization of module structure considering mechanical and thermal safety of pouch cell lithium-ion batteries using a reliability-based design optimization approach” Journal of Energy Storage (IF:9.4), 72, 108650 (2023)<a href="https://doi.org/10.1016/j.est.2023.108650">[DOI]</a></div>
-      <div class="pub-item">[16] Y.K. Lee*, “An optimization framework for enhancing cycle life of composite positive electrodes in lithium-ion batteries via composition ratio optimization”, Journal of the Electrochemical Society (IF:4.371),170, 060528 (2023)<a href="https://doi.org/10.1149/1945-7111/acdd28">[DOI]</a></div>
-      <div class="pub-item">[15] Y.K. Lee*, S. Jeon, Y.Jeon, “Modeling of electrochemical performance and its relation to mechanical responses of li metal batteries”, Journal of the Electrochemical Society (IF:4.371),170, 060520 (2023)<a href="https://doi.org/10.1149/1945-7111/acd962">[DOI]</a></div>
-      <div class="pub-item">[14] Y.K. Lee*, “Effect of porous structure and morphology of cathode on the degradation of lithium-ion batteries”, Journal of Energy Storage (IF:8.78),52, 104788 (2022)<a href="https://doi.org/10.1016/j.est.2022.104788">[DOI]</a></div>
-      <div class="pub-item">[13] Y.K. Lee, U. Lee, N. Kang*, “Multi-scale design optimization of electric vehicles by analytical target cascading: from battery cell level to marketing level”, Journal of Cleaner Production (IF:11.072), 368, 133235 (2022)<a href="https://doi.org/10.1016/j.jclepro.2022.133235">[DOI]</a></div>
-      <div class="pub-item">[12] Y.K. Lee, J.H. Park, H. Shin*#, “Multi-scale analysis of cathode microstructural effects on electrochemical and stress responses of lithium-ion batteries”, Journal of Power Sources (IF: 9.719), 548, 232050 (2022)<a href="https://doi.org/10.1016/j.jpowsour.2022.232050">[DOI]</a></div>
-      <div class="pub-item">[11] H.S Shin†#, Y.K. Lee†, W. Lu*#, “Structural degradation of graphite anode induced by dissolved manganese ions in Lithium-ion batteries”, Journal of Power Sources (IF:9.719), 528, 231223 (2022)<a href="https://doi.org/10.1016/j.jpowsour.2022.231223">[DOI]</a></div>
-      <div class="pub-item">[10] Y.K. Lee, H.S Shin*#, “Modeling study of stress generation of a single active material particle connected to solid electrolyte in solid-state batteries”, Electrochimica Acta (IF: 6.901),  403, 139639 (2022)<a href="https://doi.org/10.1016/j.electacta.2021.139639">[DOI]</a></div>
-      <div class="pub-item">[9] Y.K. Lee*, “Effect of transition metal ions on solid electrolyte interphase layer on the graphite electrode in lithium ion battery”, Journal of Power Sources (IF: 9.719), 484, 229270 (2021)<a href="https://doi.org/10.1016/j.jpowsour.2020.229270">[DOI]</a></div>
-      <div class="pub-item">[8] Y.K. Lee, J.Song, J.Park*# “Multi-scale coupled mechanical-electrochemical modeling for study on stress generation and its impact on multi-layered electrodes in lithium-ion batteries”, Electrochimica Acta (IF: 6.901), 138682 (2021)<a href="https://doi.org/10.1016/j.electacta.2021.138682">[DOI]</a></div>
-      <div class="pub-item">[7] Y. Kim, J. K. Chae, J.-H. Lee, E. Choi, Y. K. Lee, and J. Song*, “Free manipulation system for nanorobot cluster based on complicated multi-coil electromagnetic actuator”, Scientific Reports (IF: 4.38), 11 (1), 1-9 (2021)<a href="https://doi.org/10.1038/s41598-021-98957-y">[DOI]</a></div>
-      <div class="pub-item">[6] Y.K. Lee, J. Park# and W. Lu*# “A comprehensive experimental and modeling study on dissolution in li-ion batteries”, Journal of the Electrochemical Society (IF: 3.721), 166, A1340 (2019)<a href="https://doi.org/10.1149/2.0111908jes">[DOI]</a></div>
-      <div class="pub-item">[5] Y.K. Lee* “The effect of active material, conductive additives, and binder in a cathode composite electrode on battery performance”, Energies (IF: 2.702), 12, 658 (2019)<a href="https://doi.org/10.3390/en12040658">[DOI]</a></div>
-      <div class="pub-item">[4] Y.K. Lee, J. Park# and W. Lu*# “A comprehensive study of manganese deposition and side reactions in li-ion battery electrodes”, Journal of the Electrochemical Society (IF: 3.662), 164, A2822 (2017)<a href="https://doi.org/10.1149/2.1851712jes">[DOI]</a></div>
-      <div class="pub-item">[3] Y.K. Lee, J. Park# and W. Lu*# “Electronic and bonding properties of limn2o4 spinel with different surface orientations and doping elements and their effects on manganese dissolution”, Journal of the Electrochemical Society (IF: 3.259), 163, A1359 (2016)<a href="https://doi.org/10.1149/2.0991607jes">[DOI]</a></div>
-      <div class="pub-item">[2] X. Lin#, J. Park#, L. Liu#, Y.K. Lee, A.M Sastry#, and W. Lu*# “A comprehensive capacity fade model and analysis for Li-ion batteries”, Journal of the Electrochemical Society (IF: 2.859), 160 (10) A1701-A1710 (2013)<a href="https://doi.org/10.1149/2.040310jes">[DOI]</a></div>
-      <div class="pub-item">[1] J. Park#, S. Kalnaus#, S. Han#, Y.K. Lee, G. Less#, N. Dudney#, C. Daniel#, and A. M. Sastry*#, “In situ atomic force microscopy studies on lithium (de)intercalation-induced morphology changes in LixCoO2 micro-machined thin film electrodes”, Journal of Power Sources (IF: 5.211), 222 (15), 417–425 (2013)<a href="https://doi.org/10.1016/j.jpowsour.2012.09.017">[DOI]</a></div>
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images\P_2025-2.png">
+        </div>
+
+        <div class="pub-details">
+          <div class="pub-title">
+            Advanced multiscale modeling of potassium-ion batteries for interplay of electrochemical and mechanical behavior across Scales (2025)
+          </div>
+          <div class="pub-meta">
+            <em>Energy</em> (IF: 9.4), 335, 138202
+          </div>
+          <div class="pub-authors">
+            Subeen Kim†, Yun Kim, <b>Yoon Koo Lee*</b>, Jihwan Song*
+          </div>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1002/sstr.202400640" target="_blank">[DOI]</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2025_potassium_battery.png">
+        </div>
+
+        <div class="pub-details">
+          <div class="pub-title">
+            Modeling and validation of driving performance of electric vehicle converted from internal combustion engine vehicle (2025)
+          </div>
+          <div class="pub-meta">
+            <em>IEEE Transactions on Transportation Electrification</em> (IF: 7.0), 11 (1), 486-498
+          </div>
+          <div class="pub-authors">
+            J. Park†, H. Lim†, S. Kim, J. Song*, <b>Yoon Koo Lee*</b>
+          </div>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1109/TTE.2024.3392208" target="_blank">[DOI]</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2025_potassium_battery.png">
+        </div>
+
+        <div class="pub-details">
+          <div class="pub-title">
+            Multi-scale mechanical-electrochemical coupled modeling of stress generation and its impact on different battery cell geometries (2024)
+          </div>
+          <div class="pub-meta">
+            <em>Journal of Power Sources</em> (IF: 9.2), 595, 234064
+          </div>
+          <div class="pub-authors">
+            J. Shin, <b>Yoon Koo Lee*</b>
+          </div>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1016/j.jpowsour.2024.234064" target="_blank">[DOI]</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2025_potassium_battery.png">
+        </div>
+
+        <div class="pub-details">
+          <div class="pub-title">
+            Multiphysics modeling of the influence of initial pressure on mechanical and electrochemical performance of all-solid-state batteries (2024)
+          </div>
+          <div class="pub-meta">
+            <em>Journal of Energy Storage</em> (IF: 9.4), 82, 110431
+          </div>
+          <div class="pub-authors">
+            <b>Yoon Koo Lee*</b> , J. Kim, C. Sung, J.Choi*
+          </div>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1016/j.est.2024.110431" target="_blank">[DOI]</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2025_potassium_battery.png">
+        </div>
+
+        <div class="pub-details">
+          <div class="pub-title">
+            Modeling and simulation of a composite solid-state battery: The effects of stack pressure on electrochemical and mechanical behavior (2024)
+          </div>
+          <div class="pub-meta">
+            <em>Journal of Energy Storage</em> (IF: 9.4), 78, 110051
+          </div>
+          <div class="pub-authors">
+            <b>Yoon Koo Lee*</b> , H. Shin*
+          </div>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1016/j.est.2023.110051" target="_blank">[DOI]</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2023_shared_vehicle.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            Shared autonomous electric vehicle system design and optimization under dynamic battery degradation considering varying load conditions (2023)
+          </div>
+          <div class="pub-meta"><em>Journal of Cleaner Production</em> (IF: 11.1), 138795</div>
+          <div class="pub-authors">U. Lee, N. Kang*, <b>Y.K. Lee*</b></div>
+          <div class="pub-links"><a href="https://doi.org/10.1016/j.jclepro.2023.138795" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2023_module_structure.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            Optimization of module structure considering mechanical and thermal safety of pouch cell lithium-ion batteries using a reliability-based design optimization approach (2023)
+          </div>
+          <div class="pub-meta"><em>Journal of Energy Storage</em> (IF: 9.4), 72, 108650</div>
+          <div class="pub-authors">U. Lee, N. Kang*, <b>Y.K. Lee*</b></div>
+          <div class="pub-links"><a href="https://doi.org/10.1016/j.est.2023.108650" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2023_cycle_life.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            An optimization framework for enhancing cycle life of composite positive electrodes in lithium-ion batteries via composition ratio optimization (2023)
+          </div>
+          <div class="pub-meta"><em>Journal of the Electrochemical Society</em> (IF: 4.3), 170, 060528</div>
+          <div class="pub-authors"><b>Y.K. Lee*</b></div>
+          <div class="pub-links"><a href="https://doi.org/10.1149/1945-7111/acdd28" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2023_li_metal.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            Modeling of electrochemical performance and its relation to mechanical responses of li metal batteries (2023)
+          </div>
+          <div class="pub-meta"><em>Journal of the Electrochemical Society</em> (IF: 4.3), 170, 060520</div>
+          <div class="pub-authors"><b>Y.K. Lee*</b>, S. Jeon, Y. Jeon</div>
+          <div class="pub-links"><a href="https://doi.org/10.1149/1945-7111/acd962" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2022_cathode_structure.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            Effect of porous structure and morphology of cathode on the degradation of lithium-ion batteries (2022)
+          </div>
+          <div class="pub-meta"><em>Journal of Energy Storage</em> (IF: 8.7), 52, 104788</div>
+          <div class="pub-authors"><b>Y.K. Lee*</b></div>
+          <div class="pub-links"><a href="https://doi.org/10.1016/j.est.2022.104788" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2022_multi_scale_ev.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            Multi-scale design optimization of electric vehicles by analytical target cascading: from battery cell level to marketing level (2022)
+          </div>
+          <div class="pub-meta"><em>Journal of Cleaner Production</em> (IF: 11.0), 368, 133235</div>
+          <div class="pub-authors"><b>Y.K. Lee</b>, U. Lee, N. Kang*</div>
+          <div class="pub-links"><a href="https://doi.org/10.1016/j.jclepro.2022.133235" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2022_cathode_micro.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            Multi-scale analysis of cathode microstructural effects on electrochemical and stress responses of lithium-ion batteries (2022)
+          </div>
+          <div class="pub-meta"><em>Journal of Power Sources</em> (IF: 9.7), 548, 232050</div>
+          <div class="pub-authors"><b>Y.K. Lee</b>, J.H. Park, H. Shin*#</div>
+          <div class="pub-links"><a href="https://doi.org/10.1016/j.jpowsour.2022.232050" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2022_graphite.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            Structural degradation of graphite anode induced by dissolved manganese ions in Lithium-ion batteries (2022)
+          </div>
+          <div class="pub-meta"><em>Journal of Power Sources</em> (IF: 9.7), 528, 231223</div>
+          <div class="pub-authors">H.S. Shin†#, <b>Y.K. Lee†</b>, W. Lu*#</div>
+          <div class="pub-links"><a href="https://doi.org/10.1016/j.jpowsour.2022.231223" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2022_particle_stress.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            Modeling study of stress generation of a single active material particle connected to solid electrolyte in solid-state batteries (2022)
+          </div>
+          <div class="pub-meta"><em>Electrochimica Acta</em> (IF: 6.9), 403, 139639</div>
+          <div class="pub-authors"><b>Y.K. Lee</b>, H.S. Shin*#</div>
+          <div class="pub-links"><a href="https://doi.org/10.1016/j.electacta.2021.139639" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2021_graphite_sei.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            Effect of transition metal ions on solid electrolyte interphase layer on the graphite electrode in lithium ion battery (2021)
+          </div>
+          <div class="pub-meta"><em>Journal of Power Sources</em> (IF: 9.7), 484, 229270</div>
+          <div class="pub-authors"><b>Y.K. Lee*</b></div>
+          <div class="pub-links"><a href="https://doi.org/10.1016/j.jpowsour.2020.229270" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2021_multiscale.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            Multi-scale coupled mechanical-electrochemical modeling for study on stress generation and its impact on multi-layered electrodes in lithium-ion batteries (2021)
+          </div>
+          <div class="pub-meta"><em>Electrochimica Acta</em> (IF: 6.9), 138682</div>
+          <div class="pub-authors"><b>Y.K. Lee</b>, J. Song, J. Park*#</div>
+          <div class="pub-links"><a href="https://doi.org/10.1016/j.electacta.2021.138682" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2021_nanobot.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            Free manipulation system for nanorobot cluster based on complicated multi-coil electromagnetic actuator (2021)
+          </div>
+          <div class="pub-meta"><em>Scientific Reports</em> (IF: 4.3), 11 (1), 1-9</div>
+          <div class="pub-authors">Y. Kim, J.K. Chae, J.-H. Lee, E. Choi, <b>Y.K. Lee</b>, J. Song*</div>
+          <div class="pub-links"><a href="https://doi.org/10.1038/s41598-021-98957-y" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2019_dissolution.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            A comprehensive experimental and modeling study on dissolution in li-ion batteries (2019)
+          </div>
+          <div class="pub-meta"><em>Journal of the Electrochemical Society</em> (IF: 3.7), 166, A1340</div>
+          <div class="pub-authors"><b>Y.K. Lee</b>, J. Park#, W. Lu*#</div>
+          <div class="pub-links"><a href="https://doi.org/10.1149/2.0111908jes" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2019_cathode_composite.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            The effect of active material, conductive additives, and binder in a cathode composite electrode on battery performance (2019)
+          </div>
+          <div class="pub-meta"><em>Energies</em> (IF: 2.7), 12, 658</div>
+          <div class="pub-authors"><b>Y.K. Lee*</b></div>
+          <div class="pub-links"><a href="https://doi.org/10.3390/en12040658" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2017_manganese.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            A comprehensive study of manganese deposition and side reactions in li-ion battery electrodes (2017)
+          </div>
+          <div class="pub-meta"><em>Journal of the Electrochemical Society</em> (IF: 3.6), 164, A2822</div>
+          <div class="pub-authors"><b>Y.K. Lee</b>, J. Park#, W. Lu*#</div>
+          <div class="pub-links"><a href="https://doi.org/10.1149/2.1851712jes" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2016_spinels.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            Electronic and bonding properties of limn2o4 spinel with different surface orientations and doping elements and their effects on manganese dissolution (2016)
+          </div>
+          <div class="pub-meta"><em>Journal of the Electrochemical Society</em> (IF: 3.2), 163, A1359</div>
+          <div class="pub-authors"><b>Y.K. Lee</b>, J. Park#, W. Lu*#</div>
+          <div class="pub-links"><a href="https://doi.org/10.1149/2.0991607jes" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2013_capacity_fade.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            A comprehensive capacity fade model and analysis for Li-ion batteries (2013)
+          </div>
+          <div class="pub-meta"><em>Journal of the Electrochemical Society</em> (IF: 2.8), 160 (10), A1701-A1710</div>
+          <div class="pub-authors">X. Lin#, J. Park#, L. Liu#, <b>Y.K. Lee</b>, A.M. Sastry#, W. Lu*#</div>
+          <div class="pub-links"><a href="https://doi.org/10.1149/2.040310jes" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2013_in_situ.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            In situ atomic force microscopy studies on lithium (de)intercalation-induced morphology changes in LixCoO2 micro-machined thin film electrodes (2013)
+          </div>
+          <div class="pub-meta"><em>Journal of Power Sources</em> (IF: 5.2), 222 (15), 417-425</div>
+          <div class="pub-authors">J. Park#, S. Kalnaus#, S. Han#, <b>Y.K. Lee</b>, G. Less#, N. Dudney#, C. Daniel#, A.M. Sastry*#</div>
+          <div class="pub-links"><a href="https://doi.org/10.1016/j.jpowsour.2012.09.017" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
     </div>
 
     <!-- 2025 -->
     <div class="pub-list active" id="year-2025">
-      <div class="pub-item">[23] S.B.Kim, Y.Kim, Y.K. Lee*, J.Song*, “Advanced multiscale modeling of potassium-ion batteries for interplay of electrochemical and mechanical behavior across Scales”, Small Structures (IF: 13.9), 2400640 (2025) <a href="https://doi.org/10.1002/sstr.202400640">[DOI]</a></div>
-      <div class="pub-item">[22] J. Park†, H. Lim†, S. Kim, J. Song*, Y.K. Lee*, “Modeling and validation of driving performance of electric vehicle converted from internal combustion engine vehicle”, IEEE Transactions on Transportation Electrification (IF: 7.0), 11 (1), 486-498 (2025)<a href="https://doi.org/10.1109/TTE.2024.3392208">[DOI]</a></div>
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images\P_2025-2.png">
+        </div>
+
+        <div class="pub-details">
+          <div class="pub-title">
+            Advanced multiscale modeling of potassium-ion batteries for interplay of electrochemical and mechanical behavior across Scales (2025)
+          </div>
+          <div class="pub-meta">
+            <em>Energy</em> (IF: 9.4), 335, 138202
+          </div>
+          <div class="pub-authors">
+            Subeen Kim†, Yun Kim, <b>Yoon Koo Lee*</b>, Jihwan Song*
+          </div>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1002/sstr.202400640" target="_blank">[DOI]</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2025_potassium_battery.png">
+        </div>
+
+        <div class="pub-details">
+          <div class="pub-title">
+            Modeling and validation of driving performance of electric vehicle converted from internal combustion engine vehicle (2025)
+          </div>
+          <div class="pub-meta">
+            <em>IEEE Transactions on Transportation Electrification</em> (IF: 7.0), 11 (1), 486-498
+          </div>
+          <div class="pub-authors">
+            J. Park†, H. Lim†, S. Kim, J. Song*, <b>Yoon Koo Lee*</b>
+          </div>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1109/TTE.2024.3392208" target="_blank">[DOI]</a>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- 2024 -->
     <div class="pub-list" id="year-2024">
-      <div class="pub-item">[21] J. Shin, Y.K. Lee*, “Multi-scale mechanical-electrochemical coupled modeling of stress generation and its impact on different battery cell geometries”, Journal of Power Sources (IF:9.2), 595, 234064 (2024)<a href="https://doi.org/10.1016/j.jpowsour.2024.234064">[DOI]</a></div>
-      <div class="pub-item">[20] Y.K. Lee, J. Kim, C. Sung, J.Choi*, “Multiphysics modeling of the influence of initial pressure on mechanical and electrochemical performance of all-solid-state batteries”, Journal of Energy Storage (IF:9.4), 82, 110431 (2024)<a href="https://doi.org/10.1016/j.est.2024.110431">[DOI]</a></div>
-      <div class="pub-item">[19] Y.K. Lee,  H. Shin*#, “Modeling and simulation of a composite solid-state battery: The effects of stack pressure on electrochemical and mechanical behavior”, Journal of Energy Storage (IF:9.4), 78, 110051 (2024)<a href="https://doi.org/10.1016/j.est.2023.110051">[DOI]</a></div>
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2025_potassium_battery.png">
+        </div>
+
+        <div class="pub-details">
+          <div class="pub-title">
+            Multi-scale mechanical-electrochemical coupled modeling of stress generation and its impact on different battery cell geometries (2024)
+          </div>
+          <div class="pub-meta">
+            <em>Journal of Power Sources</em> (IF: 9.2), 595, 234064
+          </div>
+          <div class="pub-authors">
+            J. Shin, <b>Yoon Koo Lee*</b>
+          </div>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1016/j.jpowsour.2024.234064" target="_blank">[DOI]</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2025_potassium_battery.png">
+        </div>
+
+        <div class="pub-details">
+          <div class="pub-title">
+            Multiphysics modeling of the influence of initial pressure on mechanical and electrochemical performance of all-solid-state batteries (2024)
+          </div>
+          <div class="pub-meta">
+            <em>Journal of Energy Storage</em> (IF: 9.4), 82, 110431
+          </div>
+          <div class="pub-authors">
+            <b>Yoon Koo Lee*</b> , J. Kim, C. Sung, J.Choi*
+          </div>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1016/j.est.2024.110431" target="_blank">[DOI]</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2025_potassium_battery.png">
+        </div>
+
+        <div class="pub-details">
+          <div class="pub-title">
+            Modeling and simulation of a composite solid-state battery: The effects of stack pressure on electrochemical and mechanical behavior (2024)
+          </div>
+          <div class="pub-meta">
+            <em>Journal of Energy Storage</em> (IF: 9.4), 78, 110051
+          </div>
+          <div class="pub-authors">
+            <b>Yoon Koo Lee*</b> , H. Shin*
+          </div>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1016/j.est.2023.110051" target="_blank">[DOI]</a>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- 2023 -->
     <div class="pub-list" id="year-2023">
-      <div class="pub-item">[18] U. Lee, N. Kang*, Y.K. Lee*,  “Shared autonomous electric vehicle system design and optimization under dynamic battery degradation considering varying load conditions” Journal of Cleaner Production (IF:11.1), 138795 (2023)<a href="https://doi.org/10.1016/j.jclepro.2023.138795">[DOI]</a></div>
-      <div class="pub-item">[17] U. Lee, N. Kang*, Y.K. Lee*,  “Optimization of module structure considering mechanical and thermal safety of pouch cell lithium-ion batteries using a reliability-based design optimization approach” Journal of Energy Storage (IF:9.4), 72, 108650 (2023)<a href="https://doi.org/10.1016/j.est.2023.108650">[DOI]</a></div>
-      <div class="pub-item">[16] Y.K. Lee*, “An optimization framework for enhancing cycle life of composite positive electrodes in lithium-ion batteries via composition ratio optimization”, Journal of the Electrochemical Society (IF:4.371),170, 060528 (2023)<a href="https://doi.org/10.1149/1945-7111/acdd28">[DOI]</a></div>
-      <div class="pub-item">[15] Y.K. Lee*, S. Jeon, Y.Jeon, “Modeling of electrochemical performance and its relation to mechanical responses of li metal batteries”, Journal of the Electrochemical Society (IF:4.371),170, 060520 (2023)<a href="https://doi.org/10.1149/1945-7111/acd962">[DOI]</a></div>
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2023_shared_vehicle.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            Shared autonomous electric vehicle system design and optimization under dynamic battery degradation considering varying load conditions (2023)
+          </div>
+          <div class="pub-meta"><em>Journal of Cleaner Production</em> (IF: 11.1), 138795</div>
+          <div class="pub-authors">U. Lee, N. Kang*, <b>Y.K. Lee*</b></div>
+          <div class="pub-links"><a href="https://doi.org/10.1016/j.jclepro.2023.138795" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2023_module_structure.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            Optimization of module structure considering mechanical and thermal safety of pouch cell lithium-ion batteries using a reliability-based design optimization approach (2023)
+          </div>
+          <div class="pub-meta"><em>Journal of Energy Storage</em> (IF: 9.4), 72, 108650</div>
+          <div class="pub-authors">U. Lee, N. Kang*, <b>Y.K. Lee*</b></div>
+          <div class="pub-links"><a href="https://doi.org/10.1016/j.est.2023.108650" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2023_cycle_life.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            An optimization framework for enhancing cycle life of composite positive electrodes in lithium-ion batteries via composition ratio optimization (2023)
+          </div>
+          <div class="pub-meta"><em>Journal of the Electrochemical Society</em> (IF: 4.3), 170, 060528</div>
+          <div class="pub-authors"><b>Y.K. Lee*</b></div>
+          <div class="pub-links"><a href="https://doi.org/10.1149/1945-7111/acdd28" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2023_li_metal.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            Modeling of electrochemical performance and its relation to mechanical responses of li metal batteries (2023)
+          </div>
+          <div class="pub-meta"><em>Journal of the Electrochemical Society</em> (IF: 4.3), 170, 060520</div>
+          <div class="pub-authors"><b>Y.K. Lee*</b>, S. Jeon, Y. Jeon</div>
+          <div class="pub-links"><a href="https://doi.org/10.1149/1945-7111/acd962" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
     </div>
 
     <!-- 2022 -->
     <div class="pub-list" id="year-2022">
-      <div class="pub-item">[14] Y.K. Lee*, “Effect of porous structure and morphology of cathode on the degradation of lithium-ion batteries”, Journal of Energy Storage (IF:8.78),52, 104788 (2022)<a href="https://doi.org/10.1016/j.est.2022.104788">[DOI]</a></div>
-      <div class="pub-item">[13] Y.K. Lee, U. Lee, N. Kang*, “Multi-scale design optimization of electric vehicles by analytical target cascading: from battery cell level to marketing level”, Journal of Cleaner Production (IF:11.072), 368, 133235 (2022)<a href="https://doi.org/10.1016/j.jclepro.2022.133235">[DOI]</a></div>
-      <div class="pub-item">[12] Y.K. Lee, J.H. Park, H. Shin*#, “Multi-scale analysis of cathode microstructural effects on electrochemical and stress responses of lithium-ion batteries”, Journal of Power Sources (IF: 9.719), 548, 232050 (2022)<a href="https://doi.org/10.1016/j.jpowsour.2022.232050">[DOI]</a></div>
-      <div class="pub-item">[11] H.S Shin†#, Y.K. Lee†, W. Lu*#, “Structural degradation of graphite anode induced by dissolved manganese ions in Lithium-ion batteries”, Journal of Power Sources (IF:9.719), 528, 231223 (2022)<a href="https://doi.org/10.1016/j.jpowsour.2022.231223">[DOI]</a></div>
-      <div class="pub-item">[10] Y.K. Lee, H.S Shin*#, “Modeling study of stress generation of a single active material particle connected to solid electrolyte in solid-state batteries”, Electrochimica Acta (IF: 6.901),  403, 139639 (2022)<a href="https://doi.org/10.1016/j.electacta.2021.139639">[DOI]</a></div>
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2022_cathode_structure.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            Effect of porous structure and morphology of cathode on the degradation of lithium-ion batteries (2022)
+          </div>
+          <div class="pub-meta"><em>Journal of Energy Storage</em> (IF: 8.7), 52, 104788</div>
+          <div class="pub-authors"><b>Y.K. Lee*</b></div>
+          <div class="pub-links"><a href="https://doi.org/10.1016/j.est.2022.104788" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2022_multi_scale_ev.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            Multi-scale design optimization of electric vehicles by analytical target cascading: from battery cell level to marketing level (2022)
+          </div>
+          <div class="pub-meta"><em>Journal of Cleaner Production</em> (IF: 11.0), 368, 133235</div>
+          <div class="pub-authors"><b>Y.K. Lee</b>, U. Lee, N. Kang*</div>
+          <div class="pub-links"><a href="https://doi.org/10.1016/j.jclepro.2022.133235" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2022_cathode_micro.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            Multi-scale analysis of cathode microstructural effects on electrochemical and stress responses of lithium-ion batteries (2022)
+          </div>
+          <div class="pub-meta"><em>Journal of Power Sources</em> (IF: 9.7), 548, 232050</div>
+          <div class="pub-authors"><b>Y.K. Lee</b>, J.H. Park, H. Shin*#</div>
+          <div class="pub-links"><a href="https://doi.org/10.1016/j.jpowsour.2022.232050" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2022_graphite.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            Structural degradation of graphite anode induced by dissolved manganese ions in Lithium-ion batteries (2022)
+          </div>
+          <div class="pub-meta"><em>Journal of Power Sources</em> (IF: 9.7), 528, 231223</div>
+          <div class="pub-authors">H.S. Shin†#, <b>Y.K. Lee†</b>, W. Lu*#</div>
+          <div class="pub-links"><a href="https://doi.org/10.1016/j.jpowsour.2022.231223" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2022_particle_stress.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            Modeling study of stress generation of a single active material particle connected to solid electrolyte in solid-state batteries (2022)
+          </div>
+          <div class="pub-meta"><em>Electrochimica Acta</em> (IF: 6.9), 403, 139639</div>
+          <div class="pub-authors"><b>Y.K. Lee</b>, H.S. Shin*#</div>
+          <div class="pub-links"><a href="https://doi.org/10.1016/j.electacta.2021.139639" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
     </div>
 
     <!-- 2021 -->
     <div class="pub-list" id="year-2021">
-      <div class="pub-item">[9] Y.K. Lee*, “Effect of transition metal ions on solid electrolyte interphase layer on the graphite electrode in lithium ion battery”, Journal of Power Sources (IF: 9.719), 484, 229270 (2021)<a href="https://doi.org/10.1016/j.jpowsour.2020.229270">[DOI]</a></div>
-      <div class="pub-item">[8] Y.K. Lee, J.Song, J.Park*# “Multi-scale coupled mechanical-electrochemical modeling for study on stress generation and its impact on multi-layered electrodes in lithium-ion batteries”, Electrochimica Acta (IF: 6.901), 138682 (2021)<a href="https://doi.org/10.1016/j.electacta.2021.138682">[DOI]</a></div>
-      <div class="pub-item">[7] Y. Kim, J. K. Chae, J.-H. Lee, E. Choi, Y. K. Lee, and J. Song*, “Free manipulation system for nanorobot cluster based on complicated multi-coil electromagnetic actuator”, Scientific Reports (IF: 4.38), 11 (1), 1-9 (2021)<a href="https://doi.org/10.1038/s41598-021-98957-y">[DOI]</a></div>
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2021_graphite_sei.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            Effect of transition metal ions on solid electrolyte interphase layer on the graphite electrode in lithium ion battery (2021)
+          </div>
+          <div class="pub-meta"><em>Journal of Power Sources</em> (IF: 9.7), 484, 229270</div>
+          <div class="pub-authors"><b>Y.K. Lee*</b></div>
+          <div class="pub-links"><a href="https://doi.org/10.1016/j.jpowsour.2020.229270" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2021_multiscale.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            Multi-scale coupled mechanical-electrochemical modeling for study on stress generation and its impact on multi-layered electrodes in lithium-ion batteries (2021)
+          </div>
+          <div class="pub-meta"><em>Electrochimica Acta</em> (IF: 6.9), 138682</div>
+          <div class="pub-authors"><b>Y.K. Lee</b>, J. Song, J. Park*#</div>
+          <div class="pub-links"><a href="https://doi.org/10.1016/j.electacta.2021.138682" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2021_nanobot.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            Free manipulation system for nanorobot cluster based on complicated multi-coil electromagnetic actuator (2021)
+          </div>
+          <div class="pub-meta"><em>Scientific Reports</em> (IF: 4.3), 11 (1), 1-9</div>
+          <div class="pub-authors">Y. Kim, J.K. Chae, J.-H. Lee, E. Choi, <b>Y.K. Lee</b>, J. Song*</div>
+          <div class="pub-links"><a href="https://doi.org/10.1038/s41598-021-98957-y" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
     </div>
 
     <!-- 2020 -->
@@ -306,42 +939,93 @@
       <div class="no-pub">No publications available</div>
     </div>
 
-    <!-- 2019 -->
-    <div class="pub-list" id="year-2019">
-      <div class="pub-item">[6] Y.K. Lee, J. Park# and W. Lu*# “A comprehensive experimental and modeling study on dissolution in li-ion batteries”, Journal of the Electrochemical Society (IF: 3.721), 166, A1340 (2019)<a href="https://doi.org/10.1149/2.0111908jes">[DOI]</a></div>
-      <div class="pub-item">[5] Y.K. Lee* “The effect of active material, conductive additives, and binder in a cathode composite electrode on battery performance”, Energies (IF: 2.702), 12, 658 (2019)<a href="https://doi.org/10.3390/en12040658">[DOI]</a></div>
+    <!-- before 2020 -->
+    <div class="pub-list" id="year-before 2020">
+            <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2019_dissolution.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            A comprehensive experimental and modeling study on dissolution in li-ion batteries (2019)
+          </div>
+          <div class="pub-meta"><em>Journal of the Electrochemical Society</em> (IF: 3.7), 166, A1340</div>
+          <div class="pub-authors"><b>Y.K. Lee</b>, J. Park#, W. Lu*#</div>
+          <div class="pub-links"><a href="https://doi.org/10.1149/2.0111908jes" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2019_cathode_composite.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            The effect of active material, conductive additives, and binder in a cathode composite electrode on battery performance (2019)
+          </div>
+          <div class="pub-meta"><em>Energies</em> (IF: 2.7), 12, 658</div>
+          <div class="pub-authors"><b>Y.K. Lee*</b></div>
+          <div class="pub-links"><a href="https://doi.org/10.3390/en12040658" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2017_manganese.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            A comprehensive study of manganese deposition and side reactions in li-ion battery electrodes (2017)
+          </div>
+          <div class="pub-meta"><em>Journal of the Electrochemical Society</em> (IF: 3.6), 164, A2822</div>
+          <div class="pub-authors"><b>Y.K. Lee</b>, J. Park#, W. Lu*#</div>
+          <div class="pub-links"><a href="https://doi.org/10.1149/2.1851712jes" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2016_spinels.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            Electronic and bonding properties of limn2o4 spinel with different surface orientations and doping elements and their effects on manganese dissolution (2016)
+          </div>
+          <div class="pub-meta"><em>Journal of the Electrochemical Society</em> (IF: 3.2), 163, A1359</div>
+          <div class="pub-authors"><b>Y.K. Lee</b>, J. Park#, W. Lu*#</div>
+          <div class="pub-links"><a href="https://doi.org/10.1149/2.0991607jes" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2013_capacity_fade.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            A comprehensive capacity fade model and analysis for Li-ion batteries (2013)
+          </div>
+          <div class="pub-meta"><em>Journal of the Electrochemical Society</em> (IF: 2.8), 160 (10), A1701-A1710</div>
+          <div class="pub-authors">X. Lin#, J. Park#, L. Liu#, <b>Y.K. Lee</b>, A.M. Sastry#, W. Lu*#</div>
+          <div class="pub-links"><a href="https://doi.org/10.1149/2.040310jes" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images/2013_in_situ.png" alt="Publication Image">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">
+            In situ atomic force microscopy studies on lithium (de)intercalation-induced morphology changes in LixCoO2 micro-machined thin film electrodes (2013)
+          </div>
+          <div class="pub-meta"><em>Journal of Power Sources</em> (IF: 5.2), 222 (15), 417-425</div>
+          <div class="pub-authors">J. Park#, S. Kalnaus#, S. Han#, <b>Y.K. Lee</b>, G. Less#, N. Dudney#, C. Daniel#, A.M. Sastry*#</div>
+          <div class="pub-links"><a href="https://doi.org/10.1016/j.jpowsour.2012.09.017" target="_blank">[DOI]</a></div>
+        </div>
+      </div>
     </div>
 
-    <!-- 2018 -->
-    <div class="pub-list" id="year-2018">
-      <div class="no-pub">No publications available</div>
-    </div>
-
-    <!-- 2017 -->
-    <div class="pub-list" id="year-2017">
-      <div class="pub-item">[4] Y.K. Lee, J. Park# and W. Lu*# “A comprehensive study of manganese deposition and side reactions in li-ion battery electrodes”, Journal of the Electrochemical Society (IF: 3.662), 164, A2822 (2017)<a href="https://doi.org/10.1149/2.1851712jes">[DOI]</a></div>
-    </div>
-
-    <!-- 2016 -->
-    <div class="pub-list" id="year-2016">
-      <div class="pub-item">[3] Y.K. Lee, J. Park# and W. Lu*# “Electronic and bonding properties of limn2o4 spinel with different surface orientations and doping elements and their effects on manganese dissolution”, Journal of the Electrochemical Society (IF: 3.259), 163, A1359 (2016)<a href="https://doi.org/10.1149/2.0991607jes">[DOI]</a></div>
-    </div>
-
-    <!-- 2015 -->
-    <div class="pub-list" id="year-2015">
-      <div class="no-pub">No publications available</div>
-    </div>
-
-    <!-- 2014 -->
-    <div class="pub-list" id="year-2014">
-      <div class="no-pub">No publications available</div>
-    </div>
-
-    <!-- 2013 -->
-    <div class="pub-list" id="year-2013">
-      <div class="pub-item">[2] X. Lin#, J. Park#, L. Liu#, Y.K. Lee, A.M Sastry#, and W. Lu*# “A comprehensive capacity fade model and analysis for Li-ion batteries”, Journal of the Electrochemical Society (IF: 2.859), 160 (10) A1701-A1710 (2013)<a href="https://doi.org/10.1149/2.040310jes">[DOI]</a></div>
-      <div class="pub-item">[1] J. Park#, S. Kalnaus#, S. Han#, Y.K. Lee, G. Less#, N. Dudney#, C. Daniel#, and A. M. Sastry*#, “In situ atomic force microscopy studies on lithium (de)intercalation-induced morphology changes in LixCoO2 micro-machined thin film electrodes”, Journal of Power Sources (IF: 5.211), 222 (15), 417–425 (2013)<a href="https://doi.org/10.1016/j.jpowsour.2012.09.017">[DOI]</a></div>
-    </div>
   </main>
 
   <footer>
