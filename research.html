@@ -238,7 +238,6 @@
 
     .footer-container {
       display: flex;
-      justify-content: space-between;
       flex-wrap: wrap;
       gap: 2em;
     }
@@ -251,6 +250,16 @@
     .footer-left h3 {
       margin-top: 0;
       color: #66ccff;
+    }
+
+    .footer-right p {
+      margin: 0;       /* ✅ 문단 사이 간격 — 기본보다 조금 넓게 */
+      line-height: 0;      /* ✅ 줄 자체 높이 조정 (가독성 향상) */
+      padding-top: 4em;
+    }
+
+    .footer-right p:nth-child(2) {
+      margin-top: -1.8em; /* 간격을 줄이는 음수 여백 */
     }
 
     .footer-right a {
@@ -281,12 +290,30 @@
       from { opacity: 0; transform: translateY(30px); } 
       to { opacity: 1; transform: translateY(0); } 
     }
+
+    .logo-link {
+      text-decoration: none;   /* 밑줄 제거 */
+      color: white;            /* 기존 header의 글자색과 동일 */
+      font-weight: bold;
+      font-size: 1.0em;
+    }
+
+    .logo-link:hover {
+      color: #66ccff;          /* 마우스 올렸을 때 약간 강조 */
+    }
+
+    .research-divider {
+      border-top: 1.5px solid #ddd;    /* 회색 실선 */
+      margin: 2em 0;                   /* 위아래 간격 */
+      width: 100%;
+    }
+
   </style>
 </head>
 <body>
   <header>
     <div class="logo">
-      Battery System Laboratory
+      <a href="index.html" class="logo-link">Battery System Laboratory</a>
       <img src="images\mainlogo.ico" alt="Lab Logo" class="logo-icon">
     </div>
     <nav>
@@ -344,6 +371,8 @@
       <img src="images\EA_Research1-2.jpg" alt="Research Image 2">
     </div>
 
+    <div class="research-divider"></div>
+
     <p>
       <b>Battery Cell/Module Analysis</b>
     </p>
@@ -375,6 +404,8 @@
       <img src="images\SP_Research1-2.jpg" alt="Research Image 6">
     </div>
 
+    <div class="research-divider"></div>
+
     <p>
       <b>Battery Degradation Modeling</b>
     </p>
@@ -393,6 +424,8 @@
       <img src="images\SP_Research2-1.jpg" alt="Research Image 5">
     </div>
 
+    <div class="research-divider"></div>
+
     <p>
       <b>Lithium Metal Batteries Dendrite Simulation</b>
     </p>
@@ -408,6 +441,8 @@
       <img src="images\SP_Research3-2.jpg" alt="Research Image 6">
     </div>
 
+    <div class="research-divider"></div>
+
     <p>
       <b>Inactive Lithium Formation and Accumulation in Li-Metal Batteries</b>
     </p>
@@ -421,6 +456,8 @@
       <img src="images\SP_Research4-1.jpg" alt="Research Image 5">
       <img src="images\SP_Research4-2.jpg" alt="Research Image 6">
     </div>
+
+    <div class="research-divider"></div>
 
     <p>
       <b>Battery Thermal Runaway & Propagation Simulation</b>
@@ -449,11 +486,13 @@
       This study primarily focuses on developing a generalized optimization framework aimed at enhancing the energy density of battery modules while satisfying mechanical and thermal safety requirements. In addition, a Reliability-Based Design Optimization (RBDO) framework is established to account for system uncertainties, thereby mitigating the likelihood of safety failures and ensuring a reliable module design. The mechanical behavior of the module is analyzed to illustrate how factors such as swelling, breathing, material type, and material properties influence the final module length and internal stress. Moreover, the effects of C-rate and design parameters on the maximum temperature and temperature distribution are investigated.
     </p>
     <p>
-      <b>Optimization of module structure considering mechanical and thermal safety of pouch cell lithium-ion batteries using a reliability-based design optimization approach </b>
+      <b>Paper: Optimization of module structure considering mechanical and thermal safety of pouch cell lithium-ion batteries using a reliability-based design optimization approach </b>
     </p>
     <div class="research-Wimages">
       <img src="images\DO_Research1-1.jpg" alt="Research Image 9">
     </div>
+
+    <div class="research-divider"></div>
 
     <p>
       <b>Multi-Scale Optimization</b>
@@ -462,11 +501,13 @@
       This study develops an efficient multi-scale design optimization framework for electric vehicles (EVs) that integrates four hierarchical levels, ranging from the battery cell level to the marketing level. In the engineering domain, three physics-based models are constructed to describe the system’s performance: an electrochemical cell model, a thermal module model, and an EV dynamics model. In the marketing domain, a utility model is employed to maximize profit while considering customer preferences and cost constraints. Furthermore, the vehicle model, which represents the highest level within the engineering hierarchy, is interlinked with the marketing model, enabling integrated decision-making. As a result, all four model levels are hierarchically connected, allowing bidirectional information exchange across engineering and marketing domains for comprehensive optimization.
     </p>
     <p>
-      <b>Multi-scale design optimization of electric vehicles by analytical target cascading: From battery cell level to marketing level</b>
+      <b>Paper: Multi-scale design optimization of electric vehicles by analytical target cascading: From battery cell level to marketing level</b>
     </p>
     <div class="research-Wimages">
       <img src="images\DO_Research2-1.jpg" alt="Research Image 9">
     </div>
+
+    <div class="research-divider"></div>
 
     <p>
       <b>Shared Autonomous Electric Vehicle(SAEV)</b>
@@ -475,7 +516,7 @@
       We develop multi-scale optimization frameworks that integrate cell-level physics with vehicle and operational-level performance. These frameworks incorporate degradation-coupled models at the cell scale, link them into vehicle-level constraints, and extend to fleet and charging strategies at the operation scale. By integrating design variables and engineering constraints across all levels, we enable holistic optimization of battery and mobility systems.
     </p>
     <p>
-      <b>Shared autonomous electric vehicle system design and optimization under dynamic battery degradation considering varying load conditions</b>
+      <b>Paper: Shared autonomous electric vehicle system design and optimization under dynamic battery degradation considering varying load conditions</b>
     </p>
     <ul>
       <li>Cell scale: Physics-based, high-fidelity models incorporating degradation and electrochemical dynamics</li>
@@ -510,6 +551,8 @@
       <img src="images\CD_Research1-2.png" alt="Research Image 14">
     </div>
 
+    <div class="research-divider"></div>
+
     <p>
       <b>Multi-Level Battery-in-the-loop System(BILS)</b>
     </p>
@@ -521,6 +564,8 @@
     <div class="research-Wimages">
       <img src="images\CD_Research3-1.jpg" alt="Research Image 13">
     </div>
+
+    <div class="research-divider"></div>
 
     <p>
       <b>Degradation-considered Battery System Management</b>

@@ -87,7 +87,7 @@
     /* Member card layout */
     .member-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));  /* ← minmax(0,1fr)로 고정 */
       gap: 1.5em;
       margin-top: 1em;
     }
@@ -102,7 +102,7 @@
       align-items: flex-start;
       gap: 1em;
       animation: fadeInUp 1s ease-in-out;
-
+      min-width: 0;
       height: 200px;   /* ✅ 모든 카드 높이 동일하게 고정 */
     }
     .member-card:hover {
@@ -169,6 +169,9 @@
       flex: 1;
       font-size: 0.83em;
       overflow-y: auto; /* ✅ 내용이 넘칠 경우 스크롤 */
+      min-width: 0;                 /* ← 내부도 수축 허용 */
+      overflow-wrap: anywhere;      /* 긴 문자열 강제 줄바꿈 */
+      word-break: break-word; 
     }
     .member-info h3 {
       margin: 0;
@@ -197,7 +200,6 @@
 
     .footer-container {
       display: flex;
-      justify-content: space-between;
       flex-wrap: wrap;
       gap: 2em;
     }
@@ -210,6 +212,16 @@
     .footer-left h3 {
       margin-top: 0;
       color: #66ccff;
+    }
+
+    .footer-right p {
+      margin: 0;       /* ✅ 문단 사이 간격 — 기본보다 조금 넓게 */
+      line-height: 0;      /* ✅ 줄 자체 높이 조정 (가독성 향상) */
+      padding-top: 4em;
+    }
+
+    .footer-right p:nth-child(2) {
+      margin-top: -1.8em; /* 간격을 줄이는 음수 여백 */
     }
 
     .footer-right a {
@@ -229,7 +241,6 @@
       font-size: 0.85em;
       color: #cccccc;
     }
-
 
     .logo {
       font-weight: bold;
@@ -252,12 +263,59 @@
       from { opacity: 0; transform: translateY(30px); }
       to   { opacity: 1; transform: translateY(0); }
     }
+
+    .logo-link {
+      text-decoration: none;   /* 밑줄 제거 */
+      color: white;            /* 기존 header의 글자색과 동일 */
+      font-weight: bold;
+      font-size: 1.0em;
+    }
+
+    .logo-link:hover {
+      color: #66ccff;          /* 마우스 올렸을 때 약간 강조 */
+    }
+
+    /* 사진 + 버튼을 세로로 */
+    .member-left{
+      width: 120px;                 /* 사진 폭 기준 */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .6em;
+    }
+
+    /* 버튼 스타일 */
+    .more-btn{
+      display: inline-block;
+      padding: .45em .8em;
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: .85em;
+      font-weight: 600;
+      background: #007acc;
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,.12);
+      transition: transform .15s, background .2s, box-shadow .2s;
+    }
+    .more-btn:hover{ background:#005f99; transform: translateY(-1px); }
+
+    /* 비활성(링크 없음) 옵션 */
+    .more-btn.disabled{
+      background:#d0d5dc; color:#6b7280; cursor: not-allowed; box-shadow:none;
+    }
+
+    /* 모바일에서도 사진 아래에 버튼 유지 */
+    @media (max-width:768px){
+      .member-left{ width: 100%; }
+    }
+
+
   </style>
 </head>
 <body>
   <header>
     <div class="logo">
-      Battery System Laboratory
+      <a href="index.html" class="logo-link">Battery System Laboratory</a>
       <img src="images\mainlogo.ico" alt="Lab Logo" class="logo-icon">
     </div>
     <nav>
@@ -293,12 +351,15 @@
     <h2>Postdoctoral Researcher</h2>
     <div class="member-grid">
       <div class="member-card">
-        <img src="images\dongmin.jpg" alt="Profile Photo" class="member-photo">
+        <div class="member-left">
+          <img src="images/dongmin.jpg" alt="Profile Photo" class="member-photo">
+          <a class="more-btn disabled" href="#" aria-disabled="true">More details</a>
+        </div>
         <div class="member-info">
           <h3>Dongmin Kim</h3>
           <p><strong>E-mail:</strong> kspp8795@kaist.ac.kr</p>
-          <p><strong>Education:</strong> 
-          <p>Ph.D., CCS Graduate School of Mobility, KAIST</p>
+          <p><strong>Education:</strong></p>
+          <p><b>Ph.D.</b>, CCS Graduate School of Mobility, KAIST</p>
           <p><strong>Research:</strong> Battery Management System, Analysis of Driving Characteristics</p>
         </div>
       </div>
@@ -307,12 +368,16 @@
     <h2>Ph.D. Candidates</h2>
     <div class="member-grid">
       <div class="member-card">
-        <img src="images/yeonghwan.jpg" alt="Profile Photo" class="member-photo">
+        <div class="member-left">
+          <img src="images/yeonghwan.jpg" alt="Profile Photo" class="member-photo">
+          <a class="more-btn" href="https://buly.kr/8IwkjYe" target="_blank" rel="noopener">More details</a>
+        </div>
         <div class="member-info">
           <h3>Yeonghwan Jang <span style="font-size:0.9em; color:#666;">(Lab Leader)</span></h3>
           <p><strong>E-mail:</strong> yeonghwan@kaist.ac.kr</p>
-          <p><strong>Education:</strong> 
-          <p>2025.03 - Ph.D. course, CCS Graduate School of Mobility, KAIST</p>
+          <p><strong>Education:</strong></p>
+          <p><b>2025.03 - Ph.D.</b>, CCS Graduate School of Mobility, KAIST</p>
+          <p><b>2021.09 - 2024.02 M.S.</b>, Mechanical System Engineering, Kookmin University</p>
           <p><strong>Research:</strong> Design of Lithium Metal Battery</p>
         </div>
       </div>
@@ -321,35 +386,43 @@
     <h2>M.S. Candidates</h2>
     <div class="member-grid">
       <div class="member-card">
-        <img src="images/dongwook.jpg" alt="Profile Photo" class="member-photo">
+        <div class="member-left">
+          <img src="images/dongwook.jpg" alt="Profile Photo" class="member-photo">
+          <a class="more-btn disabled" href="#" aria-disabled="true">More details</a>
+        </div>
         <div class="member-info">
           <h3>Dongwook Kim</h3>
           <p><strong>E-mail:</strong> dongwook.kim@kaist.ac.kr</p>
-          <p><strong>Education:</strong>
-          <p>2024.09 - M.S. course, CCS Graduate School of Mobility, KAIST</p>
+          <p><strong>Education:</strong></p>
+          <p><b>2024.09 - M.S.</b>, CCS Graduate School of Mobility, KAIST</p>
           <p><strong>Research:</strong> Analysis of Thermal Runaway (Propagation)</p>
         </div>
       </div>
 
       <div class="member-card">
-        <img src="images/dain.JPG" alt="Profile Photo" class="member-photo">
+        <div class="member-left">
+          <img src="images/dain.JPG" alt="Profile Photo" class="member-photo">
+          <a class="more-btn disabled" href="#" aria-disabled="true">More details</a>
+        </div>
         <div class="member-info">
           <h3>Dain Kim</h3>
           <p><strong>E-mail:</strong> dyne_2@kaist.ac.kr</p>
-          <p><strong>Education:</strong> 
-          <p>2025.09 - M.S. course, CCS Graduate School of Mobility, KAIST</p>
+          <p><strong>Education:</strong></p>
+          <p><b>2025.09 - M.S.</b>, CCS Graduate School of Mobility, KAIST</p>
           <p><strong>Research:</strong> Battery Module/Pack Level Analysis</p>
         </div>
       </div>
 
       <div class="member-card">
-        <img src="images\donghae.jpg" alt="Profile Photo" class="member-photo">
+        <div class="member-left">
+          <img src="images/donghae.jpg" alt="Profile Photo" class="member-photo">
+          <a class="more-btn" href="https://seed-cord-a3e.notion.site/Donghae-KIM-12c4935e75cc8066a355fc08d9818d20?pvs=74" target="_blank" rel="noopener">More details</a>
+        </div>
         <div class="member-info">
           <h3>Donghae Kim</h3>
           <p><strong>E-mail:</strong> eastsea517@kaist.ac.kr</p>
-          <p><strong>Education:</strong>
-          <p>2020.03 - 2026.02 B.S. course, Electronic Engineering, Chungbuk National University</p>
-          <p>2026.03 - M.S. course, CCS Graduate School of Mobility, KAIST</p>
+          <p><strong>Education:</strong></p>
+          <p><b>2026.03 - M.S.</b>, CCS Graduate School of Mobility, KAIST</p>
           <p><strong>Research:</strong> Battery Management System, Balancing Strategies</p>
         </div>
       </div>
@@ -358,15 +431,20 @@
     <h2>Intern</h2>
     <div class="member-grid">
       <div class="member-card">
-        <img src="images/jeu.jpg" alt="Profile Photo" class="member-photo">
+        <div class="member-left">
+          <img src="images/jeu.jpg" alt="Profile Photo" class="member-photo">
+          <a class="more-btn" href="https://short-flight-7d9.notion.site/Jeu-Shin-c145997e0e8a4a7891838867b5544f1a" target="_blank" rel="noopener">More details</a>
+        </div>
         <div class="member-info">
           <h3>Jeu Shin</h3>
           <p><strong>E-mail:</strong> jshin01@kaist.ac.kr</p>
-          <p><strong>Education:</strong>
+          <p><strong>Education:</strong></p>
+          <p><b>2020.03 - 2024.08 B.S.</b>, Mechanical Engineering, Hanbat National University</p>
           <p><strong>Research:</strong> Li-ion Battery Degradation</p>
         </div>
       </div>
     </div>
+
   </main>
 
   <footer>

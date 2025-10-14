@@ -210,7 +210,6 @@
 
     .footer-container {
       display: flex;
-      justify-content: space-between;
       flex-wrap: wrap;
       gap: 2em;
     }
@@ -223,6 +222,16 @@
     .footer-left h3 {
       margin-top: 0;
       color: #66ccff;
+    }
+
+    .footer-right p {
+      margin: 0;       /* ✅ 문단 사이 간격 — 기본보다 조금 넓게 */
+      line-height: 0;      /* ✅ 줄 자체 높이 조정 (가독성 향상) */
+      padding-top: 4em;
+    }
+
+    .footer-right p:nth-child(2) {
+      margin-top: -1.8em; /* 간격을 줄이는 음수 여백 */
     }
 
     .footer-right a {
@@ -266,12 +275,24 @@
       from { opacity: 0; transform: translateY(30px); }
       to   { opacity: 1; transform: translateY(0); }
     }
+
+    .logo-link {
+      text-decoration: none;   /* 밑줄 제거 */
+      color: white;            /* 기존 header의 글자색과 동일 */
+      font-weight: bold;
+      font-size: 1.0em;
+    }
+
+    .logo-link:hover {
+      color: #66ccff;          /* 마우스 올렸을 때 약간 강조 */
+    }
+
   </style>
 </head>
 <body>
   <header>
     <div class="logo">
-      Battery System Laboratory
+      <a href="index.html" class="logo-link">Battery System Laboratory</a>
       <img src="images\mainlogo.ico" alt="Lab Logo" class="logo-icon">
     </div>
     <nav>

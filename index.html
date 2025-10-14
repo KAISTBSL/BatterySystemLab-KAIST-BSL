@@ -135,7 +135,7 @@
     .news-card:nth-child(2) { background: linear-gradient(135deg, #007acc, #66ccff); }
     .news-card:nth-child(3) { background: linear-gradient(135deg, #3399ff, #99ccff); }
     .news-card:nth-child(4) { background: linear-gradient(135deg, #004c80, #3399cc); grid-row: span 2; }
-    .news-card:nth-child(5) { background: linear-gradient(135deg, #66b2ff, #99d6ff); }
+    .news-card:nth-child(5) { background: linear-gradient(135deg, #1682c0, #68bdd3); grid-row: span 2; }
 
     .news-date { font-size: 0.85em; opacity: 0.9; }
     .news-title { font-size: 1.2em; font-weight: bold; margin: 0.3em 0; }
@@ -155,7 +155,6 @@
 
     .footer-container {
       display: flex;
-      justify-content: space-between;
       flex-wrap: wrap;
       gap: 2em;
     }
@@ -168,6 +167,16 @@
     .footer-left h3 {
       margin-top: 0;
       color: #66ccff;
+    }
+
+    .footer-right p {
+      margin: 0;       /* ✅ 문단 사이 간격 — 기본보다 조금 넓게 */
+      line-height: 0;      /* ✅ 줄 자체 높이 조정 (가독성 향상) */
+      padding-top: 4em;
+    }
+
+    .footer-right p:nth-child(2) {
+      margin-top: -1.8em; /* 간격을 줄이는 음수 여백 */
     }
 
     .footer-right a {
@@ -338,12 +347,62 @@
       height: 96px;
     }
 
+    .logo-link {
+      text-decoration: none;   /* 밑줄 제거 */
+      color: white;            /* 기존 header의 글자색과 동일 */
+      font-weight: bold;
+      font-size: 1.0em;
+    }
+
+    .logo-link:hover {
+      color: #66ccff;          /* 마우스 올렸을 때 약간 강조 */
+    }
+
+    /* 기존 .news-grid 에 이 줄만 추가 */
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: minmax(150px, auto);
+      gap: 1em;
+      grid-auto-flow: dense;   /* ✅ 빈칸 자동 메우기 */
+    }
+
+    /* 사진 카드 전용 스타일 */
+    /* 기존에 있던 스타일은 그대로 두고, 아래만 추가 */
+    .news-card.photo { 
+      grid-row: span 2;        /* ✅ news4/5와 동일 높이 */
+      padding: 0;
+      overflow: hidden;
+      position: relative;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      transition: transform 0.2s;
+    }
+
+    .news-card.photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;        /* ✅ 영역을 꽉 채우도록 */
+      display: block;
+    }
+
+    .news-card.photo .caption {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      padding: .6em .8em;
+      font-size: .95em;
+      color: #fff;
+      background: linear-gradient(transparent, rgba(0,0,0,.55));
+    }
+
+    .news-card.photo:hover { transform: translateY(-5px); }
+
   </style>
 </head>
 <body>
   <header>
     <div class="logo">
-      Battery System Laboratory
+      <a href="index.html" class="logo-link">Battery System Laboratory</a>
       <img src="images\mainlogo.ico" alt="Lab Logo" class="logo-icon">
     </div>
     <nav>
@@ -468,24 +527,40 @@
     });
 
     // 최신 5개 뉴스 로드
-    fetch('news.html')
-      .then(res => res.text())
-      .then(data => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(data, 'text/html');
-        const items = doc.querySelectorAll('.news-item');
-        const latest = Array.from(items).slice(0, 5);
-        const container = document.getElementById('latest-news');
-        latest.forEach((item) => {
-          const date = item.querySelector('.news-date')?.innerText || '';
-          const title = item.querySelector('.news-title')?.innerText || '';
-          const desc = item.querySelector('.news-desc')?.innerText || '';
-          const card = document.createElement('div');
-          card.className = 'news-card';
-          card.innerHTML = `<div class="news-date">${date}</div><div class="news-title">${title}</div><div class="news-desc">${desc}</div>`;
-          container.appendChild(card);
-        });
+  fetch('news.html')
+    .then(res => res.text())
+    .then(data => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(data, 'text/html');
+      const items = doc.querySelectorAll('.news-item');
+      const latest = Array.from(items).slice(0, 5);
+      const container = document.getElementById('latest-news');
+
+      latest.forEach((item) => {
+        const date = item.querySelector('.news-date')?.innerText || '';
+        const title = item.querySelector('.news-title')?.innerText || '';
+        const desc = item.querySelector('.news-desc')?.innerText || '';
+        const card = document.createElement('div');
+        card.className = 'news-card';
+        card.innerHTML =
+          `<div class="news-date">${date}</div>
+           <div class="news-title">${title}</div>
+           <div class="news-desc">${desc}</div>`;
+        container.appendChild(card);
       });
+
+      // ✅ 우하단 남는 칸을 채울 "사진 카드" 추가 (6번째 아이템)
+      const photo = document.createElement('a');
+      photo.href = 'news.html';             // 클릭 시 이동할 링크(원하면 변경)
+      photo.className = 'news-card photo';
+      photo.setAttribute('aria-label', 'BSL Photo');
+
+      photo.innerHTML =
+        `<img src="images/250929Gallery.jpg" alt="Battery System Lab photo">
+         <div class="caption">BSL stands for Best Student LAB</div>`;
+
+      container.appendChild(photo);
+    })
 
     // Modal 제어
     const homeLink = document.getElementById('home-link');
