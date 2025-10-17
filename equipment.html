@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Faculty - Battery System Laboratory</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Noto Sans KR", Arial, sans-serif;
+      background-color: #f8f9fa;
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+
+    header {
+      background-color: #151644;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2em;          /* 위아래 padding 제거 → 높이 고정 효과 */
+      height: 80px;            /* ✅ 상단 바 높이 고정 */
+    }
+
+    .logo {
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 96px; 
+      height: 96px;
+      object-fit: contain;     /* ✅ 비율 유지하면서 들어가도록 */
+    }
+
+
+    .logo { font-weight: bold; font-size: 1.5em; }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 1em;
+      position: relative;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 1em;
+      position: relative;
+    }
+
+    nav a::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: -3px;
+      width: 0; height: 2px;
+      background: #66ccff;
+      transition: width 0.3s;
+    }
+
+    nav a:hover::after { width: 100%; }
+
+    /* 드롭다운 메뉴 */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropbtn {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 1em;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%; left: 0;
+      background-color: white;
+      min-width: 160px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      border-radius: 5px;
+      z-index: 2000;
+    }
+
+    .dropdown-content a {
+      color: #01022c;
+      padding: 10px 14px;
+      text-decoration: none;
+      display: block;
+      font-size: 0.95em;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #f1f1f1;
+      color: #007acc;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+                  url("https://cdn.imweb.me/upload/S201903265c99a2aabdcfe/51ae98732c1b6.png") 
+                  no-repeat center/cover;
+      height: 45vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+    }
+    .hero-logo { 
+      max-height: 80px; margin-bottom: 1em; opacity: 0.85; 
+      animation: fadeInDown 1s ease-out;
+    }
+    .hero h1 { 
+      font-size: 2.5em; margin-bottom: 0.3em; 
+      animation: fadeInDown 1.2s ease-out;
+    }
+    .hero p { 
+      font-size: 1.2em; 
+      animation: fadeInUp 1.5s ease-out;
+    }
+
+    main {
+      padding: 2em;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    h2 { 
+      color: #003366; 
+      margin-top: 1.5em; 
+      text-align: center;
+      animation: fadeInDown 1.5s ease-in-out;
+    }
+
+    /* Tab 메뉴 */
+    .tab-container {
+      text-align: center;
+      margin: 2em 0;
+      border-bottom: 2px solid #ddd;
+    }
+    .tab-btn {
+      background: none;
+      border: none;
+      color: #003366;
+      font-size: 1.2em;
+      font-weight: bold;
+      margin: 0 1em;
+      padding: 0.5em;
+      cursor: pointer;
+      position: relative;
+    }
+    .tab-btn::after {
+      content: "";
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 3px;
+      background: #66ccff;
+      transition: width 0.3s;
+    }
+    .tab-btn.active::after {
+      width: 100%;
+    }
+    .tab-btn:hover { color: #66ccff; }
+
+    main {
+      padding: 2em;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    h2 { color: #003366; text-align: center; margin: 1.5em 0; }
+
+    .pub-item { 
+      display: flex;                 /* 🔹 가로 배치 */
+      align-items: flex-start;
+      margin: 1em 0; 
+      padding: 1em; 
+      background: white; 
+      border-radius: 8px; 
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1); 
+      animation: fadeInUp 0.6s ease-in-out;
+    }
+    .pub-img {
+      height: 275px;
+      width: 275px;               /* 🔹 이미지 크기 고정 */
+      margin-right: 3em;
+    }
+    .pub-img img {
+      width: 100%;
+      border-radius: 6px;
+      object-fit: cover;
+    }
+    .pub-details {
+      flex: 1;                       /* 🔹 오른쪽은 남는 공간 다 사용 */
+    }
+    .pub-title {
+      font-weight: bold;
+      margin-bottom: 0.4em;
+      font-size: 1.1em;
+    }
+    .pub-meta {
+      font-style: italic;
+      color: #444;
+      margin-bottom: 0.6em;
+    }
+    .pub-authors {
+      margin-top: 0.4em;
+      font-size: 0.95em;
+    }
+    .pub-number {
+      margin-top: 0.4em;
+      font-size: 0.75em;
+      color: #585b5e;
+    }
+    .pub-links a { 
+      margin-right: 10px; 
+      font-size: 0.9em; 
+      color: #003366; 
+      text-decoration: none; 
+    }
+    .pub-links a:hover { text-decoration: underline; }
+
+    footer {
+      background-color: #01022c;
+      color: white;
+      padding: 2em 3em;
+      margin-top: 3em;
+      font-size: 0.95em;
+    }
+
+    .footer-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2em;
+    }
+
+    .footer-left, .footer-right {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .footer-left h3 { color: #66ccff; margin-top: 0; }
+    .footer-right a { color: #66ccff; text-decoration: none; }
+    .footer-right a:hover { text-decoration: underline; }
+
+    .footer-bottom {
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      margin-top: 1.5em;
+      padding-top: 1em;
+      font-size: 0.85em;
+      color: #cccccc;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo {
+      font-weight: bold;
+      display: flex;          /* 문구와 아이콘을 가로 정렬 */
+      align-items: center;
+      gap: 10px;              /* 문구와 아이콘 사이 간격 */
+    }
+
+    .logo-icon {
+      width: 96px;
+      height: 96px;
+    }
+
+    .logo-link {
+      text-decoration: none;   /* 밑줄 제거 */
+      color: white;            /* 기존 header의 글자색과 동일 */
+      font-weight: bold;
+      font-size: 1.0em;
+    }
+
+    .logo-link:hover {
+      color: #66ccff;          /* 마우스 올렸을 때 약간 강조 */
+    }
+
+    table tbody tr:hover {
+      background-color: #e8f2ff;   /* 🔹 hover 시 파란빛 강조 */
+      transition: background 0.2s ease-in-out;
+    }
+    table th {
+      letter-spacing: 0.5px;
+      font-size: 1em;
+    }
+    table td {
+      padding: 10px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <a href="index.html" class="logo-link">Battery System Laboratory</a>
+      <img src="images/mainlogo.ico" alt="Lab Logo" class="logo-icon">
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <div class="dropdown">
+        <a class="dropbtn">Member ▾</a>
+        <div class="dropdown-content">
+          <a href="member.html">PI</a>
+          <a href="researchers.html">Researchers</a>
+          <a href="alumni.html">Alumni</a>
+        </div>
+      </div>
+      <a href="publication.html">Publication</a>
+      <a href="research.html">Research</a>
+      <a href="counterpart.html">Counterpart</a>
+      <a href="equipment.html">Equipment</a>
+      <a href="news.html">Board</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <img src="https://mo.kaist.ac.kr/wp-content/uploads/2022/08/logo_new-1-e1661933714657.png"
+         alt="KAIST Mobility Logo" class="hero-logo">
+    <h1>Equipment</h1>
+    <p>Equipments and Facilities in our Lab</p>
+  </section>
+
+  <!-- Main -->
+  <main>
+
+    <table style="
+      width:100%; 
+      border-collapse:collapse; 
+      margin-bottom:2em; 
+      font-size:0.95em; 
+      text-align:center; 
+      box-shadow:0 4px 10px rgba(0,0,0,0.08);
+      border-radius:10px;
+      overflow:hidden;
+    ">
+      <thead style="background-color:#151644; color:white;">
+        <tr>
+          <th style="padding:12px; border:1px solid #ddd;">Category</th>
+          <th style="padding:12px; border:1px solid #ddd;">Equipment</th>
+          <th style="padding:12px; border:1px solid #ddd;">Model</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background-color:#f3f6fa;">
+          <td rowspan="4" style="font-weight:bold; border:1px solid #ccc;">Experiment & Analysis</td>
+          <td style="border:1px solid #ccc;">Data Logger</td>
+          <td style="border:1px solid #ccc;">GL840</td>
+        </tr>
+        <tr style="background-color:#f3f6fa;">
+          <td style="border:1px solid #ccc;">Potentiostat</td>
+          <td style="border:1px solid #ccc;">BCS-915</td>
+        </tr>
+        <tr style="background-color:#f3f6fa;">
+          <td style="border:1px solid #ccc;">Constant Temperature Chamber</td>
+          <td style="border:1px solid #ccc;">S-CTC150R1</td>
+        </tr>
+        <tr style="background-color:#f3f6fa;">
+          <td style="border:1px solid #ccc;">DC Power Supply</td>
+          <td style="border:1px solid #ccc;">DP30-03TP</td>
+        </tr>
+
+        <tr style="background-color:#f9f9f9;">
+          <td rowspan="3" style="font-weight:bold; border:1px solid #ccc;">Safety Control</td>
+          <td style="border:1px solid #ccc;">Glove Box</td>
+          <td style="border:1px solid #ccc;">-</td>
+        </tr>
+        <tr style="background-color:#f9f9f9;">
+          <td style="border:1px solid #ccc;">Closed Internal Circulating Safety Reagents</td>
+          <td style="border:1px solid #ccc;">WJ-K140C-001</td>
+        </tr>
+        <tr style="background-color:#f9f9f9;">
+          <td style="border:1px solid #ccc;">Portable Toxic Gas Air Purifier</td>
+          <td style="border:1px solid #ccc;">CAFU-02</td>
+        </tr>
+
+        <tr style="background-color:#eef5f8;">
+          <td style="font-weight:bold; border:1px solid #ccc;">Software & Simulation</td>
+          <td style="border:1px solid #ccc;">High-Performance Computing Server</td>
+          <td style="border:1px solid #ccc;">AI Server</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Detailed Specification</h2>
+
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images\E_Datalogger.jpg" alt="Data Logger">
+        </div>
+
+        <div class="pub-details">
+          <div class="pub-title">Data Logger</div>
+          <div class="pub-meta"><em>@ Specialized Laboratory</em></div>
+
+          <div class="pub-authors">
+            <b>Model:</b> GL840<br>
+
+            <ul style="margin:0.5em 0 0 18px; padding:0; font-size:0.95em; line-height:1.5;">
+              <li><b>Functions:</b> Trigger / Alarm / Pulse input / Calculation / Search / Backup / Check-sum / Scaling</li>
+              <li><b>Power Supply:</b> AC 100–240 V / DC 8.5–24 V / Dual 7.2 V 2900 mAh Battery Packs</li>
+              <li><b>Measurement Range:</b> Voltage (20 mV–100 V), Thermocouple & RTD (100–2000 °C), Humidity (0–100 % RH)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="s" alt="Data Logger">
+        </div>
+
+        <div class="pub-details">
+          <div class="pub-title">Glove Box</div>
+          <div class="pub-meta"><em>@ Specialized Laboratory</em></div>
+
+          <div class="pub-authors">
+            <b>Model:</b> -<br>
+
+            <ul style="margin:0.5em 0 0 18px; padding:0; font-size:0.95em; line-height:1.5;">
+              <li><b>-</b> -</li>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images\E_Server.jpg" alt="Server Specification">
+        </div>
+
+        <div class="pub-details">
+          <div class="pub-title">High-Performance Computing Server</div>
+          <div class="pub-meta"><em>@ BSL Server Room</em></div>
+
+          <div class="pub-authors">
+            <p style="margin:0.5em 0; font-size:0.95em;">
+              <b>Model:</b> AI Server
+            </p>
+
+            <ul style="margin:0.5em 0 0 18px; padding:0; font-size:0.95em; line-height:1.5;">
+              <li><b>CPU:</b> Intel® Xeon® Gold 6526Y × 2 (16 cores, 2.80 GHz, 37.5 MB Cache)</li>
+              <li><b>RAM:</b> 128 GB DDR5 (PC5-38400 ECC/REG 64 GB × 2)</li>
+              <li><b>SSD:</b> 1.92 TB PCIe 4.0 ×4 NVMe (3D4 TLC)</li>
+              <li><b>GPU:</b> NVIDIA RTX A5000 (24 GB GDDR6)</li>
+              <li><b>Operating System:</b> Linux</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images\E_Poten.jpg" alt="Potentiostat">
+        </div>
+        <div class="pub-details">
+          <div class="pub-title">Potentiostat</div>
+          <div class="pub-meta"><em>@ Mobility Hall</em></div>
+
+          <div class="pub-authors">
+            <b>Model:</b> BCS-915 (8-channel multichannel potentiostat)<br><br>
+
+            <ul style="margin:0; padding-left:18px; font-size:0.95em; line-height:1.5;">
+              <li><b>Voltage:</b> 0–9 V, Resolution 150 μV / Measurement 40 μV (18 bit)</li>
+              <li><b>Accuracy:</b> ±0.01 % of value ±0.3 mV, Slew rate 3 kV/s</li>
+              <li><b>Current:</b> ±15 A per channel (5 ranges from 10 A to 1 mA)</li>
+              <li><b>Resolution:</b> Control 80 nA / Measurement 20 nA (18 bit)</li>
+              <li><b>Accuracy:</b> 0.05 % of value ±0.015 % FSR (typ.)  |  Parallel up to ±120 A</li>
+              <li><b>EIS:</b> 8 channels, 10 kHz – 10 mHz range</li>
+              <li><b>Acquisition time:</b> 1 ms  |  <b>Time base:</b> 1 ms</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images\E_Chamber.jpg" alt="Constant Temperature Chamber">
+        </div>
+
+        <div class="pub-details">
+          <div class="pub-title">Constant Temperature Chamber</div>
+          <div class="pub-meta"><em>@ Mobility Hall</em></div>
+
+          <div class="pub-authors">
+            <b>Model:</b> S-CTC150R1<br><br>
+
+            <ul style="margin:0.5em 0 0 18px; padding:0; font-size:0.95em; line-height:1.5;">
+              <li><b>Max Temp Range:</b> -25 ℃ – 150 ℃</li>
+              <li><b>Operating Range:</b> -20 ℃ – 120 ℃</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images\E_Cabinet.jpg" alt="Closed Internal Circulating Safety Reagents">
+        </div>
+
+        <div class="pub-details">
+          <div class="pub-title">Closed Internal Circulating Safety Reagents (High-grade type)</div>
+          <div class="pub-meta"><em>@ Mobility Hall</em></div>
+
+          <div class="pub-authors">
+            <b>Model:</b> WJ-K140C-001<br>
+
+            <ul style="margin:0.5em 0 0 18px; padding:0; font-size:0.95em; line-height:1.5;">
+              <li><b>External Dimensions:</b> W1400 × D700 × H1950 mm</li>
+              <li><b>Internal Dimensions:</b> W1300 × D630 × H1500 mm</li>
+              <li><b>Frame:</b> 1.2 mm steel plate, epoxy powder coating</li>
+              <li><b>Door:</b> Single 5 mm toughened glass, enclosed type</li>
+              <li><b>Shelf:</b> 10-step automatic sliding shelves</li>
+              <li><b>Filter:</b> CWK1 composite filter × 2 sets</li>
+              <li><b>Controller:</b> 7-inch touchscreen | <b>Lock:</b> Card reader + electronic swing handle</li>
+              <li><b>Power:</b> 220 V / 60 Hz, 170 W</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images\E_Purifier.jpg" alt="Portable Toxic Gas Air Purifier">
+        </div>
+
+        <div class="pub-details">
+          <div class="pub-title">Portable Toxic Gas Air Purifier</div>
+          <div class="pub-meta"><em>@ Mobility Hall</em></div>
+
+          <div class="pub-authors">
+            <b>Model:</b> CAFU-02<br>
+
+            <ul style="margin:0.5em 0 0 18px; padding:0; font-size:0.95em; line-height:1.5;">
+              <li><b>Noise:</b> ≤ 55 dB</li>
+              <li><b>Air Volume:</b> 9 – 12 m/s</li>
+              <li><b>Power Rating:</b> 220 V, 50/60 Hz, 120 W</li>
+              <li><b>Features:</b> Urethane bearing wheel for low noise / BLDC motor for low power / 
+                  Filter replacement alarm / Easy filter access / Portable mobility</li>
+              <li><b>Filter System:</b> 
+                Antibacterial pre-filter (dust & bacteria removal) + Main filter (TVOC & 0.3 μm particle elimination, sterilization)
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-img">
+          <img src="images\E_Power.jpg" alt="DC Power Supply">
+        </div>
+
+        <div class="pub-details">
+          <div class="pub-title">DC Power Supply</div>
+          <div class="pub-meta"><em>Mobility Hall</em></div>
+
+          <div class="pub-authors">
+            <b>Model:</b> DP30-03TP (3-Channel DC Power Supply)<br>
+            <p style="margin:0.5em 0; font-size:0.95em;">
+              Converts AC voltage into a stable DC output for laboratory testing and electronic device evaluation.
+            </p>
+
+            <ul style="margin:0.5em 0 0 18px; padding:0; font-size:0.95em; line-height:1.5;">
+              <li><b>Voltage:</b> 0 – 30 V (Resolution: 100 mV)</li>
+              <li><b>Current:</b> 0 – 3 A (1ch & 2ch, Resolution: 10 mA)</li>
+              <li><b>Power:</b> Max Output 180 W | Input: 115/230 V ±10%, 50/60 Hz</li>
+              <li><b>Line Fluctuation:</b> ±0.02% + 2 mV / 2 mA (for ±10% source voltage change)</li>
+              <li><b>Load Fluctuation:</b> ±0.02% + 5 mV / 5 mA (for 0–100% load variation)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-left">
+        <h3>Battery System Laboratory</h3>
+        <p>KAIST, CCS Graduate School of Mobility<br>
+        193, Munji-ro, Yuseong-gu, Daejeon, 34051, Republic of Korea</p>
+        <p><strong>Location:</strong> Faculty Wing, F440</p>
+      </div>
+      <div class="footer-right">
+        <p><strong>Phone:</strong> +82 042-350-1762</p>
+        <p><strong>Email:</strong> <a href="mailto:yoonklee@kaist.ac.kr">yoonklee@kaist.ac.kr</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Battery System Laboratory | All Rights Reserved</p>
+    </div>
+  </footer>
+
+</body>
+</html>
