@@ -215,16 +215,11 @@
       box-shadow: 0 6px 15px rgba(0,0,0,0.2);
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: 125px;
       align-items: center;
       text-align: center;
       cursor: pointer;
       transition: all 0.3s ease-in-out;
-    }
-    .interest-circle i {
-      font-size: 2.5em;
-      margin-bottom: 0.6em;
-      color: #007acc;
     }
     .interest-circle h3 {
       font-size: 1.1em;
@@ -304,7 +299,6 @@
       cursor: pointer;
       padding: 0;   /* ✅ 다른 링크와 높이 동일하게 */
     }
-
 
     .dropdown-content {
       display: none;
@@ -397,6 +391,125 @@
 
     .news-card.photo:hover { transform: translateY(-5px); }
 
+    
+    .pub-item { 
+      display: flex;                 /* 🔹 가로 배치 */
+      align-items: flex-start;
+      margin: 1em 0; 
+      padding: 1em; 
+      background: white; 
+      border-radius: 8px; 
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1); 
+      animation: fadeInUp 0.6s ease-in-out;
+    }
+    .pub-img {
+      height: 150px;
+      width: 150px;               /* 🔹 이미지 크기 고정 */
+      margin-right: 1em;
+    }
+    .pub-img img {
+      width: 100%;
+      border-radius: 6px;
+      object-fit: cover;
+    }
+    .pub-details {
+      flex: 1;                       /* 🔹 오른쪽은 남는 공간 다 사용 */
+    }
+    .pub-title {
+      font-weight: bold;
+      margin-bottom: 0.4em;
+    }
+    .pub-meta {
+      font-style: italic;
+      color: #444;
+      margin-bottom: 0.6em;
+    }
+    .pub-authors {
+      margin-top: 0.4em;
+      font-size: 0.95em;
+    }
+    .pub-number {
+      margin-top: 0.4em;
+      font-size: 0.75em;
+      color: #585b5e;
+    }
+    .pub-links a { 
+      margin-right: 10px; 
+      font-size: 0.9em; 
+      color: #003366; 
+      text-decoration: none; 
+    }
+    .pub-links a:hover { text-decoration: underline; }
+
+    .interest-circle.photo {
+      background-size: cover;
+      background-position: center;
+      border: 5px solid #007acc;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .interest-circle.photo h3 {
+      position: absolute;
+      bottom: 15px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      background: rgba(0,0,0,0.4);
+      color: white;
+      margin: 0;
+      padding: 0.5em 0;
+      font-size: 1.1em;
+    }
+
+    #partners-banner {
+      width: 100%;
+      margin: 3em auto 0 auto;
+      background: #151644;
+      color: white;
+      overflow: hidden;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      border-radius: 8px;
+      font-family: "Noto Sans KR", sans-serif;
+    }
+
+    .partner-track {
+      display: flex;
+      align-items: center;
+      gap: 3em;
+      white-space: nowrap;
+      width: max-content;
+      animation: scrollLoop 80s linear infinite;
+    }
+
+    /* 각 로고+이름 묶음 */
+    .partner-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6em;
+      font-size: 1.0em;
+      font-weight: 500;
+      opacity: 0.9;
+      transition: opacity 0.3s;
+    }
+
+    .partner-item:hover {
+      opacity: 1;
+    }
+
+    .partner-item img {
+      height: 50px;        /* ✅ 로고 크기 조정 */
+      width: auto;
+      vertical-align: middle;
+    }
+
+    /* 무한 루프 애니메이션 */
+    @keyframes scrollLoop {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
   </style>
 </head>
 <body>
@@ -428,15 +541,132 @@
 
   <!-- Hero Section -->
   <section class="hero">
-    <img src="https://mo.kaist.ac.kr/wp-content/uploads/2022/08/logo_new-1-e1661933714657.png" 
-         alt="KAIST Mobility Logo" class="hero-logo">
+    <img src="https://mo.kaist.ac.kr/wp-content/uploads/2022/08/logo_new-1-e1661933714657.png" alt="KAIST Mobility Logo" class="hero-logo">
     <h1>Battery System Laboratory</h1>
     <p>KAIST CCS Graduate School of Mobility</p>
     <a href="#research">Explore Research</a>
+    
+    <!-- 🔹 Collaboration Partners Banner -->
+    <section id="partners-banner">
+      <div class="partner-track">
+        <div class="partner-item">
+          <img src="images/kaist.png" alt="KAIST">
+          <span>KAIST</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/lges.png" alt="LG Energy Solution">
+          <span>Chungang University</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/hyundai.png" alt="Hyundai Motor Group">
+          <span>ChungNam Institute</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/samsungsdi.png" alt="Samsung SDI">
+          <span>CTNS</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/C_CAU.jpg" alt="SK On">
+          <span>EcoCAB</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/catl.png" alt="CATL">
+          <span>FutureEV</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/ecocab.png" alt="EcoCAB">
+          <span>Hanyang Electric</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/ctns.png" alt="CTNS">
+          <span>Jeonbuk TP</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/C_CAU.jpg" alt="Chungnam Institute">
+          <span>Korea University</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/ecocab.png" alt="EcoCAB">
+          <span>LG Energy Solution</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/ctns.png" alt="CTNS">
+          <span>Missouri S&T</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/C_CAU.jpg" alt="Chungnam Institute">
+          <span>MIT</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/ecocab.png" alt="EcoCAB">
+          <span>MONA</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/ctns.png" alt="CTNS">
+          <span>On Bridge</span>
+        </div>
+
+        <div class="partner-item">
+          <img src="images/kaist.png" alt="KAIST">
+          <span>KAIST</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/lges.png" alt="LG Energy Solution">
+          <span>Chungang University</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/hyundai.png" alt="Hyundai Motor Group">
+          <span>ChungNam Institute</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/samsungsdi.png" alt="Samsung SDI">
+          <span>CTNS</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/C_CAU.jpg" alt="SK On">
+          <span>EcoCAB</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/catl.png" alt="CATL">
+          <span>FutureEV</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/ecocab.png" alt="EcoCAB">
+          <span>Hanyang Electric</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/ctns.png" alt="CTNS">
+          <span>Jeonbuk TP</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/C_CAU.jpg" alt="Chungnam Institute">
+          <span>Korea University</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/ecocab.png" alt="EcoCAB">
+          <span>LG Energy Solution</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/ctns.png" alt="CTNS">
+          <span>Missouri S&T</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/C_CAU.jpg" alt="Chungnam Institute">
+          <span>MIT</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/ecocab.png" alt="EcoCAB">
+          <span>MONA</span>
+        </div>
+        <div class="partner-item">
+          <img src="images/ctns.png" alt="CTNS">
+          <span>On Bridge</span>
+        </div>
+      </div>
+    </section>
   </section>
 
   <main>
-      <!-- 🔹 Lab Introduction -->
     <section id="intro" style="text-align: center; margin-top: 2em;">
       <p style="font-size: 1.2em; color: #003366; font-weight: bold">
         Welcome to KAIST Battery System LAB (BSL)! 
@@ -460,26 +690,131 @@
     <section id="research" class="research-interests">
       <h2>RESEARCH INTERESTS</h2>
       <div class="interest-grid">
-        <div class="interest-circle">
-          <i class="fas fa-battery-full"></i>
-          <h3>Experiment & Analysis</h3>
+        <div class="interest-circle photo" style="background-image:url('images/EA_Research1-1.jpg')">
+          <h3>Experiment &<br> Analysis</h3>
         </div>
-        <div class="interest-circle">
-          <i class="fas fa-cogs"></i>
-          <h3>Simulation & Prediction</h3>
+        <div class="interest-circle photo" style="background-image:url('images/SP_Research1-1.jpg')">
+          <h3>Simulation &<br> Prediction</h3>
         </div>
-        <div class="interest-circle">
-          <i class="fas fa-atom"></i>
-          <h3>Design & Optimization</h3>
+        <div class="interest-circle photo" style="background-image:url('images/DO_Research1-1.jpg')">
+          <h3>Design &<br> Optimization</h3>
         </div>
-        <div class="interest-circle">
-          <i class="fas fa-chart-line"></i>
-          <h3>Control & Demonstration</h3>
+        <div class="interest-circle photo" style="background-image:url('images/CD_Research1-1.png')">
+          <h3>Control &<br> Demonstration</h3>
         </div>
       </div>
       <!-- 🔹 Research 페이지 이동 버튼 -->
       <a href="research.html" class="research-btn">View Full Research →</a>
     </section>
+
+    <h2><br>RECENT PUBLICATIONS</h2>
+
+    <div class="pub-item">
+      <div class="pub-img">
+        <img src="images\P_2025-2.png">
+      </div>
+
+      <div class="pub-details">
+        <div class="pub-title">
+          [23]
+          <div class="pub-links">
+            <a href="https://doi.org/10.1002/sstr.202400640" target="_blank">Advanced multiscale modeling of potassium-ion batteries for interplay of electrochemical and mechanical behavior across Scales (2025)</a>
+          </div>
+        </div>
+        <div class="pub-meta">
+          <em>Small Structure</em> (IF: 13.9), 335, 138202
+        </div>
+        <div class="pub-authors">
+          Subeen Kim<sup>†</sup>, Yun Kim, <b><u>Yoon Koo Lee</u>*</b>, Jihwan Song*
+        </div>
+
+      </div>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-img">
+        <img src="images\P_2025-1.png">
+      </div>
+
+      <div class="pub-details">
+        <div class="pub-title">
+          [22]
+          <div class="pub-links">
+            <a href="https://doi.org/10.1109/TTE.2024.3392208" target="_blank">Modeling and validation of driving performance of electric vehicle converted from internal combustion engine vehicle (2025)</a>
+          </div>
+        </div>
+        <div class="pub-meta">
+          <em>IEEE Transactions on Transportation Electrification</em> (IF: 7.0), 11 (1), 486-498
+        </div>
+        <div class="pub-authors">
+          Juhyun Park<sup>†</sup>, Hyunwoo Lim<sup>†</sup>, Sangjun Kim, Jihwan Song*, <b><u>Yoon Koo Lee</u>*</b>
+        </div>
+      </div>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-img">
+        <img src="images\P_2024-3.png">
+      </div>
+
+      <div class="pub-details">
+        <div class="pub-title">
+          [21]
+          <div class="pub-links">
+            <a href="https://doi.org/10.1016/j.jpowsour.2024.234064" target="_blank">Multi-scale mechanical-electrochemical coupled modeling of stress generation and its impact on different battery cell geometries (2024)</a>
+          </div>
+        </div>
+        <div class="pub-meta">
+          <em>Journal of Power Sources</em> (IF: 9.2), 595, 234064
+        </div>
+        <div class="pub-authors">
+          Jeu Shin<sup>†</sup>, <b><u>Yoon Koo Lee</u>*</b>
+        </div>
+      </div>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-img">
+        <img src="images\P_2024-2.png">
+      </div>
+
+      <div class="pub-details">
+        <div class="pub-title">
+          [20]
+          <div class="pub-links">
+            <a href="https://doi.org/10.1016/j.est.2024.110431" target="_blank">Multiphysics modeling of the influence of initial pressure on mechanical and electrochemical performance of all-solid-state batteries (2024)</a>
+          </div>
+        </div>
+        <div class="pub-meta">
+          <em>Journal of Energy Storage</em> (IF: 9.4), 82, 110431
+        </div>
+        <div class="pub-authors">
+          <b><u>Yoon Koo Lee</u><sup>†</sup></b>, Chaeeun Sung, Jiyeon Kim, Chaemin Hong, Jinnil Choi*
+        </div>
+
+      </div>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-img">
+        <img src="images\P_2024-1.png">
+      </div>
+
+      <div class="pub-details">
+        <div class="pub-title">
+          [19]
+          <div class="pub-links">
+            <a href="https://doi.org/10.1016/j.est.2023.110051" target="_blank">Modeling and simulation of a composite solid-state battery: The effects of stack pressure on electrochemical and mechanical behavior (2024)</a>
+          </div>
+        </div>
+        <div class="pub-meta">
+          <em>Journal of Energy Storage</em> (IF: 9.4), 78, 110051
+        </div>
+        <div class="pub-authors">
+          <b><u>Yoon Koo Lee</u><sup>†</sup></b>, Hosop Shin*
+        </div>
+      </div>
+    </div>
   </main>
 
   <footer>
@@ -574,6 +909,7 @@
     window.addEventListener('load', () => {
       modal.style.display = 'flex';
     });
+
   </script>
 </body>
 </html>
