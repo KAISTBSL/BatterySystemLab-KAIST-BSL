@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta charset="UTF-8">
   <title>News - Battery System Laboratory</title>
   <style>
@@ -347,6 +346,48 @@
       color: #66ccff;          /* 마우스 올렸을 때 약간 강조 */
     }
 
+    /* --- Gallery Slider --- */
+    .gallery-slider {
+      position: relative;
+      width: 100%;
+      height: 80%;
+      overflow: hidden;
+      border-radius: 6px;
+    }
+
+    .slide-track {
+      display: flex;
+      transition: transform 0.4s ease;
+      height: 100%;
+    }
+
+    .slide-track img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .slide-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.4);
+      color: white;
+      border: none;
+      font-size: 2em;
+      padding: 0 10px;
+      cursor: pointer;
+      border-radius: 4px;
+      z-index: 10;
+    }
+
+    .slide-btn:hover {
+      background: rgba(0,0,0,0.6);
+    }
+
+    .slide-btn.prev { left: 10px; }
+    .slide-btn.next { right: 10px; }
   </style>
 </head>
 <body>
@@ -394,6 +435,7 @@
     <!-- News Content -->
     <div id="news" class="tab-content active">
       <h2>Recent News</h2>
+      <div class="news-item"><div class="news-date">11/10/2025</div><div class="news-title">Report</div><div class="news-desc">Dongwook Kim and Donghae Kim won paper award @ KSME! <br><em> Dongwook Kim won Top prize and Donghae Kim won Excellence Prize in KSME 2025 chungcheong branch fall conference!</em></div></div>
       <div class="news-item"><div class="news-date">11/04/2025</div><div class="news-title">Report</div><div class="news-desc">BSL research was selected to KAIST College of Engineering Highlight!<br><em>Our next-gen potassium-ion battery research was featured as a departmental highlight in "KAIST 공학자의 오리연못 (2025-2)"</em></div></div>
       <div class="news-item"><div class="news-date">10/31/2025</div><div class="news-title">Report</div><div class="news-desc">BSL team got excellence award in "2025 미래내일 청년 일경험 지원사업"<br><em>Yeonghwan Jang, Dain Kim, Dongwook Kim, Donghae Kim got award. Grats!</em></div></div>
       <div class="news-item"><div class="news-date">10/31/2025</div><div class="news-title">Report</div><div class="news-desc">BSL researchers participated in the HRD Final Report Meeting<br><em>Yeonghwan Jang, Dain Kim, Dongwook Kim participated in Final Research Meeting to present their work!</em></div></div>
@@ -418,21 +460,41 @@
     <div id="gallery" class="tab-content">
       <h2>Gallery</h2>
       <div class="gallery-list">
-        <!--<div class="gallery-item">
-          <div class="gallery-date">11/19/2025</div>
-          <div class="gallery-title">KECS 2025 Fall Conference</div>
-          <img src="" alt="Professor Yoonkoo Lee's Birthday Party with BSL!">
+        <div class="gallery-item">
+          <div class="gallery-date">11/13/2025</div>
+          <div class="gallery-title">96 duo's Love-Shot</div>
+          <img src="images\251113Gallery.jpg">
         </div>
         <div class="gallery-item">
           <div class="gallery-date">11/12/2025</div>
-          <div class="gallery-title">KSAE 2025 Fall Conference</div>
-          <img src="" alt="Professor Yoonkoo Lee's Birthday Party with BSL!">
+          <div class="gallery-title">KSME 2025 Chungcheong Branch Fall Conference</div>
+          <div class="gallery-slider">
+            <button class="slide-btn prev">‹</button>
+            <div class="slide-track">
+              <img src="images\251112Gallery_1.jpg">
+              <img src="images\251112Gallery_2.jpg">
+              <img src="images\251112Gallery_3.jpg">
+              <img src="images\251112Gallery_4.jpg">
+              <img src="images\251112Gallery_5.jpg">
+            </div>
+            <button class="slide-btn next">›</button>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-date">11/11/2025</div>
+          <div class="gallery-title">Happy Pocky Day! (Thank you Dongmin!!)</div>
+          <img src="images\251111Gallery.jpg">
         </div>
         <div class="gallery-item">
           <div class="gallery-date">11/10/2025</div>
           <div class="gallery-title">KSME 2025 Chungcheong Branch Fall Conference</div>
-          <img src="" alt="Professor Yoonkoo Lee's Birthday Party with BSL!">
-        </div>-->
+          <img src="images\251110Gallery.jpg" alt="Professor Yoonkoo Lee's Birthday Party with BSL!">
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-date">11/07/2025</div>
+          <div class="gallery-title">BSL @ Dunkin Doughnut</div>
+          <img src="images\251107Gallery.jpg">
+        </div>
         <div class="gallery-item">
           <div class="gallery-date">10/31/2025</div>
           <div class="gallery-title">HRD Project Final Presentation</div>
@@ -689,6 +751,33 @@
     closeModal.addEventListener("click", () => { modal.style.display = "none"; });
     window.addEventListener("click", (e) => { 
       if (e.target === modal) modal.style.display = "none"; 
+    });
+
+    document.querySelectorAll(".gallery-slider").forEach(slider => {
+
+      const track = slider.querySelector(".slide-track");
+      const slides = track.querySelectorAll("img");
+
+      let index = 0;
+
+      const prevBtn = slider.querySelector(".prev");
+      const nextBtn = slider.querySelector(".next");
+
+      function updateSlide() {
+        track.style.transform = `translateX(-${index * 100}%)`;
+      }
+
+      nextBtn.addEventListener("click", () => {
+        if (index < slides.length - 1) index++;
+        else index = 0;   // 🔄 마지막에서 다시 처음으로 (옵션)
+        updateSlide();
+      });
+
+      prevBtn.addEventListener("click", () => {
+        if (index > 0) index--;
+        else index = slides.length - 1; // 🔄 첫 슬라이드에서 마지막으로 (옵션)
+        updateSlide();
+      });
     });
   </script>
 
