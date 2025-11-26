@@ -6,20 +6,23 @@
   <style>
     body {
       margin: 0;
-      font-family: "Noto Sans KR", Arial, sans-serif;
-      background-color: #f8f9fa;
+      font-family: "Noto Sans KR", "Arial", sans-serif;
       line-height: 1.6;
       scroll-behavior: smooth;
+      background: 
+        linear-gradient(rgba(245, 245, 245, 0.85), rgba(245, 245, 245, 0.85)),
+        url("https://img.hankyung.com/photo/202405/AA.36677880.1.jpg") no-repeat center/cover;
     }
 
     header {
       background-color: #0a1321;
       color: white;
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
       padding: 0 2em;          /* 위아래 padding 제거 → 높이 고정 효과 */
-      height: 80px;            /* ✅ 상단 바 높이 고정 */
+      min-height: 80px;            /* ✅ 상단 바 높이 고정 */
     }
 
     .logo {
@@ -34,14 +37,33 @@
       height: 96px;
       object-fit: contain;     /* ✅ 비율 유지하면서 들어가도록 */
     }
-
     .logo { font-weight: bold; font-size: 1.5em; }
+
+    .logo-link {
+      text-decoration: none;   /* 밑줄 제거 */
+      color: white;            /* 기존 header의 글자색과 동일 */
+      font-weight: bold;
+      font-size: 1.0em;
+    }
+
+    .logo-link:hover {
+      color: #66ccff;          /* 마우스 올렸을 때 약간 강조 */
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 4.5px;   /* ✅ margin 대신 간격統一 */
+      padding-bottom: 10px;
+    }
+
     nav a {
       color: white;
       text-decoration: none;
       margin-left: 20px;
       font-size: 1em;
       position: relative;
+      cursor: pointer;
     }
     nav a::after {
       content: "";
@@ -52,6 +74,48 @@
       transition: width 0.3s;
     }
     nav a:hover::after { width: 100%; }
+
+    .dropdown {
+      position: relative;
+      display: inline-block; /* ✅ a 태그처럼 inline-block 처리 */
+    }
+
+    .dropbtn {
+      color: white;
+      font-size: 1em;
+      text-decoration: none;
+      cursor: pointer;
+      padding: 0;   /* ✅ 다른 링크와 높이 동일하게 */
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;  /* ✅ nav의 flex 영향에서 분리 */
+      top: 100%;           /* ✅ 버튼 바로 아래 위치 */
+      left: 0;
+      background-color: white;
+      min-width: 160px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      border-radius: 5px;
+      z-index: 1000;
+    }
+
+    .dropdown-content a {
+      color: #01022c;
+      padding: 10px 14px;
+      text-decoration: none;
+      display: block;      /* ✅ 세로 정렬 */
+      font-size: 0.95em;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #f1f1f1;
+      color: #007acc;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
 
     /* Hero Section */
     .hero {
@@ -118,50 +182,6 @@
       flex-shrink: 0;
       background: #ddd;
     }
-
-    /* 드롭다운 스타일 */
-    .dropdown {
-      position: relative;
-      display: inline-block;
-    }
-
-    .dropbtn {
-      color: white;
-      text-decoration: none;
-      margin-left: 20px;
-      font-size: 1em;
-      cursor: pointer;
-      position: relative;
-    }
-
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: white;
-      min-width: 160px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-      border-radius: 5px;
-      z-index: 1000;
-    }
-
-    .dropdown-content a {
-      color: #01022c;
-      padding: 10px 14px;
-      text-decoration: none;
-      display: block;
-      font-size: 0.95em;
-    }
-
-    .dropdown-content a:hover {
-      background-color: #f1f1f1;
-      color: #007acc;
-    }
-
-    /* 마우스 올렸을 때 드롭다운 표시 */
-    .dropdown:hover .dropdown-content {
-      display: block;
-    }
-
 
     /* 텍스트 스타일 */
     .member-info {
@@ -241,18 +261,6 @@
       color: #cccccc;
     }
 
-    .logo {
-      font-weight: bold;
-      font-size: 1.5em;
-      display: flex;          /* 문구와 아이콘을 가로 정렬 */
-      align-items: center;
-      gap: 10px;              /* 문구와 아이콘 사이 간격 */
-    }
-
-    .logo-icon {
-      width: 96px;
-      height: 96px;
-    }
     /* Fade Animations */
     @keyframes fadeInDown {
       from { opacity: 0; transform: translateY(-30px); }
@@ -261,17 +269,6 @@
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(30px); }
       to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .logo-link {
-      text-decoration: none;   /* 밑줄 제거 */
-      color: white;            /* 기존 header의 글자색과 동일 */
-      font-weight: bold;
-      font-size: 1.0em;
-    }
-
-    .logo-link:hover {
-      color: #66ccff;          /* 마우스 올렸을 때 약간 강조 */
     }
 
     /* 사진 + 버튼을 세로로 */

@@ -21,10 +21,11 @@
       background-color: #0a1321;
       color: white;
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
       padding: 0 2em;          /* 위아래 padding 제거 → 높이 고정 효과 */
-      height: 80px;            /* ✅ 상단 바 높이 고정 */
+      min-height: 80px;            /* ✅ 상단 바 높이 고정 */
     }
 
     .logo {
@@ -40,6 +41,25 @@
       object-fit: contain;     /* ✅ 비율 유지하면서 들어가도록 */
     }
     .logo { font-weight: bold; font-size: 1.5em; }
+
+    .logo-link {
+      text-decoration: none;   /* 밑줄 제거 */
+      color: white;            /* 기존 header의 글자색과 동일 */
+      font-weight: bold;
+      font-size: 1.0em;
+    }
+
+    .logo-link:hover {
+      color: #66ccff;          /* 마우스 올렸을 때 약간 강조 */
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 4.5px;   /* ✅ margin 대신 간격統一 */
+      padding-bottom: 10px;
+    }
+
     nav a {
       color: white;
       text-decoration: none;
@@ -57,6 +77,48 @@
       transition: width 0.3s;
     }
     nav a:hover::after { width: 100%; }
+
+    .dropdown {
+      position: relative;
+      display: inline-block; /* ✅ a 태그처럼 inline-block 처리 */
+    }
+
+    .dropbtn {
+      color: white;
+      font-size: 1em;
+      text-decoration: none;
+      cursor: pointer;
+      padding: 0;   /* ✅ 다른 링크와 높이 동일하게 */
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;  /* ✅ nav의 flex 영향에서 분리 */
+      top: 100%;           /* ✅ 버튼 바로 아래 위치 */
+      left: 0;
+      background-color: white;
+      min-width: 160px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      border-radius: 5px;
+      z-index: 1000;
+    }
+
+    .dropdown-content a {
+      color: #01022c;
+      padding: 10px 14px;
+      text-decoration: none;
+      display: block;      /* ✅ 세로 정렬 */
+      font-size: 0.95em;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #f1f1f1;
+      color: #007acc;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
 
     /* Hero Section */
     .hero {
@@ -199,29 +261,48 @@
     /* 🔹 Research Interests (원형 다이나믹 스타일) */
     .interest-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr); /* ✅ 4개 한 줄 배치 */
+      grid-template-columns: repeat(4, 1fr);
       justify-items: center;
       gap: 2em;
       margin-top: 2em;
     }
 
+    /* 태블릿 */
+    @media (max-width: 900px) {
+      .interest-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* 모바일 */
+    @media (max-width: 550px) {
+      .interest-grid {
+        grid-template-columns: repeat(1, 1fr);
+      }
+    }
+
     .interest-circle {
-      width: 250px;
-      height: 250px;
+      width: 100%;              /* 🔥 부모 셀 크기에 맞게 줄어듦 */
+      max-width: 250px;         /* 🔥 PC에서는 250px 유지 */
+      aspect-ratio: 1 / 1;      /* 🔥 width = height → 원 유지 */
+      
       border-radius: 50%;
       background: white;
       border: 5px solid #007acc;
       box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+
       display: flex;
       flex-direction: column;
-      justify-content: 125px;
+      justify-content: center;
       align-items: center;
-      text-align: center;
+
       cursor: pointer;
       transition: all 0.3s ease-in-out;
+      text-align: center;
     }
+
     .interest-circle h3 {
-      font-size: 1.1em;
+      font-size: clamp(0.9rem, 1.6vw, 1.1rem);
       margin: 0;
       color: #003366;
     }
@@ -232,6 +313,24 @@
     }
     .interest-circle:hover i,
     .interest-circle:hover h3 { color: white; }
+    .interest-circle.photo {
+      background-size: cover;
+      background-position: center;
+      border: 5px solid #007acc;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .interest-circle.photo h3 {
+      position: absolute;
+      bottom: clamp(20px, 8vw, 83px);
+      left: 0;
+      right: 0;
+      padding: 0.5em 0;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+    }
 
     /* 🔹 Research 페이지 이동 버튼 */
     .research-btn {
@@ -270,85 +369,6 @@
     .close-btn {
       position: absolute; top: 10px; right: 15px;
       font-size: 1.5em; color: #333; cursor: pointer;
-    }
-
-    nav {
-      display: flex;
-      align-items: center;
-      gap: 4.5px;   /* ✅ margin 대신 간격統一 */
-    }
-
-    nav a {
-      position: relative;
-      text-decoration: none;
-      color: white;
-      font-size: 1em;
-      cursor: pointer;
-    }
-
-    .dropdown {
-      position: relative;
-      display: inline-block; /* ✅ a 태그처럼 inline-block 처리 */
-    }
-
-    .dropbtn {
-      color: white;
-      font-size: 1em;
-      text-decoration: none;
-      cursor: pointer;
-      padding: 0;   /* ✅ 다른 링크와 높이 동일하게 */
-    }
-
-    .dropdown-content {
-      display: none;
-      position: absolute;  /* ✅ nav의 flex 영향에서 분리 */
-      top: 100%;           /* ✅ 버튼 바로 아래 위치 */
-      left: 0;
-      background-color: white;
-      min-width: 160px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-      border-radius: 5px;
-      z-index: 1000;
-    }
-
-    .dropdown-content a {
-      color: #01022c;
-      padding: 10px 14px;
-      text-decoration: none;
-      display: block;      /* ✅ 세로 정렬 */
-      font-size: 0.95em;
-    }
-
-    .dropdown-content a:hover {
-      background-color: #f1f1f1;
-      color: #007acc;
-    }
-
-    .dropdown:hover .dropdown-content {
-      display: block;
-    }
-
-    .logo {
-      font-weight: bold;
-      display: flex;          /* 문구와 아이콘을 가로 정렬 */
-      align-items: center;
-      gap: 10px;              /* 문구와 아이콘 사이 간격 */
-    }
-
-    .logo-icon {
-      width: 96px;
-      height: 96px;
-    }
-
-    .logo-link {
-      text-decoration: none;   /* 밑줄 제거 */
-      color: white;            /* 기존 header의 글자색과 동일 */
-      font-weight: bold;
-      font-size: 1.0em;
-    }
-
-    .logo-link:hover {
-      color: #66ccff;          /* 마우스 올렸을 때 약간 강조 */
     }
 
     /* 기존 .news-grid 에 이 줄만 추가 */
@@ -439,27 +459,6 @@
       text-decoration: none; 
     }
     .pub-links a:hover { text-decoration: underline; }
-
-    .interest-circle.photo {
-      background-size: cover;
-      background-position: center;
-      border: 5px solid #007acc;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .interest-circle.photo h3 {
-      position: absolute;
-      bottom: 83px;
-      left: 0;
-      right: 0;
-      text-align: center;
-      background: rgba(0, 0, 0, 0.6);
-      color: white;
-      margin: 0;
-      padding: 0.5em 0;
-      font-size: 1.1em;
-    }
 
     #partners-banner {
       width: 100%;
