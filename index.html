@@ -78,48 +78,6 @@
     }
     nav a:hover::after { width: 100%; }
 
-    .dropdown {
-      position: relative;
-      display: inline-block; /* ✅ a 태그처럼 inline-block 처리 */
-    }
-
-    .dropbtn {
-      color: white;
-      font-size: 1em;
-      text-decoration: none;
-      cursor: pointer;
-      padding: 0;   /* ✅ 다른 링크와 높이 동일하게 */
-    }
-
-    .dropdown-content {
-      display: none;
-      position: absolute;  /* ✅ nav의 flex 영향에서 분리 */
-      top: 100%;           /* ✅ 버튼 바로 아래 위치 */
-      left: 0;
-      background-color: white;
-      min-width: 160px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-      border-radius: 5px;
-      z-index: 1000;
-    }
-
-    .dropdown-content a {
-      color: #01022c;
-      padding: 10px 14px;
-      text-decoration: none;
-      display: block;      /* ✅ 세로 정렬 */
-      font-size: 0.95em;
-    }
-
-    .dropdown-content a:hover {
-      background-color: #f1f1f1;
-      color: #007acc;
-    }
-
-    .dropdown:hover .dropdown-content {
-      display: block;
-    }
-
     /* Hero Section */
     .hero {
       position: relative;
@@ -410,55 +368,106 @@
 
     .news-card.photo:hover { transform: translateY(-5px); }
 
-    
-    .pub-item { 
-      display: flex;                 /* 🔹 가로 배치 */
+    /* 전체 박스 */
+    .pub-feature-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5em;
+      padding: 2em;
+      margin-top: 2em;
+      background: linear-gradient(135deg, #1682c0, #68bdd3);
+      backdrop-filter: blur(10px);
+      border-radius: 18px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      color: white;
+    }
+
+    /* 왼쪽 섹션: 최신 2개 */
+    .pub-latest-box {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2em;
+    }
+
+    /* 최신 2개 카드 */
+    .pub-latest-item {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 1em;
+      display: flex;
+      gap: 1em;
       align-items: flex-start;
-      margin: 1em 0; 
-      padding: 1em; 
-      background: white; 
-      border-radius: 8px; 
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1); 
-      animation: fadeInUp 0.6s ease-in-out;
+      box-shadow: inset 0 0 30px rgba(255,255,255,0.05);
     }
-    .pub-img {
-      height: 150px;
-      width: 150px;               /* 🔹 이미지 크기 고정 */
-      margin-right: 1em;
-    }
-    .pub-img img {
-      width: 100%;
-      border-radius: 6px;
+
+    .pub-latest-item img {
+      width: 120px;
+      height: 120px;
       object-fit: cover;
+      border-radius: 10px;
+      flex-shrink: 0;
     }
-    .pub-details {
-      flex: 1;                       /* 🔹 오른쪽은 남는 공간 다 사용 */
-    }
-    .pub-title {
+
+    .pub-latest-title {
+      font-size: 1.05em;
       font-weight: bold;
-      margin-bottom: 0.4em;
+      margin-bottom: 0.3em;
     }
-    .pub-meta {
-      font-style: italic;
-      color: #444;
-      margin-bottom: 0.6em;
+
+    .pub-latest-meta {
+      font-size: 0.85em;
+      opacity: 0.9;
+      margin-bottom: 0.3em;
     }
-    .pub-authors {
-      margin-top: 0.4em;
-      font-size: 0.95em;
+
+    .pub-latest-authors {
+      font-size: 0.8em;
+      opacity: 0.85;
     }
-    .pub-number {
-      margin-top: 0.4em;
-      font-size: 0.75em;
-      color: #585b5e;
+
+    /* 오른쪽 리스트 3개 */
+    .pub-side-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
     }
-    .pub-links a { 
-      margin-right: 10px; 
-      font-size: 0.9em; 
-      color: #003366; 
-      text-decoration: none; 
+
+    .pub-side-item {
+      background: rgba(255,255,255,0.1);
+      padding: 1em;
+      border-radius: 10px;
+      transition: background 0.3s ease;
     }
-    .pub-links a:hover { text-decoration: underline; }
+
+    .pub-side-item:hover {
+      background: rgba(255,255,255,0.18);
+    }
+
+    .pub-side-title {
+      font-size: 1em;
+      font-weight: bold;
+      margin-bottom: 0.3em;
+    }
+
+    .pub-side-meta,
+    .pub-side-authors {
+      font-size: 0.82em;
+      opacity: 0.88;
+    }
+
+    /* 글자 자동 줄바꿈 */
+    .pub-feature-box * {
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+
+    /* 반응형: 좁은 화면에서 세로 정렬 */
+    @media (max-width: 900px) {
+      .pub-feature-box {
+        grid-template-columns: 1fr;
+      }
+    }
+
 
     #partners-banner {
       width: 100%;
@@ -521,15 +530,7 @@
     <nav>
       <a href="index.html" id="home-link">Home</a>
 
-      <!-- 🔽 드롭다운 메뉴 -->
-      <div class="dropdown">
-        <a class="dropbtn">Member ▾</a>
-        <div class="dropdown-content">
-          <a href="member.html">PI</a>
-          <a href="researchers.html">Researchers</a>
-          <a href="alumni.html">Alumni</a>
-        </div>
-      </div>
+      <a href="member.html" class="menu-text">Member</a>
 
       <a href="publication.html">Publication</a>
       <a href="research.html">Research</a>
@@ -702,7 +703,73 @@
       <div class="news-grid" id="latest-news"></div>
       <div class="more-link"><a href="news.html">More News →</a></div>
     </section>
+    <h2><br>RECENT PUBLICATIONS</h2>
 
+    <div class="pub-feature-box">
+
+      <!-- 🔵 최신 2개 -->
+      <div class="pub-latest-box">
+
+        <!-- 최신 1 -->
+        <div class="pub-latest-item">
+          <img src="images/P_2025-2.png" alt="Latest Paper 1">
+          <div>
+            <div class="pub-latest-title">
+              Advanced multiscale modeling of potassium-ion batteries for interplay of electrochemical and mechanical behavior across Scales (2025)
+            </div>
+            <div class="pub-latest-meta">Small Structure, 335, 138202 (IF: 13.9)</div>
+            <div class="pub-latest-authors">Subeen Kim†, Yun Kim, <b><u>Yoon Koo Lee</u>*</b>, Jihwan Song*</div>
+          </div>
+        </div>
+
+        <!-- 최신 2 -->
+        <div class="pub-latest-item">
+          <img src="images/P_2025-1.png" alt="Latest Paper 2">
+          <div>
+            <div class="pub-latest-title">
+              Modeling and validation of driving performance of electric vehicle converted from internal combustion engine vehicle (2025)
+            </div>
+            <div class="pub-latest-meta">IEEE TTE, 11(1), 486–498 (IF: 7.0)</div>
+            <div class="pub-latest-authors">
+              Juhyun Park†, Hyunwoo Lim†, Sangjun Kim, Jihwan Song*, <b><u>Yoon Koo Lee</u>*</b>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 🔵 나머지 3개 -->
+      <div class="pub-side-list">
+
+        <div class="pub-side-item">
+          <div class="pub-side-title">
+            Multi-scale mechanical-electrochemical coupled modeling of stress generation… (2024)
+          </div>
+          <div class="pub-side-meta">Journal of Power Sources (IF: 9.2)</div>
+          <div class="pub-side-authors">Jeu Shin†, <b><u>Yoon Koo Lee</u>*</b></div>
+        </div>
+
+        <div class="pub-side-item">
+          <div class="pub-side-title">
+            Multiphysics modeling of the influence of initial pressure… (2024)
+          </div>
+          <div class="pub-side-meta">Journal of Energy Storage (IF: 9.4)</div>
+          <div class="pub-side-authors">
+            <b><u>Yoon Koo Lee</u>†</b>, Chaeeun Sung, Jiyeon Kim, Chaemin Hong, Jinnil Choi*
+          </div>
+        </div>
+
+        <div class="pub-side-item">
+          <div class="pub-side-title">
+            Modeling and simulation of a composite solid-state battery… (2024)
+          </div>
+          <div class="pub-side-meta">Journal of Energy Storage</div>
+          <div class="pub-side-authors"><b><u>Yoon Koo Lee</u>†</b>, Hosop Shin*</div>
+        </div>
+
+      </div>
+    </div>
+    
     <!-- Research Interests -->
     <section id="research" class="research-interests">
       <h2>RESEARCH INTERESTS</h2>
@@ -724,114 +791,6 @@
       <a href="research.html" class="research-btn">View Full Research →</a>
     </section>
 
-    <h2><br>RECENT PUBLICATIONS</h2>
-
-    <div class="pub-item">
-      <div class="pub-img">
-        <img src="images\P_2025-2.png">
-      </div>
-
-      <div class="pub-details">
-        <div class="pub-title">
-          [23]
-          <div class="pub-links">
-            <a href="https://doi.org/10.1002/sstr.202400640" target="_blank">Advanced multiscale modeling of potassium-ion batteries for interplay of electrochemical and mechanical behavior across Scales (2025)</a>
-          </div>
-        </div>
-        <div class="pub-meta">
-          <em>Small Structure</em> (IF: 13.9), 335, 138202
-        </div>
-        <div class="pub-authors">
-          Subeen Kim<sup>†</sup>, Yun Kim, <b><u>Yoon Koo Lee</u>*</b>, Jihwan Song*
-        </div>
-
-      </div>
-    </div>
-
-    <div class="pub-item">
-      <div class="pub-img">
-        <img src="images\P_2025-1.png">
-      </div>
-
-      <div class="pub-details">
-        <div class="pub-title">
-          [22]
-          <div class="pub-links">
-            <a href="https://doi.org/10.1109/TTE.2024.3392208" target="_blank">Modeling and validation of driving performance of electric vehicle converted from internal combustion engine vehicle (2025)</a>
-          </div>
-        </div>
-        <div class="pub-meta">
-          <em>IEEE Transactions on Transportation Electrification</em> (IF: 7.0), 11 (1), 486-498
-        </div>
-        <div class="pub-authors">
-          Juhyun Park<sup>†</sup>, Hyunwoo Lim<sup>†</sup>, Sangjun Kim, Jihwan Song*, <b><u>Yoon Koo Lee</u>*</b>
-        </div>
-      </div>
-    </div>
-
-    <div class="pub-item">
-      <div class="pub-img">
-        <img src="images\P_2024-3.png">
-      </div>
-
-      <div class="pub-details">
-        <div class="pub-title">
-          [21]
-          <div class="pub-links">
-            <a href="https://doi.org/10.1016/j.jpowsour.2024.234064" target="_blank">Multi-scale mechanical-electrochemical coupled modeling of stress generation and its impact on different battery cell geometries (2024)</a>
-          </div>
-        </div>
-        <div class="pub-meta">
-          <em>Journal of Power Sources</em> (IF: 9.2), 595, 234064
-        </div>
-        <div class="pub-authors">
-          Jeu Shin<sup>†</sup>, <b><u>Yoon Koo Lee</u>*</b>
-        </div>
-      </div>
-    </div>
-
-    <div class="pub-item">
-      <div class="pub-img">
-        <img src="images\P_2024-2.png">
-      </div>
-
-      <div class="pub-details">
-        <div class="pub-title">
-          [20]
-          <div class="pub-links">
-            <a href="https://doi.org/10.1016/j.est.2024.110431" target="_blank">Multiphysics modeling of the influence of initial pressure on mechanical and electrochemical performance of all-solid-state batteries (2024)</a>
-          </div>
-        </div>
-        <div class="pub-meta">
-          <em>Journal of Energy Storage</em> (IF: 9.4), 82, 110431
-        </div>
-        <div class="pub-authors">
-          <b><u>Yoon Koo Lee</u><sup>†</sup></b>, Chaeeun Sung, Jiyeon Kim, Chaemin Hong, Jinnil Choi*
-        </div>
-
-      </div>
-    </div>
-
-    <div class="pub-item">
-      <div class="pub-img">
-        <img src="images\P_2024-1.png">
-      </div>
-
-      <div class="pub-details">
-        <div class="pub-title">
-          [19]
-          <div class="pub-links">
-            <a href="https://doi.org/10.1016/j.est.2023.110051" target="_blank">Modeling and simulation of a composite solid-state battery: The effects of stack pressure on electrochemical and mechanical behavior (2024)</a>
-          </div>
-        </div>
-        <div class="pub-meta">
-          <em>Journal of Energy Storage</em> (IF: 9.4), 78, 110051
-        </div>
-        <div class="pub-authors">
-          <b><u>Yoon Koo Lee</u><sup>†</sup></b>, Hosop Shin*
-        </div>
-      </div>
-    </div>
   </main>
 
   <footer>
@@ -925,6 +884,15 @@
     // 페이지 로드 시 자동으로 팝업 띄우기
     window.addEventListener('load', () => {
       modal.style.display = 'flex';
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const toggle = document.querySelector(".dropdown-toggle");
+      const dropdown = document.querySelector(".dropdown");
+
+      toggle.addEventListener("click", () => {
+        dropdown.classList.toggle("open");
+      });
     });
 
   </script>

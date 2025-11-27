@@ -75,48 +75,6 @@
     }
     nav a:hover::after { width: 100%; }
 
-    .dropdown {
-      position: relative;
-      display: inline-block; /* ✅ a 태그처럼 inline-block 처리 */
-    }
-
-    .dropbtn {
-      color: white;
-      font-size: 1em;
-      text-decoration: none;
-      cursor: pointer;
-      padding: 0;   /* ✅ 다른 링크와 높이 동일하게 */
-    }
-
-    .dropdown-content {
-      display: none;
-      position: absolute;  /* ✅ nav의 flex 영향에서 분리 */
-      top: 100%;           /* ✅ 버튼 바로 아래 위치 */
-      left: 0;
-      background-color: white;
-      min-width: 160px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-      border-radius: 5px;
-      z-index: 1000;
-    }
-
-    .dropdown-content a {
-      color: #01022c;
-      padding: 10px 14px;
-      text-decoration: none;
-      display: block;      /* ✅ 세로 정렬 */
-      font-size: 0.95em;
-    }
-
-    .dropdown-content a:hover {
-      background-color: #f1f1f1;
-      color: #007acc;
-    }
-
-    .dropdown:hover .dropdown-content {
-      display: block;
-    }
-
     /* Hero */
     .hero {
       position: relative;
@@ -312,14 +270,7 @@
     </div>
     <nav>
       <a href="index.html">Home</a>
-      <div class="dropdown">
-        <a class="dropbtn">Member ▾</a>
-        <div class="dropdown-content">
-          <a href="member.html">PI</a>
-          <a href="researchers.html">Researchers</a>
-          <a href="alumni.html">Alumni</a>
-        </div>
-      </div>
+      <a href="member.html">Member</a>
       <a href="publication.html">Publication</a>
       <a href="research.html">Research</a>
       <a href="counterpart.html">Counterpart</a>

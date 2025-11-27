@@ -74,49 +74,6 @@
       transition: width 0.3s;
     }
     nav a:hover::after { width: 100%; }
-
-    .dropdown {
-      position: relative;
-      display: inline-block; /* ✅ a 태그처럼 inline-block 처리 */
-    }
-
-    .dropbtn {
-      color: white;
-      font-size: 1em;
-      text-decoration: none;
-      cursor: pointer;
-      padding: 0;   /* ✅ 다른 링크와 높이 동일하게 */
-    }
-
-    .dropdown-content {
-      display: none;
-      position: absolute;  /* ✅ nav의 flex 영향에서 분리 */
-      top: 100%;           /* ✅ 버튼 바로 아래 위치 */
-      left: 0;
-      background-color: white;
-      min-width: 160px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-      border-radius: 5px;
-      z-index: 1000;
-    }
-
-    .dropdown-content a {
-      color: #01022c;
-      padding: 10px 14px;
-      text-decoration: none;
-      display: block;      /* ✅ 세로 정렬 */
-      font-size: 0.95em;
-    }
-
-    .dropdown-content a:hover {
-      background-color: #f1f1f1;
-      color: #007acc;
-    }
-
-    .dropdown:hover .dropdown-content {
-      display: block;
-    }
-
     /* Hero Section */
     .hero {
       position: relative;
@@ -278,6 +235,50 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+        /* Sub Tab Navigation */
+    .subtab-container {
+      text-align: center;
+      margin: 2em 0 1em 0;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 0.5em;
+    }
+
+    .subtab-btn {
+      background: none;
+      border: none;
+      text-decoration: none;
+      color: #003366;
+      font-size: 1.1em;
+      font-weight: bold;
+      margin: 0 1.2em;
+      padding: 0.5em 0.2em;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .subtab-btn::after {
+      content: "";
+      position: absolute;
+      bottom: -3px; left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 3px;
+      background: #66ccff;
+      transition: width 0.3s;
+    }
+
+    .subtab-btn.active {
+      color: #003366;
+    }
+
+    .subtab-btn.active::after {
+      width: 100%;
+    }
+
+    .subtab-btn:hover {
+      color: #66ccff;
+    }
+
   </style>
 </head>
 <body>
@@ -288,17 +289,7 @@
     </div>
     <nav>
       <a href="index.html">Home</a>
-
-      <!-- 🔽 드롭다운 메뉴 -->
-      <div class="dropdown">
-        <a class="dropbtn">Member ▾</a>
-        <div class="dropdown-content">
-          <a href="member.html">PI</a>
-          <a href="researchers.html">Researchers</a>
-          <a href="alumni.html">Alumni</a>
-        </div>
-      </div>
-
+      <a href="member.html">Member</a>
       <a href="publication.html">Publication</a>
       <a href="research.html">Research</a>
       <a href="counterpart.html">Counterpart</a>
@@ -315,7 +306,11 @@
     <h1>Alumni</h1>
     <p>Former Members of Battery System Laboratory</p>
   </section>
-
+  <div class="subtab-container">
+    <a href="member.html" class="subtab-btn">PI</a>
+    <a href="researchers.html" class="subtab-btn">Researchers</a>
+    <a href="alumni.html" class="subtab-btn active">Alumni</a>
+  </div>
   <main>
     <h2>Our Alumni</h2>
     <div class="alumni-grid">
@@ -398,5 +393,24 @@
       <p>&copy; 2025 Battery System Laboratory | All Rights Reserved</p>
     </div>
   </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const toggle = document.querySelector(".dropdown-toggle");
+      const dropdown = document.querySelector(".dropdown");
+
+      toggle.addEventListener("click", (e) => {
+        e.preventDefault();        // 링크 오동작 방지
+        e.stopPropagation();       // 상위 클릭 이벤트 차단
+        dropdown.classList.toggle("open");
+      });
+
+      // 바깥 클릭 시 닫히게 하기 (선택사항)
+      document.addEventListener("click", () => {
+        dropdown.classList.remove("open");
+      });
+    });
+  </script>
+
 </body>
 </html>
