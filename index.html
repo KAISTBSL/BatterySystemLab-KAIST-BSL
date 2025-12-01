@@ -519,6 +519,71 @@
       0% { transform: translateX(0); }
       100% { transform: translateX(-50%); }
     }
+
+    .location-section {
+      margin-top: 3em;
+      text-align: center;
+    }
+
+    .location-buttons {
+      display: flex;
+      justify-content: space-between; /* ← 버튼 사이 균등 분배 */
+      flex-wrap: nowrap;              /* ← 줄바꿈 방지 */
+      max-width: 1100px;              /* ← 위 섹션들과 동일한 너비 */
+      margin: 0 auto 1.5em auto;      /* ← 중앙 정렬 */
+      gap: 1em;                         /* ← gap 제거 (버튼 너비 정확히 맞추기 위해) */
+    }
+
+    .loc-btn {
+      flex: 1 1 25%;                  /* ← 네 버튼이 정확히 25%씩 차지 */
+      padding: 0.8em 0.5em;
+      margin: 0;                      /* ← 간격 문제 해결 */
+      background: #007acc;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 0.7em;
+      font-weight: bold;
+      white-space: nowrap;            /* ← 줄바꿈 방지 */
+      transition: 0.3s;
+      text-align: center;
+    }
+
+    .loc-btn:hover {
+      background: #005f99;
+      transform: translateY(-2px);
+    }
+
+    .map-container {
+      width: 100%;
+      max-width: 1100px;
+      height: 450px; /* 원하는 세로 크기 */
+      margin: 0 auto;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      background: #ddd; /* 로딩 전 배경 */
+    }
+
+    #labMap {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    @media (max-width: 900px) {
+      .location-buttons {
+        grid-template-columns: repeat(2, 1fr); /* 태블릿: 2개씩 */
+      }
+    }
+
+    @media (max-width: 500px) {
+      .location-buttons {
+        grid-template-columns: repeat(1, 1fr); /* 모바일: 1개씩 */
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -791,6 +856,25 @@
       <a href="research.html" class="research-btn">View Full Research →</a>
     </section>
 
+    <!-- 🔵 Research Lab Locations -->
+    <section class="location-section">
+      <h2>Our Lab Locations</h2>
+
+      <div class="location-buttons">
+        <button class="loc-btn" data-map="munji">KAIST Munji Campus Faculty Wing F409</button>
+        <button class="loc-btn" data-map="daejeon">KAIST Munji Campus Mobility Hall</button>
+        <button class="loc-btn" data-map="seoul">KAIST Munji Campus Truth Hall</button>
+        <button class="loc-btn" data-map="factory">KAIST Eco-Friendly Vehicle Research Center</button>
+      </div>
+
+      <!-- 지도 표시 영역 -->
+      <div class="map-container">
+        <iframe id="labMap" 
+          src="https://www.google.com/maps/embed?pb=YOUR_DEFAULT_LOCATION"
+          loading="lazy" allowfullscreen></iframe>
+      </div>
+    </section>
+
   </main>
 
   <footer>
@@ -892,6 +976,22 @@
 
       toggle.addEventListener("click", () => {
         dropdown.classList.toggle("open");
+      });
+    });
+
+    const mapUrls = {
+      munji: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3211.655882711285!2d127.39783067581973!3d36.3933236723659!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x356549e65ed500b5%3A0xa4b72feb132f45c9!2z7ZWc6rWt6rO87ZWZ6riw7Iig7JuQIO2Vmeu2gOuPmQ!5e0!3m2!1sko!2skr!4v1764232635364!5m2!1sko!2skr=<MUNJI EMBED CODE>",
+      daejeon: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1515.728781183824!2d127.39857495577911!3d36.39183234739905!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x356549e5f5e2c115%3A0x9fa8118c8f12fab8!2z7ZWc6rWt6rO87ZWZ6riw7Iig7JuQIOu2gOyGjTPrj5k!5e0!3m2!1sko!2skr!4v1764233489042!5m2!1sko!2skr=<DAEJEON EMBED CODE>",
+      seoul: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1828.7346443921303!2d127.39745776395866!3d36.39179027058697!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x356549e62b0b4917%3A0x4981e0be5c3cfe64!2z7ZWc6rWt6rO87ZWZ6riw7Iig7JuQIOynhOumrOq0gA!5e0!3m2!1sko!2skr!4v1764233444299!5m2!1sko!2skr=<SEOUL EMBED CODE>",
+      factory: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.234172724379!2d126.57146784475499!3d33.443205089713096!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x350cfd6bfecfa743%3A0xe0c352bfdd34a97!2z7IS466-47JaR67mM65Sp!5e0!3m2!1sko!2skr!4v1764233539789!5m2!1sko!2skr=<GOYANG EMBED CODE>"
+    };
+
+    const mapFrame = document.getElementById("labMap");
+
+    document.querySelectorAll(".loc-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const key = btn.getAttribute("data-map");
+        mapFrame.src = mapUrls[key];
       });
     });
 
