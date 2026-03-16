@@ -584,6 +584,52 @@
       }
     }
 
+    .location-layout {
+      display: flex;
+      gap: 0;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* 지도 */
+    .map-container {
+      width: 650px;
+      height: 450px;
+    }
+
+    #labMap {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* 사진 */
+    .location-photo {
+      width: 450px;
+      height: 450px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .location-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* 사진 설명 overlay */
+    .photo-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0.8em;
+      color: white;
+      font-size: 1em;
+      font-weight: bold;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    }
+
   </style>
 </head>
 <body>
@@ -891,11 +937,23 @@
         <button class="loc-btn" data-map="factory">KAIST Eco-Friendly Vehicle Research Center</button>
       </div>
 
-      <!-- 지도 표시 영역 -->
-      <div class="map-container">
-        <iframe id="labMap" 
-          src="https://www.google.com/maps/embed?pb=YOUR_DEFAULT_LOCATION"
-          loading="lazy" allowfullscreen></iframe>
+      <div class="location-layout">
+
+        <!-- 지도 -->
+        <div class="map-container">
+          <iframe id="labMap"
+            src="https://www.google.com/maps/embed?pb=YOUR_DEFAULT_LOCATION"
+            loading="lazy" allowfullscreen></iframe>
+        </div>
+
+        <!-- 사진 -->
+        <div class="location-photo">
+          <img id="labPhoto" src="images/idx_main.jpg">
+          <div class="photo-caption" id="labCaption">
+            KAIST Munji Campus
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -1008,21 +1066,46 @@
     });
 
     const mapUrls = {
-      munji: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3211.655882711285!2d127.39783067581973!3d36.3933236723659!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x356549e65ed500b5%3A0xa4b72feb132f45c9!2z7ZWc6rWt6rO87ZWZ6riw7Iig7JuQIO2Vmeu2gOuPmQ!5e0!3m2!1sko!2skr!4v1764232635364!5m2!1sko!2skr=<MUNJI EMBED CODE>",
-      daejeon: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1515.728781183824!2d127.39857495577911!3d36.39183234739905!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x356549e5f5e2c115%3A0x9fa8118c8f12fab8!2z7ZWc6rWt6rO87ZWZ6riw7Iig7JuQIOu2gOyGjTPrj5k!5e0!3m2!1sko!2skr!4v1764233489042!5m2!1sko!2skr=<DAEJEON EMBED CODE>",
-      seoul: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1828.7346443921303!2d127.39745776395866!3d36.39179027058697!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x356549e62b0b4917%3A0x4981e0be5c3cfe64!2z7ZWc6rWt6rO87ZWZ6riw7Iig7JuQIOynhOumrOq0gA!5e0!3m2!1sko!2skr!4v1764233444299!5m2!1sko!2skr=<SEOUL EMBED CODE>",
-      factory: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.234172724379!2d126.57146784475499!3d33.443205089713096!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x350cfd6bfecfa743%3A0xe0c352bfdd34a97!2z7IS466-47JaR67mM65Sp!5e0!3m2!1sko!2skr!4v1764233539789!5m2!1sko!2skr=<GOYANG EMBED CODE>"
+      munji: {
+        map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3211.655882711285!2d127.39783067581973!3d36.3933236723659!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x356549e65ed500b5%3A0xa4b72feb132f45c9!2z7ZWc6rWt6rO87ZWZ6riw7Iig7JuQIO2Vmeu2gOuPmQ!5e0!3m2!1sko!2skr!4v1764232635364!5m2!1sko!2skr",
+        photo: "images/251112Gallery_2.jpg",
+        caption: "Joint Laboratory and Specialized Laboratory"
+      },
+      daejeon: {
+        map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1515.728781183824!2d127.39857495577911!3d36.39183234739905!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x356549e5f5e2c115%3A0x9fa8118c8f12fab8!2z7ZWc6rWt6rO87ZWZ6riw7Iig7JuQIOu2gOyGjTPrj5k!5e0!3m2!1sko!2skr!4v1764233489042!5m2!1sko!2skr",
+        photo: "images/251112Gallery_2.jpg",
+        caption: "Mobility Hall Battery Experiment Laboratory"
+      },
+      seoul: {
+        map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1828.7346443921303!2d127.39745776395866!3d36.39179027058697!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x356549e62b0b4917%3A0x4981e0be5c3cfe64!2z7ZWc6rWt6rO87ZWZ6riw7Iig7JuQIOynhOumrOq0gA!5e0!3m2!1sko!2skr!4v1764233444299!5m2!1sko!2skr",
+        photo: "images/idx_truth.jpg",
+        caption: "Truth Hall Wet Laboratory"
+      },
+      factory: {
+        map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.234172724379!2d126.57146784475499!3d33.443205089713096!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x350cfd6bfecfa743%3A0xe0c352bfdd34a97!2z7IS466-47JaR67mM65Sp!5e0!3m2!1sko!2skr!4v1764233539789!5m2!1sko!2skr",
+        photo: "images/idx_factory.jpg",
+        caption: "Eco-Friendly Vehicle Research Center"
+      }
     };
 
     const mapFrame = document.getElementById("labMap");
+    const photo = document.getElementById("labPhoto");
+    const caption = document.getElementById("labCaption");
 
     document.querySelectorAll(".loc-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const key = btn.getAttribute("data-map");
-        mapFrame.src = mapUrls[key];
-      });
-    });
 
+      btn.addEventListener("click", () => {
+
+        const key = btn.getAttribute("data-map");
+        const data = mapUrls[key];
+
+        mapFrame.src = data.map;
+        photo.src = data.photo;
+        caption.innerText = data.caption;
+
+      });
+
+    });
   </script>
 </body>
 </html>
