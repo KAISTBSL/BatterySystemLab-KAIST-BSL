@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Project - Battery System Laboratory</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Noto Sans KR", "Arial", sans-serif;
+      line-height: 1.6;
+      scroll-behavior: smooth;
+      background: 
+        linear-gradient(rgba(245, 245, 245, 0.85), rgba(245, 245, 245, 0.85)),
+        url("https://img.hankyung.com/photo/202405/AA.36677880.1.jpg") no-repeat center/cover;
+    }
+
+    header {
+      background-color: #0a1321;
+      color: white;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2em;
+      min-height: 80px;
+    }
+
+    .logo {
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 96px;
+      height: 96px;
+      object-fit: contain;
+    }
+    .logo { font-weight: bold; font-size: 1.5em; }
+
+    .logo-link {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      font-size: 1.0em;
+    }
+    .logo-link:hover { color: #66ccff; }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 4.5px;
+      padding-bottom: 10px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 1em;
+      position: relative;
+      cursor: pointer;
+    }
+    nav a::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: -3px;
+      width: 0; height: 2px;
+      background: #66ccff;
+      transition: width 0.3s;
+    }
+    nav a:hover::after { width: 100%; }
+    nav a.active::after { width: 100%; }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.30)),
+                  url("images/background.png") no-repeat center/cover;
+      height: 45vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+    }
+    .hero-logo {
+      max-height: 80px;
+      margin-bottom: 1em;
+      opacity: 0.85;
+      animation: fadeInDown 1s ease-out;
+    }
+    .hero h1 {
+      font-size: 2.5em;
+      margin-bottom: 0.3em;
+      animation: fadeInDown 1.2s ease-out;
+    }
+    .hero p {
+      font-size: 1.2em;
+      animation: fadeInUp 1.5s ease-out;
+    }
+
+    main {
+      padding: 2em;
+      max-width: 1100px;
+      margin: auto;
+      text-align: center;
+    }
+
+    h2 { color: #003366; margin: 1.5em 0; }
+
+    /* Filter Bar */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5em;
+      justify-content: center;
+      margin-bottom: 2em;
+    }
+    .filter-btn {
+      background: white;
+      border: 1.5px solid #003366;
+      color: #003366;
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 0.85em;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: #003366;
+      color: white;
+    }
+
+    /* Project Count Badge */
+    .proj-count {
+      text-align: right;
+      color: #888;
+      font-size: 0.88em;
+      margin-bottom: 0.5em;
+      max-width: 85%;
+      margin-left: 6em;
+    }
+
+    /* Project Grid */
+    .proj-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2em;
+      text-align: left;
+      margin-top: 1.5em;
+      max-width: 1100px;
+      margin-left: 6em;
+      margin-right: auto;
+      width: 100%;
+    }
+
+    .proj-card {
+      background: white;
+      border-radius: 12px;
+      border-left: 4px solid #003366;
+      padding: 1.4em 2em;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.10);
+      transition: transform 0.3s, box-shadow 0.3s, opacity 0.3s;
+      width: 85%;
+      box-sizing: border-box;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 0 2em;
+      position: relative;
+    }
+    .proj-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+    }
+    .proj-card.hidden {
+      display: none;
+    }
+
+    .proj-badge {
+      display: inline-block;
+      background: #e8f0fb;
+      color: #003366;
+      font-size: 0.75em;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-bottom: 0.7em;
+    }
+    .proj-card h3 {
+      font-size: 1.2em;
+      color: #0a1321;
+      margin: 0 0 0.4em;
+      line-height: 1.45;
+    }
+    .proj-card .proj-sub {
+      font-size: 1em;
+      color: #555;
+      margin: 0 0 0.9em;
+      line-height: 1.45;
+    }
+
+    .proj-meta {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 6px 2em;
+      border-top: none;
+      padding-top: 2em;
+      padding-left: 3em;
+    }
+    .proj-meta::before {
+      content: "";
+      position: absolute;
+      left: calc(var(--divider-x));
+      top: 1.4em;
+      bottom: 1.4em;
+      width: 1px;
+      background: #eef0f3;
+    }
+    .proj-meta-row {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding-left: 3em;
+      font-size: 0.8em;
+    }
+    .proj-meta-label { color: #888; min-width: 62px; flex-shrink: 0; }
+    .proj-meta-value { color: #222; }
+
+    .proj-period {
+      display: inline-block;
+      margin-top: 0.6em;
+      font-size: 0.78em;
+      color: white;
+      background: #003366;
+      padding: 2px 10px;
+      border-radius: 20px;
+    }
+
+    /* Status tag variants */
+    .proj-status {
+      display: inline-block;
+      font-size: 0.72em;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-left: 0.5em;
+      vertical-align: middle;
+    }
+    .status-ongoing {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    footer {
+      background-color: #01022c;
+      color: white;
+      padding: 2em 3em;
+      margin-top: 3em;
+      font-size: 0.95em;
+    }
+    .footer-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2em;
+    }
+    .footer-left, .footer-right {
+      flex: 1;
+      min-width: 250px;
+    }
+    .footer-left h3 {
+      margin-top: 0;
+      color: #66ccff;
+    }
+    .footer-right p {
+      margin: 0;
+      line-height: 0;
+      padding-top: 4em;
+    }
+    .footer-right p:nth-child(2) {
+      margin-top: -1.8em;
+    }
+    .footer-right a {
+      color: #66ccff;
+      text-decoration: none;
+    }
+    .footer-right a:hover { text-decoration: underline; }
+    .footer-bottom {
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      margin-top: 1.5em;
+      padding-top: 1em;
+      font-size: 0.85em;
+      color: #cccccc;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <a href="index.html" class="logo-link">Battery System Laboratory</a>
+      <img src="images\NEWLOGO.png" alt="Lab Logo" class="logo-icon">
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="member.html">Member</a>
+      <a href="publication.html">Publication</a>
+      <a href="research.html">Research</a>
+      <a href="counterpart.html">Counterpart</a>
+      <a href="project.html" class="active">Project</a>
+      <a href="equipment.html">Equipment</a>
+      <a href="news.html">Board</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <img src="https://mo.kaist.ac.kr/wp-content/uploads/2022/08/logo_new-1-e1661933714657.png"
+         alt="KAIST Mobility Logo" class="hero-logo">
+    <h1>Research Projects</h1>
+    <p>Ongoing & Collaborative Research Programs</p>
+  </section>
+
+  <main>
+    <h2>Ongoing Projects</h2>
+
+    <!-- Filter -->
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">전체</button>
+      <button class="filter-btn" data-filter="indus">기업과제</button>
+      <button class="filter-btn" data-filter="gov">정부과제</button>
+    </div>
+
+    <div class="proj-count" id="projCount"></div>
+
+    <div class="proj-grid" id="projGrid">
+
+      <!-- 1 -->
+      <div class="proj-card" data-tags="indus">
+        <div>
+          <span class="proj-badge">한국과학기술원(KAIST)</span>
+          <span class="proj-status status-ongoing">진행중</span>
+          <h3>온도감응 자가방전 기반 TR 억제 및 열,매스방출 복합제어 기반 TP 차단</h3>
+          <p class="proj-sub">삼성SDI Mega Project</p>
+        </div>
+        <div class="proj-divider"></div>
+        <div class="proj-meta">
+          <div class="proj-meta-row">
+            <span class="proj-meta-label">Main Counterpart</span>
+            <span class="proj-meta-value">삼성SDI</span>
+          </div>
+        </div>
+        <div style="text-align:left; white-space:nowrap;">
+          <span class="proj-period">-</span>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="proj-card" data-tags="indus">
+        <div>
+          <span class="proj-badge">선박해양플랜트연구소(KRISO)</span>
+          <span class="proj-status status-ongoing">진행중</span>
+          <h3>선박용 BESS 안전성 향상 선행기술조사</h3>
+          <p class="proj-sub">선박용 BESS 안전성 향상 선행기술조사</p>
+        </div>
+        <div class="proj-divider"></div>
+        <div class="proj-meta">
+          <div class="proj-meta-row">
+            <span class="proj-meta-label">Main Counterpart</span>
+            <span class="proj-meta-value">KRISO</span>
+          </div>
+        </div>
+        <div style="text-align:left; white-space:nowrap;">
+          <span class="proj-period">2026.05.01~</span>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="proj-card" data-tags="gov">
+        <div>
+          <span class="proj-badge">중앙대학교</span>
+          <span class="proj-status status-ongoing">진행중</span>
+          <h3>범용 LEA 핵심 성능 확보 및 설계 가속화를 위한 AI 기반 능동형 설계-해석 융합 플랫폼 개발</h3>
+          <p class="proj-sub">2026년도 리튬메탈음극의 범용적 활용을 위한 모듈형 LEA 핵심기술개발 사업</p>
+        </div>
+        <div class="proj-divider"></div>
+        <div class="proj-meta">
+          <div class="proj-meta-row">
+            <span class="proj-meta-label">Main Counterpart</span>
+            <span class="proj-meta-value">중앙대학교</span>
+          </div>
+        </div>
+        <div style="text-align:left; white-space:nowrap;">
+          <span class="proj-period">2026.04.01~2029.12.31</span>
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="proj-card" data-tags="gov">
+        <div>
+          <span class="proj-badge">동화일렉트로라이트</span>
+          <span class="proj-status status-ongoing">진행중</span>
+          <h3>고성능 건식 음극 구현을 위한 고이온/고전자전도 요소 기술 개발</h3>
+          <p class="proj-sub">2026년도 배터리 및 전기전자 분야 신규 지원대상 연구개발과제</p>
+        </div>
+        <div class="proj-divider"></div>
+        <div class="proj-meta">
+          <div class="proj-meta-row">
+            <span class="proj-meta-label">Main Counterpart</span>
+            <span class="proj-meta-value">한국화학연구원</span>
+          </div>
+        </div>
+        <div style="text-align:left; white-space:nowrap;">
+          <span class="proj-period">2026.04.01~2029.12.31</span>
+        </div>
+      </div>
+
+      <!-- 5 -->
+      <div class="proj-card" data-tags="gov">
+        <div>
+          <span class="proj-badge">한국과학기술원(KAIST)</span>
+          <span class="proj-status status-ongoing">진행중</span>
+          <h3>AI기반 사용후 배터리 정밀 등급화를 활용한 적용처별 모듈⋅팩 제품화 실증</h3>
+          <p class="proj-sub">공공연구성과 실증 시범사업</p>
+        </div>
+        <div class="proj-divider"></div>
+        <div class="proj-meta">
+          <div class="proj-meta-row">
+            <span class="proj-meta-label">Main Counterpart</span>
+            <span class="proj-meta-value">숙명여자대학교</span>
+            <span class="proj-meta-value">한국기계연구원</span>
+          </div>
+        </div>
+        <div style="text-align:left; white-space:nowrap;">
+          <span class="proj-period">2026.04.01~2028.12.30</span>
+        </div>
+      </div>
+
+      <!-- 6 -->
+      <div class="proj-card" data-tags="indus">
+        <div>
+          <span class="proj-badge">현대자동차</span>
+          <span class="proj-status status-ongoing">진행중</span>
+          <h3>소형 모빌리티용 NCM 배터리팩 수명 예측 모델 연구</h3>
+          <p class="proj-sub">소형 모빌리티용 NCM 배터리팩 수명 예측 모델 연구</p>
+        </div>
+        <div class="proj-divider"></div>
+        <div class="proj-meta">
+          <div class="proj-meta-row">
+            <span class="proj-meta-label">Main Counterpart</span>
+            <span class="proj-meta-value">CTNS</span>
+            <span class="proj-meta-value">현대자동차</span>
+          </div>
+        </div>
+        <div style="text-align:left; white-space:nowrap;">
+          <span class="proj-period">2026.04.01~2027.05.31</span>
+        </div>
+      </div>
+
+      <!-- 7 -->
+      <div class="proj-card" data-tags="gov">
+        <div>
+          <span class="proj-badge">씨티앤에스(CTNS)</span>
+          <span class="proj-status status-ongoing">진행중</span>
+          <h3>스마트 항만 내 다양한 전동화 모빌리티의 이차전지 Physical AI 안전 관제 시스템과 이를 적용한 Port AGV용 배터리팩 솔루션 국산화 개발</h3>
+          <p class="proj-sub">2026년도 민관공동기술사업화R&D</p>
+        </div>
+        <div class="proj-divider"></div>
+        <div class="proj-meta">
+          <div class="proj-meta-row">
+            <span class="proj-meta-label">Main Counterpart</span>
+            <span class="proj-meta-value">여수항만공사</span>
+          </div>
+        </div>
+        <div style="text-align:left; white-space:nowrap;">
+          <span class="proj-period">2026.04.01~</span>
+        </div>
+      </div>
+
+      <!-- 8 -->
+      <div class="proj-card" data-tags="gov">
+        <div>
+          <span class="proj-badge">한국과학기술원(KAIST)</span>
+          <span class="proj-status status-ongoing">진행중</span>
+          <h3>생성형 인공지능 기술을 이용한 사용후 배터리 모듈 진단 시스템 개발</h3>
+          <p class="proj-sub">이차전지 전후방 기업 역량강화 지원사업(R&D)</p>
+        </div>
+        <div class="proj-divider"></div>
+        <div class="proj-meta">
+          <div class="proj-meta-row">
+            <span class="proj-meta-label">Main Counterpart</span>
+            <span class="proj-meta-value">전북테크노파크</span>
+            <span class="proj-meta-value">MONA</span>
+          </div>
+        </div>
+        <div style="text-align:left; white-space:nowrap;">
+          <span class="proj-period">2025.10.01~2026.07.31</span>
+        </div>
+      </div>
+
+      <!-- 9 -->
+      <div class="proj-card" data-tags="gov">
+        <div>
+          <span class="proj-badge">나이아랩스</span>
+          <span class="proj-status status-ongoing">진행중</span>
+          <h3>제조업 혁신을 위한 Agentic AI 기반 자율 설계 플랫폼 개발</h3>
+          <p class="proj-sub">연구개발특구육성(R&D)</p>
+        </div>
+        <div class="proj-divider"></div>
+        <div class="proj-meta">
+          <div class="proj-meta-row">
+            <span class="proj-meta-label">Main Counterpart</span>
+            <span class="proj-meta-value">나이아랩스</span>
+          </div>
+        </div>
+        <div style="text-align:left; white-space:nowrap;">
+          <span class="proj-period">2025.07.01~2027.12.31</span>
+        </div>
+      </div>
+
+      <!-- 10 -->
+      <div class="proj-card" data-tags="gov">
+        <div>
+          <span class="proj-badge">KAIST 제조AI 빅데이터센터</span>
+          <span class="proj-status status-ongoing">진행중</span>
+          <h3>자가 적응 AI기반 이차전지 모듈팩 전주기 통합 시스템 개발</h3>
+          <p class="proj-sub">전략기술 테마별 프로젝트(DCP)</p>
+        </div>
+        <div class="proj-divider"></div>
+        <div class="proj-meta">
+          <div class="proj-meta-row">
+            <span class="proj-meta-label">Main Counterpart</span>
+            <span class="proj-meta-value">CTNS</span>
+          </div>
+        </div>
+        <div style="text-align:left; white-space:nowrap;">
+          <span class="proj-period">2024.12.01~2027.11.30</span>
+        </div>
+      </div>
+
+    </div><!-- /proj-grid -->
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <div class="footer-left">
+        <h3>Battery System Laboratory</h3>
+        <p>
+          KAIST, CCS Graduate School of Mobility<br>
+          193, Munji-ro, Yuseong-gu, Daejeon, 34051, Republic of Korea
+        </p>
+        <p><strong>Location:</strong> Faculty Wing, F440</p>
+      </div>
+      <div class="footer-right">
+        <p><strong>Phone:</strong> +82 042-350-1762</p>
+        <p><strong>Email:</strong> <a href="mailto:yoonklee@kaist.ac.kr">yoonklee@kaist.ac.kr</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Battery System Laboratory | All Rights Reserved</p>
+    </div>
+  </footer>
+
+  <script>
+    // Filter logic
+    const btns = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.proj-card');
+    const countEl = document.getElementById('projCount');
+
+    function updateCount() {
+      const visible = [...cards].filter(c => !c.classList.contains('hidden')).length;
+      countEl.textContent = `총 ${visible}개 과제`;
+    }
+
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filter = btn.dataset.filter;
+        cards.forEach(card => {
+          if (filter === 'all') {
+            card.classList.remove('hidden');
+          } else {
+            const tags = card.dataset.tags || '';
+            card.classList.toggle('hidden', !tags.includes(filter));
+          }
+        });
+        updateCount();
+      });
+    });
+
+    updateCount(); // initial count
+  </script>
+</body>
+</html>
