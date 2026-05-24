@@ -257,6 +257,10 @@
       background: #d4edda;
       color: #155724;
     }
+    .status-finished {
+      background: #d4a1a1;
+      color: #9e1717;
+    }
 
     footer {
       background-color: #01022c;
@@ -338,18 +342,40 @@
   </section>
 
   <main>
-    <h2>Ongoing Projects</h2>
+    <h2>Project List</h2>
 
     <!-- Filter -->
     <div class="filter-bar">
       <button class="filter-btn active" data-filter="all">전체</button>
       <button class="filter-btn" data-filter="indus">기업과제</button>
       <button class="filter-btn" data-filter="gov">정부과제</button>
+      <button class="filter-btn" data-filter="fin">종료과제</button>
     </div>
 
     <div class="proj-count" id="projCount"></div>
 
     <div class="proj-grid" id="projGrid">
+
+      <div class="proj-card" data-tags="gov">
+        <div>
+          <span class="proj-badge">에코캡</span>
+          <span class="proj-status status-ongoing">진행중</span>
+          <h3>AI 기반 상태, 수명, 고장진단 기술을 적용한 고안전 전기버스 배터리팩 개발</h3>
+          <p class="proj-sub">지역혁클러스터육성(R&D)</p>
+        </div>
+        <div class="proj-divider"></div>
+        <div class="proj-meta">
+          <div class="proj-meta-row">
+            <span class="proj-meta-label">Main Counterpart</span>
+            <span class="proj-meta-value">에코캡</span>
+            <span class="proj-meta-value">퓨쳐이브이</span>
+            <span class="proj-meta-value">GIVET</span>
+          </div>
+        </div>
+        <div style="text-align:left; white-space:nowrap;">
+          <span class="proj-period">2026.06.01~2030.12.31</span>
+        </div>
+      </div>
 
       <!-- 1 
       <div class="proj-card" data-tags="indus">
@@ -387,7 +413,7 @@
           </div>
         </div>
         <div style="text-align:left; white-space:nowrap;">
-          <span class="proj-period">2026.05.01~</span>
+          <span class="proj-period">2026.05.01~2026.10.15</span>
         </div>
       </div>
 
@@ -489,7 +515,7 @@
           </div>
         </div>
         <div style="text-align:left; white-space:nowrap;">
-          <span class="proj-period">2026.04.01~</span>
+          <span class="proj-period">2026.04.01~2028.03.31</span>
         </div>
       </div>
 
@@ -553,6 +579,25 @@
           <span class="proj-period">2024.12.01~2027.11.30</span>
         </div>
       </div>
+
+      <!--<div class="proj-card" data-tags="fin">
+        <div>
+          <span class="proj-badge">현대자동차 NGV</span>
+          <span class="proj-status status-finished">종료됨</span>
+          <h3>전고체 전지의 기계적 거동 예측 모델 개발 및 분석</h3>
+          <p class="proj-sub">전고체 전지의 기계적 거동 예측 모델 개발 및 분석</p>
+        </div>
+        <div class="proj-divider"></div>
+        <div class="proj-meta">
+          <div class="proj-meta-row">
+            <span class="proj-meta-label">Main Counterpart</span>
+            <span class="proj-meta-value">현대 NGV</span>
+          </div>
+        </div>
+        <div style="text-align:left; white-space:nowrap;">
+          <span class="proj-period">2022.03.01~2023.02.28</span>
+        </div>
+      </div>-->
 
     </div><!-- /proj-grid -->
   </main>
