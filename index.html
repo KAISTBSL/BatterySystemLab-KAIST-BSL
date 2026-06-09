@@ -4,645 +4,290 @@
   <meta charset="UTF-8">
   <meta name="google-site-verification" content="ZOUpO1XQxXh0elVl3KanH41-D5Vnk4DXEwwcghm-Imo" />
   <title>Battery System Laboratory</title>
-  <link rel="icon" href="images\kaistlogo.ico">
+  <link rel="icon" href="images/kaistlogo.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:      #0c1828;
+      --bg2:     #0a1221;
+      --surface: #132338;
+      --surface2:#192e4a;
+      --surface3:#1e3a5e;
+      --border:  rgba(102,204,255,0.16);
+      --border2: rgba(102,204,255,0.30);
+      --accent:  #007acc;
+      --accent2: #66ccff;
+      --accent3: #3399ff;
+      --text:    #dde2ef;
+      --text2:   #96a8c8;
+      --text3:   #4a6080;
+      --success: #3ecf8e;
+      --mono: 'JetBrains Mono', monospace;
+      --serif:'Noto Serif KR', serif;
+      --sans: 'Pretendard', -apple-system, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
     body {
-      margin: 0;
-      font-family: "Noto Sans KR", "Arial", sans-serif;
-      line-height: 1.6;
-      scroll-behavior: smooth;
-      background: 
-        linear-gradient(rgba(245, 245, 245, 0.85), rgba(245, 245, 245, 0.85)),
-        url("https://img.hankyung.com/photo/202405/AA.36677880.1.jpg") no-repeat center/cover;
+      margin: 0; font-family: var(--sans); line-height: 1.6;
+      background: var(--bg); color: var(--text); min-height: 100vh;
+    }
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(102,204,255,0.032) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(102,204,255,0.032) 1px, transparent 1px);
+      background-size: 52px 52px;
+    }
+    body::after {
+      content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse 80% 40% at 50% -5%, rgba(0,122,204,0.14) 0%, transparent 65%);
     }
 
+    /* HEADER */
     header {
-      background-color: #0a1321;
-      color: white;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 2em;          /* 위아래 padding 제거 → 높이 고정 효과 */
-      min-height: 80px;            /* ✅ 상단 바 높이 고정 */
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(12,24,40,0.90); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border); color: white;
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+      padding: 0 2em; min-height: 72px;
     }
-
-    .logo {
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .logo-icon {
-      width: 96px; 
-      height: 96px;
-      object-fit: contain;     /* ✅ 비율 유지하면서 들어가도록 */
-    }
-    .logo { font-weight: bold; font-size: 1.5em; }
-
-    .logo-link {
-      text-decoration: none;   /* 밑줄 제거 */
-      color: white;            /* 기존 header의 글자색과 동일 */
-      font-weight: bold;
-      font-size: 1.0em;
-    }
-
-    .logo-link:hover {
-      color: #66ccff;          /* 마우스 올렸을 때 약간 강조 */
-    }
-
-    nav {
-      display: flex;
-      align-items: center;
-      gap: 4.5px;   /* ✅ margin 대신 간격統一 */
-      padding-bottom: 10px;
-    }
-
-    nav a {
-      color: white;
-      text-decoration: none;
-      margin-left: 20px;
-      font-size: 1em;
-      position: relative;
-      cursor: pointer;
-    }
-    nav a::after {
-      content: "";
-      position: absolute;
-      left: 0; bottom: -3px;
-      width: 0; height: 2px;
-      background: #66ccff;
-      transition: width 0.3s;
-    }
+    .logo { font-weight: bold; display: flex; align-items: center; gap: 10px; font-size: 1.5em; }
+    .logo-icon { width: 80px; height: 80px; object-fit: contain; filter: brightness(1.1); }
+    .logo-link { text-decoration: none; color: white; font-weight: 700; font-size: 1em; letter-spacing: 0.3px; transition: color 0.2s; }
+    .logo-link:hover { color: var(--accent2); }
+    nav { display: flex; align-items: center; gap: 2px; padding-bottom: 8px; }
+    nav a { color: rgba(255,255,255,0.75); text-decoration: none; margin-left: 18px; font-size: 0.93em; font-weight: 400; position: relative; cursor: pointer; transition: color 0.2s; }
+    nav a:hover { color: var(--accent2); }
+    nav a::after { content: ""; position: absolute; left: 0; bottom: -4px; width: 0; height: 2px; background: var(--accent2); border-radius: 2px; transition: width 0.3s ease; }
     nav a:hover::after { width: 100%; }
 
-    /* Hero Section */
+    /* HERO */
     .hero {
-      position: relative;
-      background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.30)),
-                  url("images/background.png") no-repeat center/cover;
-      height: 75vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      color: white;
-      padding: 2em;
+      position: relative; z-index: 1;
+      background: linear-gradient(rgba(8,16,30,0.70), rgba(12,24,40,0.48)), url("images/background.png") no-repeat center/cover;
+      height: 78vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+      text-align: center; color: white; padding: 2em; overflow: hidden;
     }
-    .hero-logo {
-      max-height: 90px;
-      margin-bottom: 1em;
-      opacity: 0.8;
-      animation: fadeInDown 1s ease-out;
+    .hero::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 120px;
+      background: linear-gradient(transparent, var(--bg)); pointer-events: none; z-index: 2;
     }
-    .hero h1 { font-size: 2.8em; margin-bottom: 0.3em; animation: fadeInDown 1.2s ease-out; }
-    .hero p { font-size: 1.2em; margin-bottom: 1.5em; animation: fadeInUp 1.5s ease-out; }
-    .hero a {
-      background: #66ccff; color: white;
-      padding: 0.8em 1.5em; border-radius: 30px;
-      text-decoration: none; font-weight: bold;
-      transition: background 0.3s;
-      animation: fadeInUp 1.8s ease-out;
-    }
-    .hero a:hover { background: #3399ff; }
+    .hero-logo { max-height: 80px; margin-bottom: 1.2em; opacity: 0.85; animation: fadeInDown 1s ease-out; filter: drop-shadow(0 0 20px rgba(102,204,255,0.2)); }
+    .hero-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent2); background: rgba(102,204,255,0.08); border: 1px solid rgba(102,204,255,0.2); padding: 5px 16px; border-radius: 30px; margin-bottom: 1em; animation: fadeInDown 0.8s ease-out; display: inline-block; }
+    .hero h1 { font-family: var(--serif); font-size: 3em; font-weight: 600; margin-bottom: 0.3em; animation: fadeInDown 1.1s ease-out; line-height: 1.2; background: linear-gradient(120deg, #ffffff 0%, var(--accent2) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero p { font-size: 1.1em; margin-bottom: 1.8em; animation: fadeInUp 1.4s ease-out; color: rgba(255,255,255,0.65); font-weight: 300; letter-spacing: 0.3px; }
+    .hero-cta-group { display: flex; flex-direction: column; align-items: center; gap: 10px; animation: fadeInUp 1.7s ease-out; position: relative; z-index: 3; }
+    .hero a.explore-btn { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #080e1a; padding: 0.75em 2em; border-radius: 30px; text-decoration: none; font-weight: 700; font-size: 0.95em; transition: all 0.25s; letter-spacing: 0.3px; box-shadow: 0 4px 20px rgba(0,122,204,0.3); }
+    .hero a.explore-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(102,204,255,0.35); }
+    #adminBtn { margin-top: 2px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: rgba(255,255,255,0.4); padding: 0.4em 1.2em; border-radius: 30px; font-size: 0.78em; cursor: pointer; transition: all 0.25s; display: inline-flex; align-items: center; gap: 6px; font-family: var(--sans); letter-spacing: 0.3px; }
+    #adminBtn:hover { background: rgba(255,255,255,0.14); color: rgba(255,255,255,0.85); border-color: rgba(255,255,255,0.4); }
 
-    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-24px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInUp   { from { opacity: 0; transform: translateY(24px);  } to { opacity: 1; transform: translateY(0); } }
 
-    main { padding: 2em; max-width: 1100px; margin: auto; }
-    h2 { color: #003366; margin-top: 1.5em; text-align: center; }
+    /* PARTNERS BANNER */
+    #partners-banner { position: absolute; bottom: -1px; left: 0; width: 100%; background: rgba(13,27,46,0.92); border-top: 1px solid var(--border); overflow: hidden; padding: 0.55em 0; z-index: 3; }
+    .partner-track { display: flex; align-items: center; gap: 3em; white-space: nowrap; width: max-content; animation: scrollLoop 80s linear infinite; }
+    .partner-item { display: flex; align-items: center; gap: 0.4em; font-size: 1em; font-weight: 700; opacity: 0.6; transition: opacity 0.3s; color: var(--text2); }
+    .partner-item:hover { opacity: 1; color: var(--accent2); }
+    .partner-item img { height: 34px; width: auto; vertical-align: middle; opacity: 0.8; }
+    @keyframes scrollLoop { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-    /* News Section */
-    #news { margin-top: 3em; }
-    .news-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-auto-rows: minmax(150px, auto);
-      gap: 1em;
-    }
-    .news-card {
-      color: white;
-      padding: 1.2em;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-      transition: transform 0.2s;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      position: relative;
-      overflow: hidden;
-    }
-    .news-card:hover { transform: translateY(-5px); }
+    /* MAIN */
+    main { position: relative; z-index: 1; padding: 0 2em 4em; max-width: 1100px; margin: auto; }
+    .section-header { display: flex; align-items: center; gap: 14px; margin: 3rem 0 1.5rem; }
+    .section-header h2 { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent2); background: rgba(102,204,255,0.08); border: 1px solid rgba(102,204,255,0.18); padding: 5px 14px; border-radius: 30px; white-space: nowrap; }
+    .section-line { flex: 1; height: 1px; background: var(--border); }
 
-    /* 카드별 스타일 */
-    .news-card:nth-child(1) {
-      background: linear-gradient(135deg, #005f99, #3399ff);
-      grid-column: span 2; grid-row: span 2;
-    }
-    .news-card:nth-child(1)::after {
-      content: "";
-      background: url("https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/KAIST_logo.svg/2048px-KAIST_logo.svg.png") no-repeat top right / 350px;
-      opacity: 0.2; 
-      position: absolute;
-      top: 10px; right: 10px;
-      width: 350px; height: 350px;
-      pointer-events: none;
-    }
-    .news-card:nth-child(2) { background: linear-gradient(135deg, #007acc, #66ccff); }
-    .news-card:nth-child(3) { background: linear-gradient(135deg, #3399ff, #99ccff); }
-    .news-card:nth-child(4) { background: linear-gradient(135deg, #004c80, #3399cc); grid-row: span 2; }
-    .news-card:nth-child(5) { background: linear-gradient(135deg, #1682c0, #68bdd3); grid-row: span 2; }
+    /* INTRO */
+    #intro { text-align: center; margin-top: 3em; background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 2.5em 3em; position: relative; overflow: hidden; }
+    #intro::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(102,204,255,0.08) 0%, transparent 65%); pointer-events: none; }
+    #intro p:first-child { font-family: var(--serif); font-size: 1.4em; font-weight: 600; color: var(--text); margin-bottom: 0.5em; background: linear-gradient(120deg, #fff 0%, var(--accent2) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    #intro p:nth-child(2) { font-size: 1.05em; color: var(--text2); margin-bottom: 0.5em; font-weight: 400; }
+    #intro p:nth-child(3) { font-size: 0.95em; color: var(--text2); line-height: 1.8; max-width: 700px; margin: 0 auto; font-weight: 300; }
 
-    .news-date { font-size: 0.85em; opacity: 0.9; }
-    .news-title { font-size: 1.2em; font-weight: bold; margin: 0.3em 0; }
-    .news-desc { font-size: 0.95em; line-height: 1.4; }
-
+    /* NEWS */
+    #news { margin-top: 0; }
+    .news-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: minmax(150px, auto); gap: 12px; grid-auto-flow: dense; }
+    .news-card { color: white; padding: 1.4em; border-radius: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); transition: transform 0.22s, box-shadow 0.22s; display: flex; flex-direction: column; justify-content: flex-end; position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.06); }
+    .news-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(0,0,0,0.4); }
+    .news-card:nth-child(1) { background: linear-gradient(145deg, #0d2d55, #154a90); grid-column: span 2; grid-row: span 2; border-color: rgba(102,204,255,0.12); }
+    .news-card:nth-child(1)::after { content: ""; background: url("https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/KAIST_logo.svg/2048px-KAIST_logo.svg.png") no-repeat top right / 300px; opacity: 0.06; position: absolute; top: 10px; right: 10px; width: 300px; height: 300px; pointer-events: none; }
+    .news-card:nth-child(2) { background: linear-gradient(145deg, #0d3555, #16608a); }
+    .news-card:nth-child(3) { background: linear-gradient(145deg, #0f3a6e, #1860a0); }
+    .news-card:nth-child(4) { background: linear-gradient(145deg, #0a2545, #0f3a70); grid-row: span 2; }
+    .news-card:nth-child(5) { background: linear-gradient(145deg, #0c2848, #123878); grid-row: span 2; }
+    .news-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(145deg, rgba(102,204,255,0.04) 0%, transparent 60%); border-radius: inherit; pointer-events: none; }
+    .news-date  { font-size: 0.8em; opacity: 0.6; font-family: var(--mono); letter-spacing: 0.5px; }
+    .news-title { font-size: 1.1em; font-weight: 700; margin: 0.35em 0; line-height: 1.35; }
+    .news-desc  { font-size: 0.88em; line-height: 1.5; opacity: 0.8; }
     .more-link { margin-top: 1em; text-align: right; }
-    .more-link a { color: #003366; font-weight: bold; text-decoration: none; }
-    .more-link a:hover { text-decoration: underline; }
+    .more-link a { color: var(--accent2); font-weight: 600; font-size: 0.9em; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; transition: gap 0.15s; }
+    .more-link a:hover { gap: 8px; }
+    .news-card.photo { grid-row: span 2; padding: 0; overflow: hidden; position: relative; border-radius: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); transition: transform 0.22s, box-shadow 0.22s; border: 1px solid rgba(255,255,255,0.06); }
+    .news-card.photo img { width:100%; height:100%; object-fit:cover; display:block; }
+    .news-card.photo .caption { position: absolute; left: 0; right: 0; bottom: 0; padding: .8em 1em; font-size: .88em; color: #fff; background: linear-gradient(transparent, rgba(0,0,0,0.7)); }
+    .news-card.photo:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(0,0,0,0.45); }
 
-    footer {
-      background-color: #01022c;
-      color: white;
-      padding: 2em 3em;
-      margin-top: 3em;
-      font-size: 0.95em;
+    /* PUBLICATIONS */
+    .pub-feature-box { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 2em; margin-top: 1em; background: linear-gradient(145deg, #102a50, #154070); border: 1px solid rgba(102,204,255,0.15); border-radius: 18px; box-shadow: 0 8px 30px rgba(0,0,0,0.35); color: white; }
+    .pub-latest-box { display:flex; flex-direction:column; gap:12px; }
+    .pub-latest-item { background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 1em; display: flex; gap: 1em; align-items: flex-start; transition: background 0.2s; }
+    .pub-latest-item:hover { background: rgba(255,255,255,0.11); }
+    .pub-latest-item img { width: 110px; height: 110px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+    .pub-latest-title { font-size: 0.97em; font-weight: 600; margin-bottom: 0.3em; line-height: 1.45; }
+    .pub-latest-meta  { font-size: 0.82em; opacity: 0.85; margin-bottom: 0.25em; color: var(--accent2); }
+    .pub-latest-authors { font-size: 0.78em; opacity: 0.75; }
+    .pub-side-list { display:flex; flex-direction:column; gap:10px; }
+    .pub-side-item { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.07); padding: 1em; border-radius: 10px; transition: background 0.2s, border-color 0.2s; }
+    .pub-side-item:hover { background: rgba(255,255,255,0.11); border-color: rgba(102,204,255,0.2); }
+    .pub-side-title   { font-size: 0.93em; font-weight: 600; margin-bottom: 0.3em; line-height: 1.4; }
+    .pub-side-meta    { font-size: 0.8em; opacity: 0.8; color: var(--accent2); }
+    .pub-side-authors { font-size: 0.78em; opacity: 0.7; margin-top: 0.2em; }
+    .pub-feature-box * { word-break:keep-all; overflow-wrap:break-word; }
+    @media(max-width:900px){.pub-feature-box{grid-template-columns:1fr;}}
+
+    /* RESEARCH */
+    .research-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 1.5em; }
+    @media(max-width:900px){.research-grid{grid-template-columns:repeat(1,1fr);}}
+    .research-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2em 1.8em 1.8em; display: flex; flex-direction: column; gap: 1em; position: relative; overflow: hidden; transition: transform .22s, border-color .22s, box-shadow .22s; }
+    .research-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 16px 16px 0 0; }
+    .research-card:nth-child(1)::before { background: linear-gradient(90deg, #3b82f6, #66ccff); }
+    .research-card:nth-child(2)::before { background: linear-gradient(90deg, #a78bfa, #66ccff); }
+    .research-card:nth-child(3)::before { background: linear-gradient(90deg, #3ecf8e, #66ccff); }
+    .research-card:hover { transform: translateY(-4px); border-color: var(--border2); box-shadow: 0 12px 36px rgba(0,0,0,0.3); }
+    .research-card::after { content: ''; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(102,204,255,0.04) 0%, transparent 70%); }
+    .research-card:nth-child(1)::after { background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(59,130,246,0.06) 0%, transparent 70%); }
+    .research-card:nth-child(2)::after { background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(167,139,250,0.06) 0%, transparent 70%); }
+    .research-card:nth-child(3)::after { background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(62,207,142,0.06) 0%, transparent 70%); }
+    .rc-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3em; flex-shrink: 0; }
+    .research-card:nth-child(1) .rc-icon { background: rgba(59,130,246,0.14); color: #93c5fd; }
+    .research-card:nth-child(2) .rc-icon { background: rgba(167,139,250,0.14); color: #c4b5fd; }
+    .research-card:nth-child(3) .rc-icon { background: rgba(62,207,142,0.14); color: #6ee7b7; }
+    .rc-title { font-size: 1.08em; font-weight: 700; color: var(--text); line-height: 1.3; }
+    .rc-desc { font-size: 0.85em; color: var(--text2); line-height: 1.75; font-weight: 300; flex: 1; }
+    .rc-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 0.8em; border-top: 1px solid var(--border); }
+    .rc-tag { font-size: 10px; font-family: var(--mono); padding: 2px 9px; border-radius: 4px; letter-spacing: 0.3px; }
+    .research-card:nth-child(1) .rc-tag { background: rgba(59,130,246,0.12); color: #93c5fd; border: 1px solid rgba(59,130,246,0.2); }
+    .research-card:nth-child(2) .rc-tag { background: rgba(167,139,250,0.12); color: #c4b5fd; border: 1px solid rgba(167,139,250,0.2); }
+    .research-card:nth-child(3) .rc-tag { background: rgba(62,207,142,0.12); color: #6ee7b7; border: 1px solid rgba(62,207,142,0.2); }
+    .research-btn { display: block; margin: 2em auto 0; padding: 0.75em 2.2em; background: transparent; color: var(--accent2); font-weight: 600; font-size: 0.93em; border: 1px solid rgba(102,204,255,0.35); border-radius: 30px; text-align: center; text-decoration: none; width: fit-content; transition: all 0.25s; letter-spacing: 0.3px; }
+    .research-btn:hover { background: rgba(102,204,255,0.1); border-color: var(--accent2); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,122,204,0.2); }
+
+    /* LOCATIONS */
+    .location-section { margin-top: 0; }
+    .location-buttons { display: flex; justify-content: space-between; flex-wrap: nowrap; max-width: 1100px; margin: 0 auto 1.2em auto; gap: 8px; }
+    .loc-btn { flex: 1 1 25%; padding: 0.7em 0.5em; background: var(--surface2); color: var(--text2); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; font-size: 0.68em; font-family: var(--sans); font-weight: 500; white-space: nowrap; transition: all 0.22s; text-align: center; }
+    .loc-btn:hover { background: rgba(102,204,255,0.08); border-color: rgba(102,204,255,0.35); color: var(--accent2); transform: translateY(-1px); }
+    .location-layout { display: flex; gap: 0; max-width: 1100px; margin: 0 auto; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.35); }
+    .map-container { width: 650px; height: 440px; flex-shrink: 0; }
+    #labMap { width:100%; height:100%; border:none; display:block; }
+    .location-photo { flex: 1; height: 440px; position: relative; overflow: hidden; }
+    .location-photo img { width:100%; height:100%; object-fit:cover; display:block; }
+    .photo-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 1em; color: white; font-size: 0.95em; font-weight: 600; background: linear-gradient(transparent, rgba(8,14,26,0.85)); }
+    @media(max-width:900px){.location-buttons{flex-wrap:wrap}}
+    @media(max-width:500px){.location-buttons{flex-direction:column}}
+
+    /* FOOTER */
+    footer { position: relative; z-index: 1; background: var(--surface); border-top: 1px solid var(--border); color: white; padding: 2.5em 3em; margin-top: 4em; font-size: 0.92em; }
+    .footer-container { display:flex; flex-wrap:wrap; gap:2em; }
+    .footer-left h3 { margin-top: 0; color: var(--accent2); font-size: 1em; font-weight: 600; margin-bottom: 0.6em; }
+    .footer-left p { color: var(--text2); font-size: 0.9em; line-height: 1.7; }
+    .footer-right { flex:1; min-width:250px; padding-top: 0.5em; }
+    .footer-right p { color: var(--text2); font-size: 0.9em; line-height: 2; margin: 0; }
+    .footer-right a { color: var(--accent2); text-decoration: none; transition: color 0.15s; }
+    .footer-right a:hover { color: white; }
+    .footer-bottom { text-align: center; border-top: 1px solid var(--border); margin-top: 1.5em; padding-top: 1em; font-size: 0.82em; color: var(--text3); position: relative; }
+    .admin-btn { position: absolute; right: 0; top: 50%; transform: translateY(-50%); background: none; border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.25); padding: 4px 10px; border-radius: 20px; font-size: 0.75em; cursor: pointer; transition: all 0.25s; display: flex; align-items: center; gap: 5px; text-decoration: none; font-family: var(--sans); }
+    .admin-btn:hover { color: rgba(255,255,255,0.8); border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.08); }
+
+    /* ═══════════════════════════════════════════
+       ADMIN MODAL — ID + PASSWORD
+    ═══════════════════════════════════════════ */
+    .admin-modal-bg {
+      display: none; position: fixed; inset: 0; z-index: 2000;
+      background: rgba(0,0,0,0.72); backdrop-filter: blur(8px);
+      align-items: center; justify-content: center;
+    }
+    .admin-modal-bg.open { display: flex; }
+    .admin-modal {
+      background: var(--surface); border: 1px solid rgba(102,204,255,0.25);
+      border-radius: 18px; padding: 2.4em 2.6em;
+      width: 360px; max-width: 90vw;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.55);
+      animation: fadeInUp 0.28s ease; position: relative;
+    }
+    .admin-modal-icon { text-align:center; font-size:2em; margin-bottom:.5em; }
+    .admin-modal h3   { text-align:center; color:var(--accent2); margin:0 0 .3em; font-size:1.1em; }
+    .admin-modal .sub { text-align:center; color:rgba(255,255,255,0.45); font-size:.82em; margin:0 0 1.4em; }
+
+    /* field group */
+    .admin-field-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 6px; }
+    .admin-field-wrap { position: relative; }
+    .admin-field-label {
+      font-family: var(--mono); font-size: .7em; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--text3); margin-bottom: 4px; display: block;
+    }
+    .admin-input {
+      width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(102,204,255,0.22);
+      border-radius: 10px; color: white; font-size: .95em; padding: 10px 14px;
+      outline: none; box-sizing: border-box; transition: border-color 0.2s, box-shadow 0.2s;
+      font-family: var(--sans);
+    }
+    .admin-input:focus { border-color: var(--accent2); box-shadow: 0 0 0 3px rgba(102,204,255,0.1); }
+    .admin-input.shake { animation: shake 0.4s ease; border-color: #f45c5c; }
+
+    /* logged-in badge (shown after success) */
+    .admin-user-badge {
+      display: none; align-items: center; gap: 8px;
+      background: rgba(62,207,142,0.1); border: 1px solid rgba(62,207,142,0.25);
+      border-radius: 10px; padding: 8px 14px; margin-bottom: 10px;
+      font-size: .82em; color: var(--success);
+    }
+    .admin-user-badge.visible { display: flex; }
+
+    .admin-submit-btn {
+      width: 100%; margin-top: 14px; padding: 11px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none; border-radius: 10px; color: #080e1a;
+      font-size: .95em; font-weight: 700; cursor: pointer;
+      transition: opacity .2s, transform .15s; font-family: var(--sans);
+    }
+    .admin-submit-btn:hover { opacity:.88; transform:translateY(-1px); }
+    .admin-modal-close { position: absolute; top:12px; right:16px; background:none; border:none; color:rgba(255,255,255,.35); font-size:1.3em; cursor:pointer; line-height:1; transition:color .15s; }
+    .admin-modal-close:hover { color:white; }
+    .admin-err { font-size:.8em; color:#f45c5c; text-align:center; margin-top:8px; min-height:1.2em; }
+
+    @keyframes shake {
+      0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)}
+      40%{transform:translateX(8px)}   60%{transform:translateX(-5px)}
+      80%{transform:translateX(5px)}
     }
 
-    .footer-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2em;
-    }
-
-    .footer-left, .footer-right {
-      flex: 1;
-      min-width: 250px;
-    }
-
-    .footer-left h3 {
-      margin-top: 0;
-      color: #66ccff;
-    }
-
-    .footer-right p {
-      margin: 0;       /* ✅ 문단 사이 간격 — 기본보다 조금 넓게 */
-      line-height: 0;      /* ✅ 줄 자체 높이 조정 (가독성 향상) */
-      padding-top: 4em;
-    }
-
-    .footer-right p:nth-child(2) {
-      margin-top: -1.8em; /* 간격을 줄이는 음수 여백 */
-    }
-
-    .footer-right a {
-      color: #66ccff;
-      text-decoration: none;
-    }
-
-    .footer-right a:hover {
-      text-decoration: underline;
-    }
-
-    .footer-bottom {
-      text-align: center;
-      border-top: 1px solid rgba(255,255,255,0.2);
-      margin-top: 1.5em;
-      padding-top: 1em;
-      font-size: 0.85em;
-      color: #cccccc;
-    }
-
-    /* 🔹 Research Interests (원형 다이나믹 스타일) */
-    .interest-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      justify-items: center;
-      gap: 2em;
-      margin-top: 2em;
-    }
-
-    /* 태블릿 */
-    @media (max-width: 900px) {
-      .interest-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    /* 모바일 */
-    @media (max-width: 550px) {
-      .interest-grid {
-        grid-template-columns: repeat(1, 1fr);
-      }
-    }
-
-    .interest-circle {
-      width: 100%;              /* 🔥 부모 셀 크기에 맞게 줄어듦 */
-      max-width: 250px;         /* 🔥 PC에서는 250px 유지 */
-      aspect-ratio: 1 / 1;      /* 🔥 width = height → 원 유지 */
-      
-      border-radius: 50%;
-      background: white;
-      border: 5px solid #007acc;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-
-      cursor: pointer;
-      transition: all 0.3s ease-in-out;
-      text-align: center;
-    }
-
-    .interest-circle h3 {
-      font-size: clamp(0.9rem, 1.6vw, 1.1rem);
-      margin: 0;
-      color: #003366;
-    }
-    .interest-circle:hover {
-      transform: scale(1.15);
-      background: #007acc;
-      color: white;
-    }
-    .interest-circle:hover i,
-    .interest-circle:hover h3 { color: white; }
-    .interest-circle.photo {
-      background-size: cover;
-      background-position: center;
-      border: 5px solid #007acc;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .interest-circle.photo h3 {
-      position: absolute;
-      bottom: clamp(20px, 8vw, 83px);
-      left: 0;
-      right: 0;
-      padding: 0.5em 0;
-      background: rgba(0,0,0,0.6);
-      color: white;
-      font-size: clamp(0.9rem, 1.6vw, 1.1rem);
-    }
-
-    /* 🔹 Research 페이지 이동 버튼 */
-    .research-btn {
-      display: block;
-      margin: 2em auto 0;
-      padding: 0.8em 2em;
-      background: #007acc;
-      color: white;
-      font-weight: bold;
-      border: none;
-      border-radius: 30px;
-      font-size: 1.1em;
-      text-align: center;
-      text-decoration: none;
-      transition: background 0.3s ease, transform 0.2s ease;
-    }
-    .research-btn:hover {
-      background: #005f99;
-      transform: translateY(-3px);
-    }
-
-    /* Modal Popup */
-    .modal {
-      display: none; position: fixed;
-      z-index: 1000; left: 0; top: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
-      display: flex; align-items: center; justify-content: center;
-    }
-    .modal-content {
-      background: white; padding: 2em; border-radius: 12px;
-      max-width: 600px; width: 80%; text-align: left;
-      position: relative; animation: fadeInUp 0.5s ease-in-out;
-    }
-    .modal h2 { text-align: center; margin-top: 0; }
-    .close-btn {
-      position: absolute; top: 10px; right: 15px;
-      font-size: 1.5em; color: #333; cursor: pointer;
-    }
-
-    /* 기존 .news-grid 에 이 줄만 추가 */
-    .news-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-auto-rows: minmax(150px, auto);
-      gap: 1em;
-      grid-auto-flow: dense;   /* ✅ 빈칸 자동 메우기 */
-    }
-
-    /* 사진 카드 전용 스타일 */
-    /* 기존에 있던 스타일은 그대로 두고, 아래만 추가 */
-    .news-card.photo { 
-      grid-row: span 2;        /* ✅ news4/5와 동일 높이 */
-      padding: 0;
-      overflow: hidden;
-      position: relative;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-      transition: transform 0.2s;
-    }
-
-    .news-card.photo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;        /* ✅ 영역을 꽉 채우도록 */
-      display: block;
-    }
-
-    .news-card.photo .caption {
-      position: absolute;
-      left: 0; right: 0; bottom: 0;
-      padding: .6em .8em;
-      font-size: .95em;
-      color: #fff;
-      background: linear-gradient(transparent, rgba(0,0,0,.55));
-    }
-
-    .news-card.photo:hover { transform: translateY(-5px); }
-
-    /* 전체 박스 */
-    .pub-feature-box {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5em;
-      padding: 2em;
-      margin-top: 2em;
-      background: linear-gradient(135deg, #1682c0, #68bdd3);
-      backdrop-filter: blur(10px);
-      border-radius: 18px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-      color: white;
-    }
-
-    /* 왼쪽 섹션: 최신 2개 */
-    .pub-latest-box {
-      display: flex;
-      flex-direction: column;
-      gap: 1.2em;
-    }
-
-    /* 최신 2개 카드 */
-    .pub-latest-item {
-      background: rgba(255, 255, 255, 0.12);
-      border-radius: 12px;
-      padding: 1em;
-      display: flex;
-      gap: 1em;
-      align-items: flex-start;
-      box-shadow: inset 0 0 30px rgba(255,255,255,0.05);
-    }
-
-    .pub-latest-item img {
-      width: 120px;
-      height: 120px;
-      object-fit: cover;
-      border-radius: 10px;
-      flex-shrink: 0;
-    }
-
-    .pub-latest-title {
-      font-size: 1.05em;
-      font-weight: bold;
-      margin-bottom: 0.3em;
-    }
-
-    .pub-latest-meta {
-      font-size: 0.85em;
-      opacity: 0.9;
-      margin-bottom: 0.3em;
-    }
-
-    .pub-latest-authors {
-      font-size: 0.8em;
-      opacity: 0.85;
-    }
-
-    /* 오른쪽 리스트 3개 */
-    .pub-side-list {
-      display: flex;
-      flex-direction: column;
-      gap: 1em;
-    }
-
-    .pub-side-item {
-      background: rgba(255,255,255,0.1);
-      padding: 1em;
-      border-radius: 10px;
-      transition: background 0.3s ease;
-    }
-
-    .pub-side-item:hover {
-      background: rgba(255,255,255,0.18);
-    }
-
-    .pub-side-title {
-      font-size: 1em;
-      font-weight: bold;
-      margin-bottom: 0.3em;
-    }
-
-    .pub-side-meta,
-    .pub-side-authors {
-      font-size: 0.82em;
-      opacity: 0.88;
-    }
-
-    /* 글자 자동 줄바꿈 */
-    .pub-feature-box * {
-      word-break: keep-all;
-      overflow-wrap: break-word;
-    }
-
-    /* 반응형: 좁은 화면에서 세로 정렬 */
-    @media (max-width: 900px) {
-      .pub-feature-box {
-        grid-template-columns: 1fr;
-      }
-    }
-
-
-    #partners-banner {
-      width: 100%;
-      margin: 3em auto 0 auto;
-      background: #cddae7;
-      color: rgb(26, 17, 114);
-      overflow: hidden;
-      position: absolute;
-      margin-top: 1em;
-      padding: 0.6em 0;  /* ← 높이에 영향을 주는 부분 */
-      bottom: -1em;
-      left: 0;
-      border-radius: 0px;
-      font-family: "Noto Sans KR", sans-serif;
-    }
-
-    .partner-track {
-      display: flex;
-      align-items: center;
-      gap: 3em;
-      white-space: nowrap;
-      width: max-content;
-      animation: scrollLoop 80s linear infinite;
-    }
-
-    /* 각 로고+이름 묶음 */
-    .partner-item {
-      display: flex;
-      align-items: center;
-      gap: 0.2em;
-      font-size: 1.2em;
-      font-weight: 800;
-      opacity: 0.9;
-      transition: opacity 0.9s;
-    }
-
-    .partner-item:hover {
-      opacity: 1;
-    }
-
-    .partner-item img {
-      height: 40px;        /* ✅ 로고 크기 조정 */
-      width: auto;
-      vertical-align: middle;
-    }
-
-    /* 무한 루프 애니메이션 */
-    @keyframes scrollLoop {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    .location-section {
-      margin-top: 3em;
-      text-align: center;
-    }
-
-    .location-buttons {
-      display: flex;
-      justify-content: space-between; /* ← 버튼 사이 균등 분배 */
-      flex-wrap: nowrap;              /* ← 줄바꿈 방지 */
-      max-width: 1100px;              /* ← 위 섹션들과 동일한 너비 */
-      margin: 0 auto 1.5em auto;      /* ← 중앙 정렬 */
-      gap: 1em;                         /* ← gap 제거 (버튼 너비 정확히 맞추기 위해) */
-    }
-
-    .loc-btn {
-      flex: 1 1 25%;                  /* ← 네 버튼이 정확히 25%씩 차지 */
-      padding: 0.8em 0.5em;
-      margin: 0;                      /* ← 간격 문제 해결 */
-      background: #007acc;
-      color: white;
-      border: none;
-      border-radius: 25px;
-      cursor: pointer;
-      font-size: 0.7em;
-      font-weight: bold;
-      white-space: nowrap;            /* ← 줄바꿈 방지 */
-      transition: 0.3s;
-      text-align: center;
-    }
-
-    .loc-btn:hover {
-      background: #005f99;
-      transform: translateY(-2px);
-    }
-
-    .map-container {
-      width: 100%;
-      max-width: 1100px;
-      height: 450px; /* 원하는 세로 크기 */
-      margin: 0 auto;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      background: #ddd; /* 로딩 전 배경 */
-    }
-
-    #labMap {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
-    @media (max-width: 900px) {
-      .location-buttons {
-        grid-template-columns: repeat(2, 1fr); /* 태블릿: 2개씩 */
-      }
-    }
-
-    @media (max-width: 500px) {
-      .location-buttons {
-        grid-template-columns: repeat(1, 1fr); /* 모바일: 1개씩 */
-      }
-    }
-
-    .location-layout {
-      display: flex;
-      gap: 0;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    /* 지도 */
-    .map-container {
-      width: 650px;
-      height: 450px;
-    }
-
-    #labMap {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
-    /* 사진 */
-    .location-photo {
-      width: 450px;
-      height: 450px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .location-photo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    /* 사진 설명 overlay */
-    .photo-caption {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 0.8em;
-      color: white;
-      font-size: 1em;
-      font-weight: bold;
-      background: linear-gradient(transparent, rgba(0,0,0,0.7));
-    }
-
+    /* WELCOME MODAL */
+    .modal { display: none; position: fixed; z-index: 1000; left:0; top:0; width:100%; height:100%; background: rgba(0,0,0,0.72); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; }
+    .modal-content { background: var(--surface); border: 1px solid var(--border2); padding: 2.2em; border-radius: 16px; max-width: 560px; width: 85%; text-align: left; position: relative; animation: fadeInUp 0.35s ease-in-out; color: var(--text); }
+    .modal-content h2 { text-align:center; margin-top:0; color:var(--accent2); font-size:1.2em; margin-bottom:.8em; }
+    .modal-content p  { font-size:.93em; color:var(--text2); line-height:1.75; margin-bottom:.6em; }
+    .modal-content ul { font-size:.9em; color:var(--text2); line-height:1.8; padding-left:1.4em; }
+    .modal-content strong { color:var(--text); }
+    .close-btn { position:absolute; top:12px; right:16px; font-size:1.4em; color:var(--text3); cursor:pointer; transition:color .15s; }
+    .close-btn:hover { color:var(--text); }
   </style>
 </head>
 <body>
+
   <header>
     <div class="logo">
-      <a href="index.html" class="logo-link">Battery System Laboratory </a>
-      <img src="images\NEWLOGO.png" alt="Lab Logo" class="logo-icon">
+      <a href="index.html" class="logo-link">Battery System Laboratory</a>
+      <img src="images/NEWLOGO.png" alt="Lab Logo" class="logo-icon">
     </div>
     <nav>
       <a href="index.html" id="home-link">Home</a>
-
-      <a href="member.html" class="menu-text">Member</a>
-
+      <a href="member.html">Member</a>
       <a href="publication.html">Publication</a>
       <a href="research.html">Research</a>
       <a href="counterpart.html">Counterpart</a>
@@ -652,325 +297,185 @@
     </nav>
   </header>
 
-  <!-- Hero Section -->
   <section class="hero">
     <img src="https://mo.kaist.ac.kr/wp-content/uploads/2022/08/logo_new-1-e1661933714657.png" alt="KAIST Mobility Logo" class="hero-logo">
+    <div class="hero-eyebrow">KAIST · CCS Graduate School of Mobility</div>
     <h1>Battery System Laboratory</h1>
-    <p>KAIST CCS Graduate School of Mobility</p>
-    <a href="#research">Explore Research</a>
-    
-    <!-- 🔹 Collaboration Partners Banner -->
+    <p>Advancing battery science for the future of mobility</p>
+    <div class="hero-cta-group">
+      <a href="#research" class="explore-btn">Explore Research</a>
+      <button id="adminBtn">
+        Are you BSL? then, log-in to <i class="fa fa-lock" style="font-size:0.85em"></i> Admin
+      </button>
+    </div>
+
     <section id="partners-banner">
       <div class="partner-track">
-        <div class="partner-item">
-          <img src="images\B_CTNS.png" alt="Samsung SDI">
-          <span>CTNS</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_EcoCAB.png" alt="SK On">
-          <span>EcoCAB</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_FutureEV.png" alt="CATL">
-          <span>FutureEV</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_Hanyang.png" alt="EcoCAB">
-          <span>Hanyang Electric</span>
-        </div>
-        <!--<div class="partner-item">
-          <img src="images\B_Hyundai.png" alt="EcoCAB">
-          <span>Hyundai Motors</span>
-        </div>-->
-        <div class="partner-item">
-          <img src="images\B_LGEnergySolution.png" alt="EcoCAB">
-          <span>LG Energy Solution</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_MONA.png" alt="EcoCAB">
-          <span>MONA</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_Narnia.png" alt="EcoCAB">
-          <span>Narnia Labs</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_Onbridge.png" alt="CTNS">
-          <span>On Bridge</span>
-        </div>
-        <!--<div class="partner-item">
-          <img src="images\B_SDI.png" alt="CTNS">
-          <span>Samsung SDI</span>
-        </div>-->
-        <div class="partner-item">
-          <img src="images\B_CAU.png" alt="LG Energy Solution">
-          <span>Chungang University</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_KU.png" alt="Chungnam Institute">
-          <span>Korea University</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_KAIST.png" alt="KAIST">
-          <span>KAIST</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_Missouri.png" alt="CTNS">
-          <span>Missouri S&T</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_MIT.png" alt="Chungnam Institute">
-          <span>MIT</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_POSTECH.png" alt="CTNS">
-          <span>POSTECH</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_Purdue.png" alt="CTNS">
-          <span>Purdue University</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_ChungNamInstitute.png" alt="Hyundai Motor Group">
-          <span>ChungNam Institute</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_JBTP.png" alt="CTNS">
-          <span>Jeonbuk TP</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_Chem.png" alt="CTNS">
-          <span>KRICT</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_KRISO.png" alt="CTNS">
-          <span>KRISO</span>
-        </div>
-
-        <div class="partner-item">
-          <img src="images\B_CTNS.png" alt="Samsung SDI">
-          <span>CTNS</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_EcoCAB.png" alt="SK On">
-          <span>EcoCAB</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_FutureEV.png" alt="CATL">
-          <span>FutureEV</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_Hanyang.png" alt="EcoCAB">
-          <span>Hanyang Electric</span>
-        </div>
-        <!--<div class="partner-item">
-          <img src="images\B_Hyundai.png" alt="EcoCAB">
-          <span>Hyundai Motors</span>
-        </div>-->
-        <div class="partner-item">
-          <img src="images\B_LGEnergySolution.png" alt="EcoCAB">
-          <span>LG Energy Solution</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_MONA.png" alt="EcoCAB">
-          <span>MONA</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_Narnia.png" alt="EcoCAB">
-          <span>Narnia Labs</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_Onbridge.png" alt="CTNS">
-          <span>On Bridge</span>
-        </div>
-        <!--<div class="partner-item">
-          <img src="images\B_SDI.png" alt="CTNS">
-          <span>Samsung SDI</span>
-        </div>-->
-        <div class="partner-item">
-          <img src="images\B_CAU.png" alt="LG Energy Solution">
-          <span>Chungang University</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_KU.png" alt="Chungnam Institute">
-          <span>Korea University</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_KAIST.png" alt="KAIST">
-          <span>KAIST</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_Missouri.png" alt="CTNS">
-          <span>Missouri S&T</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_MIT.png" alt="Chungnam Institute">
-          <span>MIT</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_POSTECH.png" alt="CTNS">
-          <span>POSTECH</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_Purdue.png" alt="CTNS">
-          <span>Purdue University</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_ChungNamInstitute.png" alt="Hyundai Motor Group">
-          <span>ChungNam Institute</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_JBTP.png" alt="CTNS">
-          <span>Jeonbuk TP</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_Chem.png" alt="CTNS">
-          <span>KRICT</span>
-        </div>
-        <div class="partner-item">
-          <img src="images\B_KRISO.png" alt="CTNS">
-          <span>KRISO</span>
-        </div>
-
+        <div class="partner-item"><img src="images/B_CTNS.png" alt="CTNS"><span>CTNS</span></div>
+        <div class="partner-item"><img src="images/B_EcoCAB.png" alt="EcoCAB"><span>EcoCAB</span></div>
+        <div class="partner-item"><img src="images/B_FutureEV.png" alt="FutureEV"><span>FutureEV</span></div>
+        <div class="partner-item"><img src="images/B_Hanyang.png" alt="Hanyang"><span>Hanyang Electric</span></div>
+        <div class="partner-item"><img src="images/B_LGEnergySolution.png" alt="LG"><span>LG Energy Solution</span></div>
+        <div class="partner-item"><img src="images/B_MONA.png" alt="MONA"><span>MONA</span></div>
+        <div class="partner-item"><img src="images/B_Narnia.png" alt="Narnia"><span>Narnia Labs</span></div>
+        <div class="partner-item"><img src="images/B_Onbridge.png" alt="Onbridge"><span>On Bridge</span></div>
+        <div class="partner-item"><img src="images/B_CAU.png" alt="CAU"><span>Chungang University</span></div>
+        <div class="partner-item"><img src="images/B_KU.png" alt="KU"><span>Korea University</span></div>
+        <div class="partner-item"><img src="images/B_KAIST.png" alt="KAIST"><span>KAIST</span></div>
+        <div class="partner-item"><img src="images/B_Missouri.png" alt="Missouri"><span>Missouri S&amp;T</span></div>
+        <div class="partner-item"><img src="images/B_MIT.png" alt="MIT"><span>MIT</span></div>
+        <div class="partner-item"><img src="images/B_POSTECH.png" alt="POSTECH"><span>POSTECH</span></div>
+        <div class="partner-item"><img src="images/B_Purdue.png" alt="Purdue"><span>Purdue University</span></div>
+        <div class="partner-item"><img src="images/B_ChungNamInstitute.png" alt="ChungNam"><span>ChungNam Institute</span></div>
+        <div class="partner-item"><img src="images/B_JBTP.png" alt="JBTP"><span>Jeonbuk TP</span></div>
+        <div class="partner-item"><img src="images/B_Chem.png" alt="KRICT"><span>KRICT</span></div>
+        <div class="partner-item"><img src="images/B_KRISO.png" alt="KRISO"><span>KRISO</span></div>
+        <!-- 루프 복사본 -->
+        <div class="partner-item"><img src="images/B_CTNS.png" alt="CTNS"><span>CTNS</span></div>
+        <div class="partner-item"><img src="images/B_EcoCAB.png" alt="EcoCAB"><span>EcoCAB</span></div>
+        <div class="partner-item"><img src="images/B_FutureEV.png" alt="FutureEV"><span>FutureEV</span></div>
+        <div class="partner-item"><img src="images/B_Hanyang.png" alt="Hanyang"><span>Hanyang Electric</span></div>
+        <div class="partner-item"><img src="images/B_LGEnergySolution.png" alt="LG"><span>LG Energy Solution</span></div>
+        <div class="partner-item"><img src="images/B_MONA.png" alt="MONA"><span>MONA</span></div>
+        <div class="partner-item"><img src="images/B_Narnia.png" alt="Narnia"><span>Narnia Labs</span></div>
+        <div class="partner-item"><img src="images/B_Onbridge.png" alt="Onbridge"><span>On Bridge</span></div>
+        <div class="partner-item"><img src="images/B_CAU.png" alt="CAU"><span>Chungang University</span></div>
+        <div class="partner-item"><img src="images/B_KU.png" alt="KU"><span>Korea University</span></div>
+        <div class="partner-item"><img src="images/B_KAIST.png" alt="KAIST"><span>KAIST</span></div>
+        <div class="partner-item"><img src="images/B_Missouri.png" alt="Missouri"><span>Missouri S&amp;T</span></div>
+        <div class="partner-item"><img src="images/B_MIT.png" alt="MIT"><span>MIT</span></div>
+        <div class="partner-item"><img src="images/B_POSTECH.png" alt="POSTECH"><span>POSTECH</span></div>
+        <div class="partner-item"><img src="images/B_Purdue.png" alt="Purdue"><span>Purdue University</span></div>
+        <div class="partner-item"><img src="images/B_ChungNamInstitute.png" alt="ChungNam"><span>ChungNam Institute</span></div>
+        <div class="partner-item"><img src="images/B_JBTP.png" alt="JBTP"><span>Jeonbuk TP</span></div>
+        <div class="partner-item"><img src="images/B_Chem.png" alt="KRICT"><span>KRICT</span></div>
+        <div class="partner-item"><img src="images/B_KRISO.png" alt="KRISO"><span>KRISO</span></div>
       </div>
     </section>
   </section>
 
   <main>
-    <section id="intro" style="text-align: center; margin-top: 2em;">
-      <p style="font-size: 1.2em; color: #003366; font-weight: bold">
-        Welcome to KAIST Battery System LAB (BSL)! 
-      </p>
-      <p style="font-size: 1.2em; color: #003366; font-weight: bold">
-        Prof. Yoonkoo Lee and our Researchers conduct research on batteries for future mobility. 
-      </p>
-      <p style="font-size: 1.1em; color: #005f99;">
-        Our work spans from material-level analyses for battery safety to the investigation of internal degradation mechanisms and thermal runaway phenomena, which are then applied to system-level modeling and optimization.
-      </p>
+
+    <section id="intro">
+      <p>Welcome to KAIST Battery System LAB (BSL)!</p>
+      <p>Prof. Yoonkoo Lee and our Researchers conduct research on batteries for future mobility.</p>
+      <p>Our work spans from material-level analyses for battery safety to the investigation of internal degradation mechanisms and thermal runaway phenomena, which are then applied to system-level modeling and optimization.</p>
     </section>
 
-    <!-- Latest News -->
     <section id="news">
-      <h2>Latest News</h2>
+      <div class="section-header">
+        <h2>Latest News</h2>
+        <div class="section-line"></div>
+      </div>
       <div class="news-grid" id="latest-news"></div>
       <div class="more-link"><a href="news.html">More News →</a></div>
     </section>
-    <h2><br>RECENT PUBLICATIONS</h2>
+
+    <div class="section-header">
+      <h2>Recent Publications</h2>
+      <div class="section-line"></div>
+    </div>
 
     <div class="pub-feature-box">
-
-      <!-- 🔵 최신 2개 -->
       <div class="pub-latest-box">
-
-        <!-- 최신 1 -->
         <div class="pub-latest-item">
           <img src="images/P_2025-2.png" alt="Latest Paper 1">
           <div>
-            <div class="pub-latest-title">
-              Advanced multiscale modeling of potassium-ion batteries for interplay of electrochemical and mechanical behavior across Scales (2025)
-            </div>
+            <div class="pub-latest-title">Advanced multiscale modeling of potassium-ion batteries for interplay of electrochemical and mechanical behavior across Scales (2025)</div>
             <div class="pub-latest-meta">Small Structure, 335, 138202 (IF: 13.9)</div>
             <div class="pub-latest-authors">Subeen Kim†, Yun Kim, <b><u>Yoon Koo Lee</u>*</b>, Jihwan Song*</div>
           </div>
         </div>
-
-        <!-- 최신 2 -->
         <div class="pub-latest-item">
           <img src="images/P_2025-1.png" alt="Latest Paper 2">
           <div>
-            <div class="pub-latest-title">
-              Modeling and validation of driving performance of electric vehicle converted from internal combustion engine vehicle (2025)
-            </div>
+            <div class="pub-latest-title">Modeling and validation of driving performance of electric vehicle converted from internal combustion engine vehicle (2025)</div>
             <div class="pub-latest-meta">IEEE TTE, 11(1), 486–498 (IF: 7.0)</div>
-            <div class="pub-latest-authors">
-              Juhyun Park†, Hyunwoo Lim†, Sangjun Kim, Jihwan Song*, <b><u>Yoon Koo Lee</u>*</b>
-            </div>
+            <div class="pub-latest-authors">Juhyun Park†, Hyunwoo Lim†, Sangjun Kim, Jihwan Song*, <b><u>Yoon Koo Lee</u>*</b></div>
           </div>
         </div>
-
       </div>
-
-      <!-- 🔵 나머지 3개 -->
       <div class="pub-side-list">
-
         <div class="pub-side-item">
-          <div class="pub-side-title">
-            Multi-scale mechanical-electrochemical coupled modeling of stress generation… (2024)
-          </div>
+          <div class="pub-side-title">Multi-scale mechanical-electrochemical coupled modeling of stress generation… (2024)</div>
           <div class="pub-side-meta">Journal of Power Sources (IF: 9.2)</div>
           <div class="pub-side-authors">Jeu Shin†, <b><u>Yoon Koo Lee</u>*</b></div>
         </div>
-
         <div class="pub-side-item">
-          <div class="pub-side-title">
-            Multiphysics modeling of the influence of initial pressure… (2024)
-          </div>
+          <div class="pub-side-title">Multiphysics modeling of the influence of initial pressure… (2024)</div>
           <div class="pub-side-meta">Journal of Energy Storage (IF: 9.4)</div>
-          <div class="pub-side-authors">
-            <b><u>Yoon Koo Lee</u>†</b>, Chaeeun Sung, Jiyeon Kim, Chaemin Hong, Jinnil Choi*
-          </div>
+          <div class="pub-side-authors"><b><u>Yoon Koo Lee</u>†</b>, Chaeeun Sung, Jiyeon Kim, Chaemin Hong, Jinnil Choi*</div>
         </div>
-
         <div class="pub-side-item">
-          <div class="pub-side-title">
-            Modeling and simulation of a composite solid-state battery… (2024)
-          </div>
+          <div class="pub-side-title">Modeling and simulation of a composite solid-state battery… (2024)</div>
           <div class="pub-side-meta">Journal of Energy Storage</div>
           <div class="pub-side-authors"><b><u>Yoon Koo Lee</u>†</b>, Hosop Shin*</div>
         </div>
-
       </div>
     </div>
-    
-    <!-- Research Interests -->
+
     <section id="research" class="research-interests">
-      <h2>RESEARCH INTERESTS</h2>
-      <div class="interest-grid">
-        <div class="interest-circle photo" style="background-image:url('images/EA_banner.jpg')">
-          <h3>Experiment &<br> Analysis</h3>
+      <div class="section-header">
+        <h2>Research Interests</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="research-grid">
+        <div class="research-card">
+          <div class="rc-icon"><i class="fa fa-microchip"></i></div>
+          <div class="rc-title">Simulation &amp;<br>Prediction</div>
+          <div class="rc-desc">Physics-based and data-driven modeling of lithium-ion cells across multiple scales — from electrode microstructure to pack level. Electrochemical, mechanical, and thermal simulations enable accurate state estimation and lifetime prediction.</div>
+          <div class="rc-tags">
+            <span class="rc-tag">Electrochemical Model</span>
+            <span class="rc-tag">Multiscale</span>
+            <span class="rc-tag">Digital Twin</span>
+            <span class="rc-tag">RUL Prediction</span>
+          </div>
         </div>
-        <div class="interest-circle photo" style="background-image:url('images/SP_banner.jpg')">
-          <h3>Simulation &<br> Prediction</h3>
+        <div class="research-card">
+          <div class="rc-icon"><i class="fa fa-brain"></i></div>
+          <div class="rc-title">AI &amp;<br>Control</div>
+          <div class="rc-desc">Machine learning and deep learning algorithms for real-time battery management. Data-driven SOC/SOH estimation, anomaly detection, and adaptive BMS strategies that self-optimize under varying operational conditions.</div>
+          <div class="rc-tags">
+            <span class="rc-tag">Deep Learning</span>
+            <span class="rc-tag">BMS</span>
+            <span class="rc-tag">SOC / SOH</span>
+            <span class="rc-tag">Adaptive Control</span>
+          </div>
         </div>
-        <div class="interest-circle photo" style="background-image:url('images/DO_banner.jpg')">
-          <h3>Design &<br> Optimization</h3>
-        </div>
-        <div class="interest-circle photo" style="background-image:url('images/CD_banner.png')">
-          <h3>Control &<br> Demonstration</h3>
+        <div class="research-card">
+          <div class="rc-icon"><i class="fa fa-rocket"></i></div>
+          <div class="rc-title">Optimization &amp;<br>Demonstration</div>
+          <div class="rc-desc">System-level design optimization of battery packs for EVs, drones, and ESS — covering thermal management, cell balancing, and structural layout. Hardware-in-the-loop demonstration bridges simulation and real-world validation.</div>
+          <div class="rc-tags">
+            <span class="rc-tag">Pack Design</span>
+            <span class="rc-tag">Thermal Mgmt</span>
+            <span class="rc-tag">EV / ESS</span>
+            <span class="rc-tag">HIL Testing</span>
+          </div>
         </div>
       </div>
-      <!-- 🔹 Research 페이지 이동 버튼 -->
       <a href="research.html" class="research-btn">View Full Research →</a>
     </section>
 
-    <!-- 🔵 Research Lab Locations -->
     <section class="location-section">
-      <h2>Our Lab Locations</h2>
-
+      <div class="section-header">
+        <h2>Our Lab Locations</h2>
+        <div class="section-line"></div>
+      </div>
       <div class="location-buttons">
-        <button class="loc-btn" data-map="munji">KAIST Munji Campus Faculty Wing F409</button>
-        <button class="loc-btn" data-map="daejeon">KAIST Munji Campus Mobility Hall</button>
-        <button class="loc-btn" data-map="seoul">KAIST Munji Campus Truth Hall</button>
+        <button class="loc-btn" data-map="munji">KAIST Munji Campus · Faculty Wing F409</button>
+        <button class="loc-btn" data-map="daejeon">KAIST Munji Campus · Mobility Hall</button>
+        <button class="loc-btn" data-map="seoul">KAIST Munji Campus · Truth Hall</button>
         <button class="loc-btn" data-map="factory">KAIST Eco-Friendly Vehicle Research Center</button>
       </div>
-
       <div class="location-layout">
-
-        <!-- 지도 -->
         <div class="map-container">
-          <iframe id="labMap"
-            src="https://www.google.com/maps/embed?pb=YOUR_DEFAULT_LOCATION"
-            loading="lazy" allowfullscreen></iframe>
+          <iframe id="labMap" src="https://www.google.com/maps/embed?pb=YOUR_DEFAULT_LOCATION" loading="lazy" allowfullscreen></iframe>
         </div>
-
-        <!-- 사진 -->
         <div class="location-photo">
-          <img id="labPhoto" src="images/idx_main.jpg">
-          <div class="photo-caption" id="labCaption">
-            KAIST Munji Campus
-          </div>
+          <img id="labPhoto" src="images/idx_main.jpg" alt="Lab Photo">
+          <div class="photo-caption" id="labCaption">KAIST Munji Campus</div>
         </div>
-
       </div>
     </section>
 
@@ -978,151 +483,234 @@
 
   <footer>
     <div class="footer-container">
-      <!-- 왼쪽: 연구실 정보 -->
       <div class="footer-left">
         <h3>Battery System Laboratory</h3>
-        <p>
-          KAIST, CCS Graduate School of Mobility
-          193, Munji-ro, Yuseong-gu, Daejeon, 34051, Republic of Korea
-        </p>
-        <p><strong>Location:</strong> Faculty Wing, F440</p>
+        <p>KAIST, CCS Graduate School of Mobility<br>193, Munji-ro, Yuseong-gu, Daejeon, 34051, Republic of Korea</p>
+        <p style="margin-top:.5em"><strong style="color:var(--text)">Location:</strong> Faculty Wing, F440</p>
       </div>
-
-      <!-- 오른쪽: 연락처 정보 -->
       <div class="footer-right">
-        <p><strong>Phone:</strong> +82 042-350-1762</p>
-        <p><strong>Email:</strong> <a href="mailto:yoonklee@kaist.ac.kr">yoonklee@kaist.ac.kr</a></p>
+        <p><strong style="color:var(--text)">Phone:</strong> +82 042-350-1762</p>
+        <p><strong style="color:var(--text)">Email:</strong> <a href="mailto:yoonklee@kaist.ac.kr">yoonklee@kaist.ac.kr</a></p>
       </div>
     </div>
-
     <div class="footer-bottom">
       <p>&copy; 2025 Battery System Laboratory | All Rights Reserved</p>
     </div>
   </footer>
 
-  <!-- Modal Popup -->
+  <!-- ─── ADMIN MODAL ─── -->
+  <div class="admin-modal-bg" id="adminModalBg">
+    <div class="admin-modal">
+      <button class="admin-modal-close" id="adminModalClose">&times;</button>
+      <div class="admin-modal-icon">🔐</div>
+      <h3>관리자 로그인</h3>
+      <p class="sub">ID와 비밀번호를 입력하세요</p>
+
+      <!-- 로그인 성공 후 표시될 배지 -->
+      <div class="admin-user-badge" id="adminUserBadge">
+        <i class="fa fa-circle-check"></i>
+        <span id="adminUserBadgeText"></span>
+      </div>
+
+      <div class="admin-field-group">
+        <div class="admin-field-wrap">
+          <label class="admin-field-label" for="adminIdInput">ID</label>
+          <input type="text" class="admin-input" id="adminIdInput"
+            placeholder="사용자 ID 입력" autocomplete="username"/>
+        </div>
+        <div class="admin-field-wrap">
+          <label class="admin-field-label" for="adminPwInput">Password</label>
+          <input type="password" class="admin-input" id="adminPwInput"
+            placeholder="비밀번호 입력" autocomplete="current-password"/>
+        </div>
+      </div>
+
+      <div class="admin-err" id="adminErr"></div>
+      <button class="admin-submit-btn" id="adminSubmit">로그인</button>
+    </div>
+  </div>
+
+  <!-- ─── WELCOME MODAL ─── -->
   <div class="modal" id="welcome-modal">
     <div class="modal-content">
       <span class="close-btn" id="close-modal">&times;</span>
       <h2>Welcome</h2>
-      <p>
-        We are recruiting students and researchers at various positions (Master’s, Ph.D., Postdoctoral researchers, and interns) who are interested in secondary battery research related to mobility systems. The specific research areas include:
-      </p>
+      <p>We are recruiting students and researchers at various positions (Master's, Ph.D., Postdoctoral researchers, and interns) who are interested in secondary battery research related to mobility systems. The specific research areas include:</p>
       <ul>
         <li>Analysis and prediction of secondary batteries</li>
         <li>Battery system-integrated design and optimization</li>
         <li>System-level control and demonstration</li>
       </ul>
-      <p><strong>Professor e-mail:</strong> yoonklee@kaist.ac.kr | yoonkoolee@gmail.com</p>
+      <p style="margin-top:.8em"><strong>Professor e-mail:</strong> yoonklee@kaist.ac.kr | yoonkoolee@gmail.com</p>
     </div>
   </div>
 
   <script>
-    // Hero 버튼 스크롤
-    document.querySelector('.hero a').addEventListener('click', function(e) {
+    // ─── Hero scroll ───
+    document.querySelector('.hero a.explore-btn').addEventListener('click', function(e) {
       e.preventDefault();
-      document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior:'smooth', block:'start' });
     });
 
-    // 최신 5개 뉴스 로드
-  fetch('news.html')
-    .then(res => res.text())
-    .then(data => {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(data, 'text/html');
-      const items = doc.querySelectorAll('.news-item');
-      const latest = Array.from(items).slice(0, 5);
-      const container = document.getElementById('latest-news');
-
-      latest.forEach((item) => {
-        const date = item.querySelector('.news-date')?.innerText || '';
-        const title = item.querySelector('.news-title')?.innerText || '';
-        const desc = item.querySelector('.news-desc')?.innerText || '';
-        const card = document.createElement('div');
-        card.className = 'news-card';
-        card.innerHTML =
-          `<div class="news-date">${date}</div>
-           <div class="news-title">${title}</div>
-           <div class="news-desc">${desc}</div>`;
-        container.appendChild(card);
+    // ─── Latest News ───
+    fetch('news.html')
+      .then(res => res.text())
+      .then(data => {
+        const parser = new DOMParser();
+        const doc    = parser.parseFromString(data, 'text/html');
+        const items  = doc.querySelectorAll('.news-item');
+        const latest = Array.from(items).slice(0, 5);
+        const container = document.getElementById('latest-news');
+        latest.forEach(item => {
+          const date  = item.querySelector('.news-date')?.innerText  || '';
+          const title = item.querySelector('.news-title')?.innerText || '';
+          const desc  = item.querySelector('.news-desc')?.innerText  || '';
+          const card  = document.createElement('div');
+          card.className = 'news-card';
+          card.innerHTML = `<div class="news-date">${date}</div>
+            <div class="news-title">${title}</div>
+            <div class="news-desc">${desc}</div>`;
+          container.appendChild(card);
+        });
+        const photo = document.createElement('a');
+        photo.href = 'news.html';
+        photo.className = 'news-card photo';
+        photo.setAttribute('aria-label', 'BSL Photo');
+        photo.innerHTML = `<img src="images/260305Gallery.jpg" alt="Battery System Lab photo">
+          <div class="caption">BSL stands for Best Student LAB</div>`;
+        container.appendChild(photo);
       });
 
-      // ✅ 우하단 남는 칸을 채울 "사진 카드" 추가 (6번째 아이템)
-      const photo = document.createElement('a');
-      photo.href = 'news.html';             // 클릭 시 이동할 링크(원하면 변경)
-      photo.className = 'news-card photo';
-      photo.setAttribute('aria-label', 'BSL Photo');
-
-      photo.innerHTML =
-        `<img src="images/260305Gallery.jpg" alt="Battery System Lab photo">
-         <div class="caption">BSL stands for Best Student LAB</div>`;
-
-      container.appendChild(photo);
-    })
-
-    // Modal 제어
+    // ─── Welcome Modal ───
     const homeLink = document.getElementById('home-link');
-    const modal = document.getElementById('welcome-modal');
+    const modal    = document.getElementById('welcome-modal');
     const closeBtn = document.getElementById('close-modal');
     homeLink.addEventListener('click', () => { modal.style.display = 'flex'; });
     closeBtn.addEventListener('click', () => { modal.style.display = 'none'; });
-    window.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
+    window.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
+    window.addEventListener('load',  () => { modal.style.display = 'flex'; });
 
-    // 페이지 로드 시 자동으로 팝업 띄우기
-    window.addEventListener('load', () => {
-      modal.style.display = 'flex';
-    });
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const toggle = document.querySelector(".dropdown-toggle");
-      const dropdown = document.querySelector(".dropdown");
-
-      toggle.addEventListener("click", () => {
-        dropdown.classList.toggle("open");
-      });
-    });
-
+    // ─── Map buttons ───
     const mapUrls = {
-      munji: {
-        map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3211.655882711285!2d127.39783067581973!3d36.3933236723659!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x356549e65ed500b5%3A0xa4b72feb132f45c9!2z7ZWc6rWt6rO87ZWZ6riw7Iig7JuQIO2Vmeu2gOuPmQ!5e0!3m2!1sko!2skr!4v1764232635364!5m2!1sko!2skr",
-        photo: "images/idx_room.jpg",
-        caption: "Joint Laboratory and Specialized Laboratory"
-      },
-      daejeon: {
-        map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1515.728781183824!2d127.39857495577911!3d36.39183234739905!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x356549e5f5e2c115%3A0x9fa8118c8f12fab8!2z7ZWc6rWt6rO87ZWZ6riw7Iig7JuQIOu2gOyGjTPrj5k!5e0!3m2!1sko!2skr!4v1764233489042!5m2!1sko!2skr",
-        photo: "images/idx_mob.jpg",
-        caption: "Mobility Hall Battery Experiment Laboratory"
-      },
-      seoul: {
-        map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1828.7346443921303!2d127.39745776395866!3d36.39179027058697!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x356549e62b0b4917%3A0x4981e0be5c3cfe64!2z7ZWc6rWt6rO87ZWZ6riw7Iig7JuQIOynhOumrOq0gA!5e0!3m2!1sko!2skr!4v1764233444299!5m2!1sko!2skr",
-        photo: "images/idx_truth.jpg",
-        caption: "Truth Hall Wet Laboratory"
-      },
-      factory: {
-        map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.234172724379!2d126.57146784475499!3d33.443205089713096!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x350cfd6bfecfa743%3A0xe0c352bfdd34a97!2z7IS466-47JaR67mM65Sp!5e0!3m2!1sko!2skr!4v1764233539789!5m2!1sko!2skr",
-        photo: "images/idx_factory.jpg",
-        caption: "Eco-Friendly Vehicle Research Center"
-      }
+      munji:   { map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3211.655882711285!2d127.39783067581973!3d36.3933236723659!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x356549e65ed500b5%3A0xa4b72feb132f45c9!2z7ZWc6rWt6rO87ZWZ6riw7Iig7JuQIO2Vmeu2gOuPmQ!5e0!3m2!1sko!2skr!4v1764232635364!5m2!1sko!2skr", photo: "images/idx_room.jpg",    caption: "Joint Laboratory and Specialized Laboratory" },
+      daejeon: { map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1515.728781183824!2d127.39857495577911!3d36.39183234739905!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x356549e5f5e2c115%3A0x9fa8118c8f12fab8!2z7ZWc6rWt6rO87ZWZ6riw7Iig7JuQIOu2gOyGjTPrj5k!5e0!3m2!1sko!2skr!4v1764233489042!5m2!1sko!2skr", photo: "images/idx_mob.jpg",     caption: "Mobility Hall Battery Experiment Laboratory" },
+      seoul:   { map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1828.7346443921303!2d127.39745776395866!3d36.39179027058697!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x356549e62b0b4917%3A0x4981e0be5c3cfe64!2z7ZWc6rWt6rO87ZWZ6riw7Iig7JuQIOynhOumrOq0gA!5e0!3m2!1sko!2skr!4v1764233444299!5m2!1sko!2skr", photo: "images/idx_truth.jpg",  caption: "Truth Hall Wet Laboratory" },
+      factory: { map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.234172724379!2d126.57146784475499!3d33.443205089713096!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x350cfd6bfecfa743%3A0xe0c352bfdd34a97!2z7IS466-47JaR67mM65Sp!5e0!3m2!1sko!2skr!4v1764233539789!5m2!1sko!2skr", photo: "images/idx_factory.jpg", caption: "Eco-Friendly Vehicle Research Center" }
     };
-
     const mapFrame = document.getElementById("labMap");
-    const photo = document.getElementById("labPhoto");
-    const caption = document.getElementById("labCaption");
-
+    const labPhoto = document.getElementById("labPhoto");
+    const locCapt  = document.getElementById("labCaption");
     document.querySelectorAll(".loc-btn").forEach(btn => {
-
       btn.addEventListener("click", () => {
-
-        const key = btn.getAttribute("data-map");
+        const key  = btn.getAttribute("data-map");
         const data = mapUrls[key];
-
-        mapFrame.src = data.map;
-        photo.src = data.photo;
-        caption.innerText = data.caption;
-
+        mapFrame.src      = data.map;
+        labPhoto.src      = data.photo;
+        locCapt.innerText = data.caption;
       });
-
     });
+
+    // ─────────────────────────────────────────
+    // ADMIN LOGIN  (ID + 공유 비밀번호)
+    //
+    // • 비밀번호는 모두 동일: '0409'
+    // • ID 목록만 여기서 관리 — 필요 시 추가/삭제
+    // • 로그인 성공 시 admin.html 로 이동하며
+    //   URL 파라미터(?user=ID)로 접속자를 전달
+    // ─────────────────────────────────────────
+    const ADMIN_PW   = btoa('0409');       // 공유 비밀번호 (base64)
+    const ADMIN_PAGE = 'admin.html';
+
+    // ▼ 허용 ID 목록 — 소문자로 비교
+    const ALLOWED_IDS = [
+      'admin',
+      'yoonkoo',
+      'dain',
+      'yeonghwan',
+      'dongwook',
+      'donghae',
+      'jinho',
+      'cheoljin',
+      'gudqls0623',
+      'dongmin',
+    ];
+
+    const adminBtn        = document.getElementById('adminBtn');
+    const adminModalBg    = document.getElementById('adminModalBg');
+    const adminModalClose = document.getElementById('adminModalClose');
+    const adminIdInput    = document.getElementById('adminIdInput');
+    const adminPwInput    = document.getElementById('adminPwInput');
+    const adminSubmit     = document.getElementById('adminSubmit');
+    const adminErr        = document.getElementById('adminErr');
+    const adminUserBadge  = document.getElementById('adminUserBadge');
+    const adminUserBadgeText = document.getElementById('adminUserBadgeText');
+
+    function openAdminModal() {
+      adminModalBg.classList.add('open');
+      adminIdInput.value = '';
+      adminPwInput.value = '';
+      adminErr.textContent = '';
+      adminUserBadge.classList.remove('visible');
+      setTimeout(() => adminIdInput.focus(), 150);
+    }
+    function closeAdminModal() {
+      adminModalBg.classList.remove('open');
+      adminIdInput.value = '';
+      adminPwInput.value = '';
+      adminErr.textContent = '';
+      adminUserBadge.classList.remove('visible');
+    }
+
+    function shakeField(el) {
+      el.classList.remove('shake');
+      void el.offsetWidth;          // reflow
+      el.classList.add('shake');
+      el.addEventListener('animationend', () => el.classList.remove('shake'), { once: true });
+    }
+
+    function checkAdminLogin() {
+      const id = adminIdInput.value.trim().toLowerCase();
+      const pw = adminPwInput.value;
+
+      if (!id) {
+        adminErr.textContent = 'ID를 입력해주세요.';
+        shakeField(adminIdInput);
+        adminIdInput.value = '';
+        return;
+      }
+      if (!ALLOWED_IDS.includes(id)) {
+        adminErr.textContent = '등록되지 않은 ID입니다.';
+        shakeField(adminIdInput);
+        adminIdInput.value = '';
+        adminPwInput.value = '';
+        adminIdInput.focus();
+        return;
+      }
+      if (btoa(pw) !== ADMIN_PW) {
+        adminErr.textContent = '비밀번호가 올바르지 않습니다.';
+        shakeField(adminPwInput);
+        adminPwInput.value = '';
+        adminPwInput.focus();
+        return;
+      }
+
+      // ✅ 로그인 성공
+      adminErr.textContent = '';
+      adminUserBadgeText.textContent = `${adminIdInput.value.trim()} 으로 로그인되었습니다`;
+      adminUserBadge.classList.add('visible');
+
+      setTimeout(() => {
+        closeAdminModal();
+        window.location.href = `${ADMIN_PAGE}?user=${encodeURIComponent(id)}`;
+      }, 800);
+    }
+
+    adminBtn.addEventListener('click', openAdminModal);
+    adminModalClose.addEventListener('click', closeAdminModal);
+    adminModalBg.addEventListener('click', e => { if (e.target === adminModalBg) closeAdminModal(); });
+    adminSubmit.addEventListener('click', checkAdminLogin);
+    adminPwInput.addEventListener('keydown', e => { if (e.key === 'Enter') checkAdminLogin(); });
+    adminIdInput.addEventListener('keydown', e => { if (e.key === 'Enter') adminPwInput.focus(); });
   </script>
 </body>
 </html>

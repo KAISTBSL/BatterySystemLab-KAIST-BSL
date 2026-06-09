@@ -2,238 +2,251 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>Counterpart - Battery System Laboratory</title>
+  <title>Counterpart · Battery System Laboratory</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:      #0c1828;
+      --surface: #132338;
+      --surface2:#192e4a;
+      --surface3:#1e3a5e;
+      --border:  rgba(102,204,255,0.16);
+      --border2: rgba(102,204,255,0.30);
+      --accent:  #007acc;
+      --accent2: #66ccff;
+      --text:    #dde2ef;
+      --text2:   #96a8c8;
+      --text3:   #4a6080;
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'Pretendard', -apple-system, sans-serif;
+      --r: 14px;
+    }
+
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      font-family: "Noto Sans KR", "Arial", sans-serif;
+      font-family: var(--sans);
       line-height: 1.6;
-      scroll-behavior: smooth;
-      background: 
-        linear-gradient(rgba(245, 245, 245, 0.85), rgba(245, 245, 245, 0.85)),
-        url("https://img.hankyung.com/photo/202405/AA.36677880.1.jpg") no-repeat center/cover;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(102,204,255,0.032) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(102,204,255,0.032) 1px, transparent 1px);
+      background-size: 52px 52px;
+    }
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse 80% 40% at 50% -5%,
+        rgba(0,122,204,0.14) 0%, transparent 65%);
     }
 
+    /* ── HEADER ── */
     header {
-      background-color: #0a1321;
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(12,24,40,0.90);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
       color: white;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 2em;          /* 위아래 padding 제거 → 높이 고정 효과 */
-      min-height: 80px;            /* ✅ 상단 바 높이 고정 */
+      display: flex; flex-wrap: wrap;
+      justify-content: space-between; align-items: center;
+      padding: 0 2em; min-height: 72px;
     }
-
-    .logo {
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .logo-icon {
-      width: 96px; 
-      height: 96px;
-      object-fit: contain;     /* ✅ 비율 유지하면서 들어가도록 */
-    }
-    .logo { font-weight: bold; font-size: 1.5em; }
-
-    .logo-link {
-      text-decoration: none;   /* 밑줄 제거 */
-      color: white;            /* 기존 header의 글자색과 동일 */
-      font-weight: bold;
-      font-size: 1.0em;
-    }
-
-    .logo-link:hover {
-      color: #66ccff;          /* 마우스 올렸을 때 약간 강조 */
-    }
-
-    nav {
-      display: flex;
-      align-items: center;
-      gap: 4.5px;   /* ✅ margin 대신 간격統一 */
-      padding-bottom: 10px;
-    }
-
+    .logo { font-weight: bold; display: flex; align-items: center; gap: 10px; font-size: 1.5em; }
+    .logo-icon { width:80px; height:80px; object-fit:contain; }
+    .logo-link { text-decoration:none; color:white; font-weight:700; font-size:1em; transition:color .2s; }
+    .logo-link:hover { color: var(--accent2); }
+    nav { display:flex; align-items:center; gap:2px; padding-bottom:8px; }
     nav a {
-      color: white;
-      text-decoration: none;
-      margin-left: 20px;
-      font-size: 1em;
-      position: relative;
-      cursor: pointer;
+      color: rgba(255,255,255,0.72); text-decoration:none;
+      margin-left:18px; font-size:.93em; font-weight:400;
+      position:relative; cursor:pointer; transition:color .2s;
     }
+    nav a:hover { color: var(--accent2); }
     nav a::after {
-      content: "";
-      position: absolute;
-      left: 0; bottom: -3px;
-      width: 0; height: 2px;
-      background: #66ccff;
-      transition: width 0.3s;
+      content:""; position:absolute; left:0; bottom:-4px;
+      width:0; height:2px; background:var(--accent2);
+      border-radius:2px; transition:width .3s ease;
     }
-    nav a:hover::after { width: 100%; }
+    nav a:hover::after { width:100%; }
 
-    /* Hero Section */
+    /* ── HERO ── */
     .hero {
-      position: relative;
-      background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.30)),
-                  url("images/background.png") no-repeat center/cover;
-      height: 45vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      color: white;
+      position: relative; z-index: 1;
+      background:
+        linear-gradient(rgba(8,16,30,0.70), rgba(12,24,40,0.50)),
+        url("images/background.png") no-repeat center/cover;
+      height: 44vh; min-height: 250px;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      text-align: center; color: white; overflow: hidden;
+    }
+    .hero::after {
+      content:''; position:absolute; bottom:0; left:0; right:0;
+      height:100px;
+      background: linear-gradient(transparent, var(--bg));
+      pointer-events:none; z-index:2;
     }
     .hero-logo {
-      max-height: 80px;
-      margin-bottom: 1em;
-      opacity: 0.85;
+      max-height: 68px; margin-bottom:.9em; opacity:.85;
       animation: fadeInDown 1s ease-out;
+      filter: drop-shadow(0 0 16px rgba(102,204,255,0.2));
     }
-    .hero h1 { 
-      font-size: 2.5em; 
-      margin-bottom: 0.3em;
-      animation: fadeInDown 1.2s ease-out;
+    .hero-eyebrow {
+      font-family: var(--mono); font-size:11px; letter-spacing:3px;
+      text-transform:uppercase; color:var(--accent2);
+      background:rgba(102,204,255,0.08); border:1px solid rgba(102,204,255,0.2);
+      padding:4px 14px; border-radius:30px; margin-bottom:.9em;
+      animation:fadeInDown .8s ease-out; display:inline-block;
     }
-    .hero p { 
-      font-size: 1.2em; 
-      animation: fadeInUp 1.5s ease-out;
+    .hero h1 {
+      font-size: 2.4em; font-weight:700; margin-bottom:.25em;
+      animation:fadeInDown 1.1s ease-out;
+      background:linear-gradient(120deg,#fff 0%,var(--accent2) 100%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+    .hero p {
+      font-size:1em; color:rgba(255,255,255,0.55);
+      font-weight:300; animation:fadeInUp 1.4s ease-out;
     }
 
+    /* ── MAIN ── */
     main {
-      padding: 2em;
-      max-width: 1100px;
-      margin: auto;
-      text-align: center;
+      position: relative; z-index: 1;
+      padding: 2.5em 2em 5em;
+      max-width: 1100px; margin: auto;
     }
 
-    h2 { color: #003366; margin: 1.5em 0; }
+    /* Section header */
+    .section-header {
+      display: flex; align-items: center; gap: 14px;
+      margin: 3rem 0 1.8rem;
+    }
+    .section-header h2 {
+      font-family: var(--mono); font-size:11px; font-weight:500;
+      letter-spacing:2.5px; text-transform:uppercase;
+      color:var(--accent2); background:rgba(102,204,255,0.08);
+      border:1px solid rgba(102,204,255,0.18);
+      padding:5px 14px; border-radius:30px; white-space:nowrap;
+      display:flex; align-items:center; gap:7px;
+    }
+    .section-count {
+      background: rgba(102,204,255,0.18); color:var(--accent2);
+      font-size:10px; padding:1px 7px; border-radius:10px;
+      font-family:var(--mono);
+    }
+    .section-line { flex:1; height:1px; background:var(--border); }
 
-    /* ✅ 큰 카드 스타일 - 폭 200px 고정 */
-    .big-card-container {
+    /* ── PARTNER CARDS ── */
+    .card-container {
       display: grid;
-      grid-template-columns: repeat(auto-fill, 200px); /* 폭 200으로 고정 */
-      gap: 2.5em; /* 카드 사이 간격 */
+      grid-template-columns: repeat(auto-fill, 190px);
+      gap: 14px;
       justify-content: center;
-      margin-top: 2em;
     }
 
-    .big-card {
-      width: 200px;   /* 폭 200 */
-      height: 250px;  /* 높이 고정 */
-      background: white;
-      border-radius: 12px;
-      padding: 1em;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.12);
-      transition: transform 0.3s, box-shadow 0.3s;
+    .partner-card {
+      width: 190px;
+      background: #ffffff;
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: var(--r);
+      overflow: hidden;
+      transition: transform .22s, box-shadow .22s;
+      animation: fadeInUp .7s ease-in-out backwards;
       cursor: default;
-
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      animation: fadeInUp 1s ease-in-out;
     }
-    .big-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    .partner-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 14px 36px rgba(0,0,0,0.2);
     }
 
-    /* ✅ 로고 크기 */
-    .big-card img {
-      max-width: 200px;
-      max-height: 150px;
+    /* Image container */
+    .card-img-wrap {
+      width: 100%;
+      height: 128px;
+      display: flex; align-items: center; justify-content: center;
+      background: #f4f6f9;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      padding: 14px;
+    }
+    .card-img-wrap img {
+      max-width: 140px; max-height: 96px;
       object-fit: contain;
+      transition: filter .22s;
+    }
+    .partner-card:hover .card-img-wrap img {
+      filter: brightness(0.94) contrast(1.05);
     }
 
+    /* Text area */
     .card-text {
+      padding: .85em .95em .95em;
       text-align: center;
-      margin-top: auto;
+    }
+    .card-name {
+      font-size: .9em; font-weight: 700;
+      color: #0d1b2e; margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .card-desc {
+      font-size: .75em; color: #7a8fa8;
+      line-height: 1.45;
     }
 
-    .card-text h3 {
-      font-size: 1em;
-      color: #003366;
-      margin: 0 0 0.2em 0;
-    }
-    .card-text p {
-      color: #555;
-      font-size: 0.85em;
-      margin: 0;
-    }
+    /* Stagger animation */
+    .card-container .partner-card:nth-child(1){animation-delay:.04s}
+    .card-container .partner-card:nth-child(2){animation-delay:.08s}
+    .card-container .partner-card:nth-child(3){animation-delay:.12s}
+    .card-container .partner-card:nth-child(4){animation-delay:.16s}
+    .card-container .partner-card:nth-child(5){animation-delay:.20s}
+    .card-container .partner-card:nth-child(6){animation-delay:.24s}
+    .card-container .partner-card:nth-child(7){animation-delay:.28s}
+    .card-container .partner-card:nth-child(8){animation-delay:.32s}
 
+    /* ── FOOTER ── */
     footer {
-      background-color: #01022c;
-      color: white;
-      padding: 2em 3em;
-      margin-top: 3em;
-      font-size: 0.95em;
+      position:relative; z-index:1;
+      background:var(--surface); border-top:1px solid var(--border);
+      color:white; padding:2.5em 3em; font-size:.92em;
     }
-
-    .footer-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2em;
-    }
-
-    .footer-left, .footer-right {
-      flex: 1;
-      min-width: 250px;
-    }
-
-    .footer-left h3 {
-      margin-top: 0;
-      color: #66ccff;
-    }
-
-    .footer-right p {
-      margin: 0;       /* ✅ 문단 사이 간격 — 기본보다 조금 넓게 */
-      line-height: 0;      /* ✅ 줄 자체 높이 조정 (가독성 향상) */
-      padding-top: 4em;
-    }
-
-    .footer-right p:nth-child(2) {
-      margin-top: -1.8em; /* 간격을 줄이는 음수 여백 */
-    }
-
-    .footer-right a {
-      color: #66ccff;
-      text-decoration: none;
-    }
-
-    .footer-right a:hover {
-      text-decoration: underline;
-    }
-
+    .footer-container { display:flex; flex-wrap:wrap; gap:2em; }
+    .footer-left h3  { margin-top:0; color:var(--accent2); font-size:1em; margin-bottom:.6em; }
+    .footer-left p   { color:var(--text2); font-size:.9em; line-height:1.7; }
+    .footer-right    { flex:1; min-width:250px; padding-top:.5em; }
+    .footer-right p  { color:var(--text2); font-size:.9em; line-height:2; margin:0; }
+    .footer-right a  { color:var(--accent2); text-decoration:none; }
+    .footer-right a:hover { color:white; }
     .footer-bottom {
-      text-align: center;
-      border-top: 1px solid rgba(255,255,255,0.2);
-      margin-top: 1.5em;
-      padding-top: 1em;
-      font-size: 0.85em;
-      color: #cccccc;
-    }
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-30px); }
-      to { opacity: 1; transform: translateY(0); }
+      text-align:center; border-top:1px solid var(--border);
+      margin-top:1.5em; padding-top:1em;
+      font-size:.82em; color:var(--text3);
     }
 
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeInDown { from{opacity:0;transform:translateY(-24px)}to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeInUp   { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
 
+    @media(max-width:600px){
+      .card-container { grid-template-columns: repeat(auto-fill, 160px); gap:10px; }
+      .partner-card   { width:160px; }
+      .card-img-wrap  { height:108px; }
+    }
   </style>
 </head>
 <body>
+
+  <!-- HEADER -->
   <header>
     <div class="logo">
       <a href="index.html" class="logo-link">Battery System Laboratory</a>
-      <img src="images\NEWLOGO.png" alt="Lab Logo" class="logo-icon">
+      <img src="images/NEWLOGO.png" alt="Lab Logo" class="logo-icon">
     </div>
     <nav>
       <a href="index.html">Home</a>
@@ -247,197 +260,149 @@
     </nav>
   </header>
 
-
-  <!-- Hero -->
+  <!-- HERO -->
   <section class="hero">
-    <img src="https://mo.kaist.ac.kr/wp-content/uploads/2022/08/logo_new-1-e1661933714657.png" 
+    <img src="https://mo.kaist.ac.kr/wp-content/uploads/2022/08/logo_new-1-e1661933714657.png"
          alt="KAIST Mobility Logo" class="hero-logo">
+    <div class="hero-eyebrow">Battery System Laboratory</div>
     <h1>Our Counterparts</h1>
-    <p>Industrial & International Collaboration Partners</p>
+    <p>Industrial &amp; International Collaboration Partners</p>
   </section>
 
   <main>
 
-    <!-- Industrial Collaboration -->
-    <h2>Industrial Collaboration</h2>
-    <div class="big-card-container">
-      <div class="big-card">
-        <img src="images\C_CTNS.jpg" alt="Company Logo">
-        <div class="card-text">
-          <h3>CTNS</h3>
-          <p>Reusable Golf Cart Analysis</p>
-        </div>
-      </div>
-      <div class="big-card">
-        <img src="images\C_EcoCAB.jpg" alt="Company Logo">
-        <div class="card-text">
-          <h3>Eco CAB</h3>
-          <p>Battery Pack Design, BPDU</p>
-        </div>
-      </div>
-      <div class="big-card">
-        <img src="images\C_FutureEV.jpg" alt="Company Logo">
-        <div class="card-text">
-          <h3>Future EV</h3>
-          <p>Mobile ESS</p>
-        </div>
-      </div>
-      <div class="big-card">
-        <img src="images\C_Hanyang.jpg" alt="Company Logo">
-        <div class="card-text">
-          <h3>Hanyang Electric</h3>
-          <p>PCS-BMS</p>
-        </div>
-      </div>
-      <!--<div class="big-card">
-        <img src="images\C_Hyundai Motor.jpg" alt="Company Logo">
-        <div class="card-text">
-          <h3>Hyundai Motors</h3>
-          <p>Battery Management System</p>
-        </div>
-      </div>-->
-      <div class="big-card">
-        <img src="images\C_LGEnergySolution.jpg" alt="Company Logo">
-        <div class="card-text">
-          <h3>LG EnergySolution</h3>
-          <p>Battery Thermal Runaway</p>
-        </div>
-      </div>
-      <div class="big-card">
-        <img src="images\C_MONA.jpg" alt="Company Logo">
-        <div class="card-text">
-          <h3>Mona</h3>
-          <p>AI-based BMS</p>
-        </div>
-      </div>
-      <div class="big-card">
-        <img src="images\C_Narnia.png" alt="Company Logo">
-        <div class="card-text">
-          <h3>Narnia Labs</h3>
-          <p>Self-reinforcing AI Solution</p>
-        </div>
-      </div>
-      <div class="big-card">
-        <img src="images\C_Onbridge.jpg" alt="Company Logo">
-        <div class="card-text">
-          <h3>OnBridge</h3>
-          <p>Virtual Module/Pack Analysis</p>
-        </div>
-      </div>
-      <!--<div class="big-card">
-        <img src="images\C_SDI.jpg" alt="Company Logo">
-        <div class="card-text">
-          <h3>Samsung SDI</h3>
-          <p>Thermal Propagation Zero</p>
-        </div>
-      </div>-->
+    <!-- INDUSTRIAL COLLABORATION -->
+    <div class="section-header">
+      <h2>
+        <i class="fa fa-industry" style="font-size:10px;opacity:.7"></i>
+        Industrial Collaboration
+        <span class="section-count">8</span>
+      </h2>
+      <div class="section-line"></div>
     </div>
-    
-    <!-- International Collaboration -->
-    <h2>Academic Collaboration</h2>
-    <div class="big-card-container">
-      <div class="big-card">
-        <img src="images\C_CAU.jpg" alt="Company Logo">
-        <div class="card-text">
-          <h3>ChungAng University</h3>
-          <p>Next-Gen Battery Degradation</p>
-        </div>
+
+    <div class="card-container">
+      <div class="partner-card">
+        <div class="card-img-wrap"><img src="images/C_CTNS.jpg" alt="CTNS"></div>
+        <div class="card-text"><div class="card-name">CTNS</div><div class="card-desc">Reusable Golf Cart Analysis</div></div>
       </div>
-      <div class="big-card">
-        <img src="images\C_KU.jpg" alt="Company Logo">
-        <div class="card-text">
-          <h3>Korea University</h3>
-          <p>Drone Battery Optimization</p>
-        </div>
+      <div class="partner-card">
+        <div class="card-img-wrap"><img src="images/C_EcoCAB.jpg" alt="Eco CAB"></div>
+        <div class="card-text"><div class="card-name">Eco CAB</div><div class="card-desc">Battery Pack Design, BPDU</div></div>
       </div>
-      <div class="big-card">
-        <img src="images\C_Missouri.jpg" alt="Company Logo">
-        <div class="card-text">
-          <h3>Missouri S&T</h3>
-          <p>Degradation Analysis</p>
-        </div>
+      <div class="partner-card">
+        <div class="card-img-wrap"><img src="images/C_FutureEV.jpg" alt="Future EV"></div>
+        <div class="card-text"><div class="card-name">Future EV</div><div class="card-desc">Mobile ESS</div></div>
       </div>
-      <div class="big-card">
-        <img src="images\C_MIT.jpg" alt="Company Logo">
-        <div class="card-text">
-          <h3>MIT</h3>
-          <p>Self-Adaptive AI-based System</p>
-        </div>
+      <div class="partner-card">
+        <div class="card-img-wrap"><img src="images/C_Hanyang.jpg" alt="Hanyang Electric"></div>
+        <div class="card-text"><div class="card-name">Hanyang Electric</div><div class="card-desc">PCS-BMS</div></div>
       </div>
-      <div class="big-card">
-        <img src="images\C_POSTECH.jpg" alt="Company Logo">
-        <div class="card-text">
-          <h3>POSTECH</h3>
-          <p>Thermal Propagation Zero</p>
-        </div>
+      <div class="partner-card">
+        <div class="card-img-wrap"><img src="images/C_LGEnergySolution.jpg" alt="LG Energy Solution"></div>
+        <div class="card-text"><div class="card-name">LG EnergySolution</div><div class="card-desc">Battery Thermal Runaway</div></div>
       </div>
-      <div class="big-card">
-        <img src="images\C_Purdue.jpg" alt="Company Logo">
-        <div class="card-text">
-          <h3>Purdue University</h3>
-          <p>Recycled Battery</p>
-        </div>
+      <div class="partner-card">
+        <div class="card-img-wrap"><img src="images/C_MONA.jpg" alt="Mona"></div>
+        <div class="card-text"><div class="card-name">Mona</div><div class="card-desc">AI-based BMS</div></div>
+      </div>
+      <div class="partner-card">
+        <div class="card-img-wrap"><img src="images/C_Narnia.png" alt="Narnia Labs"></div>
+        <div class="card-text"><div class="card-name">Narnia Labs</div><div class="card-desc">Self-reinforcing AI Solution</div></div>
+      </div>
+      <div class="partner-card">
+        <div class="card-img-wrap"><img src="images/C_Onbridge.jpg" alt="OnBridge"></div>
+        <div class="card-text"><div class="card-name">OnBridge</div><div class="card-desc">Virtual Module/Pack Analysis</div></div>
       </div>
     </div>
 
-    <!-- Public Institution Collaboration -->
-    <h2>Public Institution</h2>
-    <div class="big-card-container">
-      <div class="big-card">
-        <img src="images\C_ChungNamInstitute.jpg" alt="Company Logo">
-        <div class="card-text">
-          <h3>ChungNam Institute</h3>
-          <p>Mobile ESS</p>
-        </div>
+    <!-- ACADEMIC COLLABORATION -->
+    <div class="section-header">
+      <h2>
+        <i class="fa fa-university" style="font-size:10px;opacity:.7"></i>
+        Academic Collaboration
+        <span class="section-count">6</span>
+      </h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="card-container">
+      <div class="partner-card">
+        <div class="card-img-wrap"><img src="images/C_CAU.jpg" alt="ChungAng University"></div>
+        <div class="card-text"><div class="card-name">ChungAng University</div><div class="card-desc">Next-Gen Battery Degradation</div></div>
       </div>
-      <div class="big-card">
-        <img src="images\C_JBTP.jpg" alt="Company Logo">
-        <div class="card-text">
-          <h3>JeonBuk TP</h3>
-          <p>Battery Process Control</p>
-        </div>
+      <div class="partner-card">
+        <div class="card-img-wrap"><img src="images/C_KU.jpg" alt="Korea University"></div>
+        <div class="card-text"><div class="card-name">Korea University</div><div class="card-desc">Drone Battery Optimization</div></div>
       </div>
-      <div class="big-card">
-        <img src="images\C_Chem.jpg" alt="Company Logo">
-        <div class="card-text">
-          <h3>KRICT</h3>
-          <p>Advanced Dry Anode</p>
-        </div>
+      <div class="partner-card">
+        <div class="card-img-wrap"><img src="images/C_Missouri.jpg" alt="Missouri S&T"></div>
+        <div class="card-text"><div class="card-name">Missouri S&amp;T</div><div class="card-desc">Degradation Analysis</div></div>
       </div>
-      <div class="big-card">
-        <img src="images\C_KRISO.png" alt="Company Logo">
-        <div class="card-text">
-          <h3>KRISO</h3>
-          <p>BESS State Estimation</p>
-        </div>
+      <div class="partner-card">
+        <div class="card-img-wrap"><img src="images/C_MIT.jpg" alt="MIT"></div>
+        <div class="card-text"><div class="card-name">MIT</div><div class="card-desc">Self-Adaptive AI-based System</div></div>
+      </div>
+      <div class="partner-card">
+        <div class="card-img-wrap"><img src="images/C_POSTECH.jpg" alt="POSTECH"></div>
+        <div class="card-text"><div class="card-name">POSTECH</div><div class="card-desc">Thermal Propagation Zero</div></div>
+      </div>
+      <div class="partner-card">
+        <div class="card-img-wrap"><img src="images/C_Purdue.jpg" alt="Purdue University"></div>
+        <div class="card-text"><div class="card-name">Purdue University</div><div class="card-desc">Recycled Battery</div></div>
       </div>
     </div>
 
-    
+    <!-- PUBLIC INSTITUTION -->
+    <div class="section-header">
+      <h2>
+        <i class="fa fa-landmark" style="font-size:10px;opacity:.7"></i>
+        Public Institution
+        <span class="section-count">4</span>
+      </h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="card-container">
+      <div class="partner-card">
+        <div class="card-img-wrap"><img src="images/C_ChungNamInstitute.jpg" alt="ChungNam Institute"></div>
+        <div class="card-text"><div class="card-name">ChungNam Institute</div><div class="card-desc">Mobile ESS</div></div>
+      </div>
+      <div class="partner-card">
+        <div class="card-img-wrap"><img src="images/C_JBTP.jpg" alt="JeonBuk TP"></div>
+        <div class="card-text"><div class="card-name">JeonBuk TP</div><div class="card-desc">Battery Process Control</div></div>
+      </div>
+      <div class="partner-card">
+        <div class="card-img-wrap"><img src="images/C_Chem.jpg" alt="KRICT"></div>
+        <div class="card-text"><div class="card-name">KRICT</div><div class="card-desc">Advanced Dry Anode</div></div>
+      </div>
+      <div class="partner-card">
+        <div class="card-img-wrap"><img src="images/C_KRISO.png" alt="KRISO"></div>
+        <div class="card-text"><div class="card-name">KRISO</div><div class="card-desc">BESS State Estimation</div></div>
+      </div>
+    </div>
+
   </main>
 
+  <!-- FOOTER -->
   <footer>
     <div class="footer-container">
-      <!-- 왼쪽: 연구실 정보 -->
       <div class="footer-left">
         <h3>Battery System Laboratory</h3>
-        <p>
-          KAIST, CCS Graduate School of Mobility
-          193, Munji-ro, Yuseong-gu, Daejeon, 34051, Republic of Korea
-        </p>
-        <p><strong>Location:</strong> Faculty Wing, F440</p>
+        <p>KAIST, CCS Graduate School of Mobility<br>
+           193, Munji-ro, Yuseong-gu, Daejeon, 34051, Republic of Korea</p>
+        <p style="margin-top:.5em"><strong style="color:var(--text)">Location:</strong> Faculty Wing, F440</p>
       </div>
-
-      <!-- 오른쪽: 연락처 정보 -->
       <div class="footer-right">
-        <p><strong>Phone:</strong> +82 042-350-1762</p>
-        <p><strong>Email:</strong> <a href="mailto:yoonklee@kaist.ac.kr">yoonklee@kaist.ac.kr</a></p>
+        <p><strong style="color:var(--text)">Phone:</strong> +82 042-350-1762</p>
+        <p><strong style="color:var(--text)">Email:</strong>
+          <a href="mailto:yoonklee@kaist.ac.kr">yoonklee@kaist.ac.kr</a></p>
       </div>
     </div>
-
     <div class="footer-bottom">
       <p>&copy; 2025 Battery System Laboratory | All Rights Reserved</p>
     </div>
   </footer>
+
 </body>
 </html>

@@ -2,271 +2,255 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>Equipment - Battery System Laboratory</title>
+  <title>Equipment · Battery System Laboratory</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    body {
-      margin: 0;
-      font-family: "Noto Sans KR", "Arial", sans-serif;
-      line-height: 1.6;
-      scroll-behavior: smooth;
-      background: 
-        linear-gradient(rgba(245, 245, 245, 0.85), rgba(245, 245, 245, 0.85)),
-        url("https://img.hankyung.com/photo/202405/AA.36677880.1.jpg") no-repeat center/cover;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:      #0c1828;
+      --surface: #132338;
+      --surface2:#192e4a;
+      --surface3:#1e3a5e;
+      --border:  rgba(102,204,255,0.16);
+      --border2: rgba(102,204,255,0.30);
+      --accent:  #007acc;
+      --accent2: #66ccff;
+      --text:    #dde2ef;
+      --text2:   #96a8c8;
+      --text3:   #4a6080;
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'Pretendard', -apple-system, sans-serif;
+      --r: 12px;
+    }
+    html { scroll-behavior: smooth; }
+    body { margin:0; font-family:var(--sans); line-height:1.6; background:var(--bg); color:var(--text); min-height:100vh; }
+
+    body::before {
+      content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+      background-image:
+        linear-gradient(rgba(102,204,255,0.032) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(102,204,255,0.032) 1px,transparent 1px);
+      background-size:52px 52px;
+    }
+    body::after {
+      content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+      background:radial-gradient(ellipse 80% 40% at 50% -5%,rgba(0,122,204,0.14) 0%,transparent 65%);
     }
 
+    /* ── HEADER ── */
     header {
-      background-color: #0a1321;
-      color: white;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 2em;          /* 위아래 padding 제거 → 높이 고정 효과 */
-      min-height: 80px;            /* ✅ 상단 바 높이 고정 */
+      position:sticky; top:0; z-index:200;
+      background:rgba(12,24,40,0.90); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+      border-bottom:1px solid var(--border);
+      color:white; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center;
+      padding:0 2em; min-height:72px;
     }
-
-    .logo {
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .logo-icon {
-      width: 96px; 
-      height: 96px;
-      object-fit: contain;     /* ✅ 비율 유지하면서 들어가도록 */
-    }
-    .logo { font-weight: bold; font-size: 1.5em; }
-
-    .logo-link {
-      text-decoration: none;   /* 밑줄 제거 */
-      color: white;            /* 기존 header의 글자색과 동일 */
-      font-weight: bold;
-      font-size: 1.0em;
-    }
-
-    .logo-link:hover {
-      color: #66ccff;          /* 마우스 올렸을 때 약간 강조 */
-    }
-
-    nav {
-      display: flex;
-      align-items: center;
-      gap: 4.5px;   /* ✅ margin 대신 간격統一 */
-      padding-bottom: 10px;
-    }
-
+    .logo { font-weight:bold; display:flex; align-items:center; gap:10px; font-size:1.5em; }
+    .logo-icon { width:80px; height:80px; object-fit:contain; }
+    .logo-link { text-decoration:none; color:white; font-weight:700; font-size:1em; transition:color .2s; }
+    .logo-link:hover { color:var(--accent2); }
+    nav { display:flex; align-items:center; gap:2px; padding-bottom:8px; }
     nav a {
-      color: white;
-      text-decoration: none;
-      margin-left: 20px;
-      font-size: 1em;
-      position: relative;
-      cursor: pointer;
+      color:rgba(255,255,255,0.72); text-decoration:none; margin-left:18px;
+      font-size:.93em; font-weight:400; position:relative; cursor:pointer; transition:color .2s;
     }
+    nav a:hover { color:var(--accent2); }
     nav a::after {
-      content: "";
-      position: absolute;
-      left: 0; bottom: -3px;
-      width: 0; height: 2px;
-      background: #66ccff;
-      transition: width 0.3s;
+      content:""; position:absolute; left:0; bottom:-4px;
+      width:0; height:2px; background:var(--accent2); border-radius:2px; transition:width .3s ease;
     }
-    nav a:hover::after { width: 100%; }
+    nav a:hover::after { width:100%; }
 
-    /* Hero */
+    /* ── HERO ── */
     .hero {
-      position: relative;
-      background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.30)),
-                  url("images/background.png") no-repeat center/cover;
-      height: 45vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      color: white;
+      position:relative; z-index:1;
+      background:
+        linear-gradient(rgba(8,16,30,0.70),rgba(12,24,40,0.50)),
+        url("images/background.png") no-repeat center/cover;
+      height:44vh; min-height:250px;
+      display:flex; flex-direction:column; justify-content:center; align-items:center;
+      text-align:center; color:white; overflow:hidden;
     }
-    .hero-logo { 
-      max-height: 80px; margin-bottom: 1em; opacity: 0.85; 
-      animation: fadeInDown 1s ease-out;
+    .hero::after {
+      content:''; position:absolute; bottom:0; left:0; right:0; height:100px;
+      background:linear-gradient(transparent,var(--bg)); pointer-events:none; z-index:2;
     }
-    .hero h1 { 
-      font-size: 2.5em; margin-bottom: 0.3em; 
-      animation: fadeInDown 1.2s ease-out;
+    .hero-logo {
+      max-height:68px; margin-bottom:.9em; opacity:.85;
+      animation:fadeInDown 1s ease-out; filter:drop-shadow(0 0 16px rgba(102,204,255,0.2));
     }
-    .hero p { 
-      font-size: 1.2em; 
-      animation: fadeInUp 1.5s ease-out;
+    .hero-eyebrow {
+      font-family:var(--mono); font-size:11px; letter-spacing:3px; text-transform:uppercase;
+      color:var(--accent2); background:rgba(102,204,255,0.08); border:1px solid rgba(102,204,255,0.2);
+      padding:4px 14px; border-radius:30px; margin-bottom:.9em;
+      animation:fadeInDown .8s ease-out; display:inline-block;
     }
-
-    main {
-      padding: 2em;
-      max-width: 1000px;
-      margin: auto;
+    .hero h1 {
+      font-size:2.4em; font-weight:700; margin-bottom:.25em; animation:fadeInDown 1.1s ease-out;
+      background:linear-gradient(120deg,#fff 0%,var(--accent2) 100%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
     }
-
-    h2 { 
-      color: #003366; 
-      margin-top: 1.5em; 
-      text-align: center;
-      animation: fadeInDown 1.5s ease-in-out;
+    .hero p {
+      font-size:1em; color:rgba(255,255,255,0.55); font-weight:300; animation:fadeInUp 1.4s ease-out;
     }
 
-    /* Tab 메뉴 */
-    .tab-container {
-      text-align: center;
-      margin: 2em 0;
-      border-bottom: 2px solid #ddd;
-    }
-    .tab-btn {
-      background: none;
-      border: none;
-      color: #003366;
-      font-size: 1.2em;
-      font-weight: bold;
-      margin: 0 1em;
-      padding: 0.5em;
-      cursor: pointer;
-      position: relative;
-    }
-    .tab-btn::after {
-      content: "";
-      position: absolute;
-      bottom: 0; left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 3px;
-      background: #66ccff;
-      transition: width 0.3s;
-    }
-    .tab-btn.active::after {
-      width: 100%;
-    }
-    .tab-btn:hover { color: #66ccff; }
+    /* ── MAIN ── */
+    main { position:relative; z-index:1; padding:2.5em 2em 5em; max-width:1100px; margin:auto; }
 
-    main {
-      padding: 2em;
-      max-width: 1100px;
-      margin: auto;
+    .section-header {
+      display:flex; align-items:center; gap:14px; margin:2.5rem 0 1.5rem;
     }
+    .section-header h2 {
+      font-family:var(--mono); font-size:11px; font-weight:500;
+      letter-spacing:2.5px; text-transform:uppercase;
+      color:var(--accent2); background:rgba(102,204,255,0.08);
+      border:1px solid rgba(102,204,255,0.18);
+      padding:5px 14px; border-radius:30px; white-space:nowrap;
+      display:flex; align-items:center; gap:7px;
+    }
+    .section-line { flex:1; height:1px; background:var(--border); }
 
-    h2 { color: #003366; text-align: center; margin: 1.5em 0; }
+    /* ── EQUIPMENT TABLE ── */
+    .eq-table-wrap {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:16px; overflow:hidden;
+      box-shadow:0 8px 32px rgba(0,0,0,0.28); margin-bottom:1em;
+    }
+    .eq-table {
+      width:100%; border-collapse:collapse; font-size:.92em; text-align:center;
+    }
+    .eq-table thead tr { background:var(--surface3); }
+    .eq-table thead th {
+      padding:13px 16px; color:var(--accent2);
+      font-family:var(--mono); font-size:11px; letter-spacing:1.5px; text-transform:uppercase;
+      border-bottom:1px solid var(--border2); font-weight:500;
+    }
+    .eq-table tbody td {
+      padding:10px 14px; border:1px solid var(--border); color:var(--text2); font-size:.9em;
+    }
+    .eq-table tbody tr { transition:background .18s; }
+    .eq-table tbody tr:hover { background:rgba(102,204,255,0.05); }
+    .eq-table tbody tr:hover td { color:var(--text); }
 
-    .pub-item { 
-      display: flex;                 /* 🔹 가로 배치 */
-      align-items: flex-start;
-      margin: 1em 0; 
-      padding: 1em; 
-      background: white; 
-      border-radius: 8px; 
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1); 
-      animation: fadeInUp 0.6s ease-in-out;
-    }
-    .pub-img {
-      height: 275px;
-      width: 275px;               /* 🔹 이미지 크기 고정 */
-      margin-right: 3em;
-    }
-    .pub-img img {
-      width: 100%;
-      border-radius: 6px;
-      object-fit: cover;
-    }
-    .pub-details {
-      flex: 1;                       /* 🔹 오른쪽은 남는 공간 다 사용 */
-    }
-    .pub-title {
-      font-weight: bold;
-      margin-bottom: 0.4em;
-      font-size: 1.1em;
-    }
-    .pub-meta {
-      font-style: italic;
-      color: #444;
-      margin-bottom: 0.6em;
-    }
-    .pub-authors {
-      margin-top: 0.4em;
-      font-size: 0.95em;
-    }
-    .pub-number {
-      margin-top: 0.4em;
-      font-size: 0.75em;
-      color: #585b5e;
-    }
-    .pub-links a { 
-      margin-right: 10px; 
-      font-size: 0.9em; 
-      color: #003366; 
-      text-decoration: none; 
-    }
-    .pub-links a:hover { text-decoration: underline; }
+    /* Row background groups */
+    .row-ea  { background:rgba(59,130,246,0.05); }
+    .row-sc  { background:rgba(62,207,142,0.04); }
+    .row-sw  { background:rgba(167,139,250,0.04); }
+    .row-bat { background:rgba(244,168,50,0.04); }
 
+    /* Category cell styling */
+    .cat-cell {
+      font-weight:700; color:var(--text); font-size:.88em;
+      letter-spacing:.3px; vertical-align:middle;
+    }
+    .cat-cell.ea  { border-left:3px solid #3b82f6 !important; color:#93c5fd; }
+    .cat-cell.sc  { border-left:3px solid #3ecf8e !important; color:#6ee7b7; }
+    .cat-cell.sw  { border-left:3px solid #a78bfa !important; color:#c4b5fd; }
+    .cat-cell.bat { border-left:3px solid #f4a832 !important; color:#fcd34d; }
+
+    /* ── SPEC CARDS ── */
+    .spec-list { display:flex; flex-direction:column; gap:12px; }
+
+    .spec-card {
+      background:#ffffff; border:1px solid rgba(0,0,0,0.08);
+      border-radius:var(--r); overflow:hidden;
+      display:flex; align-items:stretch;
+      transition:transform .22s, border-color .22s, box-shadow .22s;
+      animation:fadeInUp .6s ease-in-out backwards;
+    }
+    .spec-card:hover {
+      transform:translateY(-3px);
+      border-color:rgba(0,0,0,0.14);
+      box-shadow:0 10px 32px rgba(0,0,0,0.18);
+    }
+    /* left accent stripe by category */
+    .spec-card.ea  { border-left:3px solid #3b82f6; }
+    .spec-card.sc  { border-left:3px solid #3ecf8e; }
+    .spec-card.sw  { border-left:3px solid #a78bfa; }
+    .spec-card.bat { border-left:3px solid #f4a832; }
+    .spec-card.hw  { border-left:3px solid #007acc; }
+
+    .spec-card:nth-child(1){animation-delay:.04s}
+    .spec-card:nth-child(2){animation-delay:.08s}
+    .spec-card:nth-child(3){animation-delay:.12s}
+    .spec-card:nth-child(4){animation-delay:.16s}
+    .spec-card:nth-child(5){animation-delay:.20s}
+    .spec-card:nth-child(6){animation-delay:.24s}
+    .spec-card:nth-child(7){animation-delay:.28s}
+    .spec-card:nth-child(8){animation-delay:.32s}
+
+    .spec-img {
+      width:240px; min-width:240px; height:220px;
+      overflow:hidden; flex-shrink:0; background:#f4f6f9;
+      display:flex; align-items:center; justify-content:center;
+      border-right:1px solid rgba(0,0,0,0.06);
+    }
+    .spec-img img {
+      width:100%; height:100%; object-fit:cover;
+      display:block; transition:transform .3s;
+    }
+    .spec-card:hover .spec-img img { transform:scale(1.04); }
+
+    .spec-body {
+      flex:1; padding:1.5em 1.8em;
+      display:flex; flex-direction:column; gap:.5em;
+    }
+    .spec-title {
+      font-size:1.05em; font-weight:700; color:#0d1b2e; line-height:1.3;
+    }
+    .spec-meta {
+      font-size:.82em; color:#7a8fa8; font-style:italic;
+      display:flex; align-items:center; gap:5px;
+    }
+    .spec-model {
+      font-family:var(--mono); font-size:.82em; color:#007acc;
+      background:rgba(0,122,204,0.07); border:1px solid rgba(0,122,204,0.18);
+      padding:2px 10px; border-radius:4px; display:inline-block; width:fit-content;
+    }
+    .spec-list-inner {
+      margin:0; padding-left:1.1em;
+      font-size:.88em; color:#3a4e66; line-height:1.85;
+      flex:1;
+    }
+    .spec-list-inner li { margin-bottom:.1em; }
+    .spec-list-inner b  { color:#0d1b2e; font-weight:600; }
+    .spec-divider { height:1px; background:#e8ecf0; margin:.4em 0; }
+
+    /* ── FOOTER ── */
     footer {
-      background-color: #01022c;
-      color: white;
-      padding: 2em 3em;
-      margin-top: 3em;
-      font-size: 0.95em;
+      position:relative; z-index:1;
+      background:var(--surface); border-top:1px solid var(--border);
+      color:white; padding:2.5em 3em; font-size:.92em;
     }
-
-    .footer-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2em;
-    }
-
-    .footer-left, .footer-right {
-      flex: 1;
-      min-width: 250px;
-    }
-
-    .footer-left h3 { color: #66ccff; margin-top: 0; }
-    .footer-right a { color: #66ccff; text-decoration: none; }
-    .footer-right a:hover { text-decoration: underline; }
-
+    .footer-container { display:flex; flex-wrap:wrap; gap:2em; }
+    .footer-left h3  { margin-top:0; color:var(--accent2); font-size:1em; margin-bottom:.6em; }
+    .footer-left p   { color:var(--text2); font-size:.9em; line-height:1.7; }
+    .footer-right    { flex:1; min-width:250px; padding-top:.5em; }
+    .footer-right p  { color:var(--text2); font-size:.9em; line-height:2; margin:0; }
+    .footer-right a  { color:var(--accent2); text-decoration:none; }
+    .footer-right a:hover { color:white; }
     .footer-bottom {
-      text-align: center;
-      border-top: 1px solid rgba(255,255,255,0.2);
-      margin-top: 1.5em;
-      padding-top: 1em;
-      font-size: 0.85em;
-      color: #cccccc;
+      text-align:center; border-top:1px solid var(--border);
+      margin-top:1.5em; padding-top:1em; font-size:.82em; color:var(--text3);
     }
 
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeInDown { from{opacity:0;transform:translateY(-24px)}to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeInUp   { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
 
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+    @media(max-width:700px){
+      .spec-card  { flex-direction:column; }
+      .spec-img   { width:100%; min-width:0; height:180px; }
     }
-
-    table tbody tr:hover {
-      background-color: #e8f2ff;   /* 🔹 hover 시 파란빛 강조 */
-      transition: background 0.2s ease-in-out;
-    }
-    table th {
-      letter-spacing: 0.5px;
-      font-size: 1em;
-    }
-    table td {
-      padding: 10px;
-    }
-
   </style>
 </head>
 <body>
 
-  <!-- Header -->
+  <!-- HEADER -->
   <header>
     <div class="logo">
       <a href="index.html" class="logo-link">Battery System Laboratory</a>
-      <img src="images\NEWLOGO.png" alt="Lab Logo" class="logo-icon">
+      <img src="images/NEWLOGO.png" alt="Lab Logo" class="logo-icon">
     </div>
     <nav>
       <a href="index.html">Home</a>
@@ -280,615 +264,425 @@
     </nav>
   </header>
 
-  <!-- Hero -->
+  <!-- HERO -->
   <section class="hero">
     <img src="https://mo.kaist.ac.kr/wp-content/uploads/2022/08/logo_new-1-e1661933714657.png"
          alt="KAIST Mobility Logo" class="hero-logo">
+    <div class="hero-eyebrow">Battery System Laboratory</div>
     <h1>Equipment</h1>
     <p>Equipments and Facilities in our Lab</p>
   </section>
 
-  <!-- Main -->
   <main>
 
-    <table style="
-      width:100%; 
-      border-collapse:collapse; 
-      margin-bottom:2em; 
-      font-size:0.95em; 
-      text-align:center; 
-      box-shadow:0 4px 10px rgba(0,0,0,0.08);
-      border-radius:10px;
-      overflow:hidden;
-    ">
-      <thead style="background-color:#151644; color:white;">
-        <tr>
-          <th style="padding:12px; border:1px solid #ddd;">Category</th>
-          <th style="padding:12px; border:1px solid #ddd;">Equipment</th>
-          <th style="padding:12px; border:1px solid #ddd;">Model</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr style="background-color:#f3f6fa;">
-          <td rowspan="5" style="font-weight:bold; border:1px solid #ccc;">Experiment & Analysis</td>
-          <td style="border:1px solid #ccc;">Data Logger</td>
-          <td style="border:1px solid #ccc;">GL840</td>
-        </tr>
-        <tr style="background-color:#f3f6fa;">
-          <td style="border:1px solid #ccc;">Potentiostat</td>
-          <td style="border:1px solid #ccc;">BCS-915</td>
-        </tr>
-        <tr style="background-color:#f3f6fa;">
-          <td style="border:1px solid #ccc;">Constant Temperature Chamber</td>
-          <td style="border:1px solid #ccc;">S-CTC150R1</td>
-        </tr>
-        <tr style="background-color:#f3f6fa;">
-          <td style="border:1px solid #ccc;">DC Power Supply</td>
-          <td style="border:1px solid #ccc;">DP30-03TP</td>
-        </tr>
-        <tr style="background-color:#f3f6fa;">
-          <td style="border:1px solid #ccc;">Battery Jig</td>
-          <td style="border:1px solid #ccc;">Model for cylindrical cell</td>
-        </tr>
+    <!-- OVERVIEW TABLE -->
+    <div class="section-header">
+      <h2><i class="fa fa-list" style="font-size:10px;opacity:.7"></i> Equipment Overview</h2>
+      <div class="section-line"></div>
+    </div>
 
-        <tr style="background-color:#f9f9f9;">
-          <td rowspan="5" style="font-weight:bold; border:1px solid #ccc;">Safety Control</td>
-          <td style="border:1px solid #ccc;">Glove Box</td>
-          <td style="border:1px solid #ccc;">RAF-750</td>
-        </tr>
-        <tr style="background-color:#f9f9f9;">
-          <td style="border:1px solid #ccc;">Ion Cluster Cabinet</td>
-          <td style="border:1px solid #ccc;">ST-ION 1001F</td>
-        </tr>
-        <tr style="background-color:#f9f9f9;">
-          <td style="border:1px solid #ccc;">Fume Hood</td>
-          <td style="border:1px solid #ccc;">CAFU-02-10</td>
-        </tr>
-        <tr style="background-color:#f9f9f9;">
-          <td style="border:1px solid #ccc;">Vacuum Desiccator</td>
-          <td style="border:1px solid #ccc;">VLHK</td>
-        </tr>
-        <tr style="background-color:#f9f9f9;">
-          <td style="border:1px solid #ccc;">Gast Pump</td>
-          <td style="border:1px solid #ccc;">DOA-P704-AC</td>
-        </tr>
+    <div class="eq-table-wrap">
+      <table class="eq-table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Equipment</th>
+            <th>Model</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="row-ea">
+            <td rowspan="5" class="cat-cell ea">Experiment &amp; Analysis</td>
+            <td>Data Logger</td><td>GL840</td>
+          </tr>
+          <tr class="row-ea"><td>Potentiostat</td><td>BCS-915</td></tr>
+          <tr class="row-ea"><td>Constant Temperature Chamber</td><td>S-CTC150R1</td></tr>
+          <tr class="row-ea"><td>DC Power Supply</td><td>DP30-03TP</td></tr>
+          <tr class="row-ea"><td>Battery Jig</td><td>Model for cylindrical cell</td></tr>
 
-        <tr style="background-color:#eef5f8;">
-          <td rowspan="4" style="font-weight:bold; border:1px solid #ccc;">Software & Hardware Testing</td>
-          <td style="border:1px solid #ccc;">Computing Server</td>
-          <td style="border:1px solid #ccc;">ASUS RS720-E11-RS12U / Precision 7960 Tower</td>
-        </tr>
-        <tr style="background-color:#eef5f8;">
-          <td style="border:1px solid #ccc;">MCU Development Board</td>
-          <td style="border:1px solid #ccc;">C2000 Launchpad</td>
-        </tr>
-        <tr style="background-color:#eef5f8;">
-          <td style="border:1px solid #ccc;">EVM (Evaluation Module)</td>
-          <td style="border:1px solid #ccc;">Texas Instrument BQ76952EVM</td>
-        </tr>
-        <tr style="background-color:#eef5f8;">
-          <td style="border:1px solid #ccc;">EVM (Evaluation Module)</td>
-          <td style="border:1px solid #ccc;">Texas Instrument LM5170EVM-BIDIR</td>
-        </tr>
+          <tr class="row-sc">
+            <td rowspan="5" class="cat-cell sc">Safety Control</td>
+            <td>Glove Box</td><td>RAF-750</td>
+          </tr>
+          <tr class="row-sc"><td>Ion Cluster Cabinet</td><td>ST-ION 1001F</td></tr>
+          <tr class="row-sc"><td>Fume Hood</td><td>CAFU-02-10</td></tr>
+          <tr class="row-sc"><td>Vacuum Desiccator</td><td>VLHK</td></tr>
+          <tr class="row-sc"><td>Gast Pump</td><td>DOA-P704-AC</td></tr>
 
-        <tr style="background-color:#dbe4f1;">
-          <td rowspan="4" style="font-weight:bold; border:1px solid #ccc;">Battery</td>
-          <td style="border:1px solid #ccc;">Cylindrical Cell from <b>SAMSUNG SDI</b></td>
-          <td style="border:1px solid #ccc;">INR2170050G, INR1865035E, INR1865030Q</td>
-        </tr>
-        <tr style="background-color:#dbe4f1;">
-          <td style="border:1px solid #ccc;">Cylindrical Cell from <b>LG EnergySolution</b></td>
-          <td style="border:1px solid #ccc;">INR18650MJ1</td>
-        </tr>
-        <tr style="background-color:#dbe4f1;">
-          <td style="border:1px solid #ccc;">Pouch Cell from <b>SK on</b></td>
-          <td style="border:1px solid #ccc;">E-GMP (IONIQ5)</td>
-        </tr>
-        <tr style="background-color:#dbe4f1;">
-          <td style="border:1px solid #ccc;">Prismatic Cell from <b>EVE Energy</b></td>
-          <td style="border:1px solid #ccc;">EVE LF230 (X-PACK)</td>
-        </tr>
-      </tbody>
-    </table>
+          <tr class="row-sw">
+            <td rowspan="4" class="cat-cell sw">Software &amp; Hardware Testing</td>
+            <td>Computing Server</td><td>ASUS RS720-E11-RS12U / Precision 7960 Tower</td>
+          </tr>
+          <tr class="row-sw"><td>MCU Development Board</td><td>C2000 Launchpad</td></tr>
+          <tr class="row-sw"><td>EVM (Evaluation Module)</td><td>TI BQ76952EVM</td></tr>
+          <tr class="row-sw"><td>EVM (Evaluation Module)</td><td>TI LM5170EVM-BIDIR</td></tr>
 
-    <h2>Detailed Specification</h2>
+          <tr class="row-bat">
+            <td rowspan="4" class="cat-cell bat">Battery</td>
+            <td>Cylindrical Cell — <b>SAMSUNG SDI</b></td><td>INR2170050G, INR1865035E, INR1865030Q</td>
+          </tr>
+          <tr class="row-bat"><td>Cylindrical Cell — <b>LG EnergySolution</b></td><td>INR18650MJ1</td></tr>
+          <tr class="row-bat"><td>Pouch Cell — <b>SK on</b></td><td>E-GMP (IONIQ5)</td></tr>
+          <tr class="row-bat"><td>Prismatic Cell — <b>EVE Energy</b></td><td>EVE LF230 (X-PACK)</td></tr>
+        </tbody>
+      </table>
+    </div>
 
-      <div class="pub-item">
-        <div class="pub-img">
-          <img src="images\E_Server.jpg" alt="Server Specification">
-        </div>
+    <!-- DETAILED SPECS -->
+    <div class="section-header">
+      <h2><i class="fa fa-microchip" style="font-size:10px;opacity:.7"></i> Detailed Specification</h2>
+      <div class="section-line"></div>
+    </div>
 
-        <div class="pub-details">
-          <div class="pub-title">Computing Server</div>
-          <div class="pub-meta"><em>@ BSL Server Room</em></div>
+    <div class="spec-list">
 
-          <div class="pub-authors">
-            <p style="margin:0.5em 0; font-size:0.95em;">
-              <b>Model:</b> ASUS RS720-E11-RS12U
-            </p>
-
-            <ul style="margin:0; padding-left:18px; font-size:0.95em; line-height:1.5;">
-              <li><b>CPU:</b> Intel® Xeon® Gold 6526Y × 2 (16 cores, 2.80 GHz, 37.5 MB Cache)</li>
-              <li><b>RAM:</b> 128 GB DDR5 (PC5-38400 ECC/REG 64 GB × 2)</li>
-              <li><b>SSD:</b> 1.92 TB PCIe 4.0 ×4 NVMe (3D4 TLC)</li>
-              <li><b>Operating System:</b> Linux</li>
-            </ul>
-          </div>
+      <!-- Computing Server 1 -->
+      <div class="spec-card sw">
+        <div class="spec-img"><img src="images/E_Server.jpg" alt="Computing Server"></div>
+        <div class="spec-body">
+          <div class="spec-title">Computing Server</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> BSL Server Room</div>
+          <div class="spec-model">ASUS RS720-E11-RS12U</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>CPU:</b> Intel® Xeon® Gold 6526Y × 2 (16 cores, 2.80 GHz, 37.5 MB Cache)</li>
+            <li><b>RAM:</b> 128 GB DDR5 (PC5-38400 ECC/REG 64 GB × 2)</li>
+            <li><b>SSD:</b> 1.92 TB PCIe 4.0 ×4 NVMe (3D4 TLC)</li>
+            <li><b>OS:</b> Linux</li>
+          </ul>
         </div>
       </div>
 
-      <div class="pub-item">
-        <div class="pub-img">
-          <img src="images\E_Server2.png" alt="Server Specification">
-        </div>
-
-        <div class="pub-details">
-          <div class="pub-title">Computing Server</div>
-          <div class="pub-meta"><em>@ BSL Server Room</em></div>
-
-          <div class="pub-authors">
-            <p style="margin:0.5em 0; font-size:0.95em;">
-              <b>Model:</b> Precision 7960 Tower
-            </p>
-
-            <ul style="margin:0; padding-left:18px; font-size:0.95em; line-height:1.5;">
-              <li><b>CPU:</b> Intel® Xeon® w5-3525 (16 cores, 32 threads, 3.2GHz to 4.8GHz Turbo 290W, 45MB Cache)</li>
-              <li><b>RAM:</b> 192GB, DDR5</li>
-              <li><b>SSD:</b> 1 TB, M.2, PCIe NVMe</li>
-              <li><b>GPU:</b> NVIDIA RTX A5000 (24 GB GDDR6)</li>
-              <li><b>Operating System:</b> Windows</li>
-            </ul>
-          </div>
+      <!-- Computing Server 2 -->
+      <div class="spec-card sw">
+        <div class="spec-img"><img src="images/E_Server2.png" alt="Computing Server 2"></div>
+        <div class="spec-body">
+          <div class="spec-title">Computing Server</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> BSL Server Room</div>
+          <div class="spec-model">Precision 7960 Tower</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>CPU:</b> Intel® Xeon® w5-3525 (16 cores, 32 threads, 3.2–4.8 GHz Turbo, 290 W, 45 MB Cache)</li>
+            <li><b>RAM:</b> 192 GB DDR5</li>
+            <li><b>SSD:</b> 1 TB M.2 PCIe NVMe</li>
+            <li><b>GPU:</b> NVIDIA RTX A5000 (24 GB GDDR6)</li>
+            <li><b>OS:</b> Windows</li>
+          </ul>
         </div>
       </div>
 
-      <div class="pub-item">
-        <div class="pub-img">
-          <img src="images\E_Glove.jpg" alt="Data Logger">
-        </div>
-
-        <div class="pub-details">
-          <div class="pub-title">Glove Box</div>
-          <div class="pub-meta"><em>@ Specialized Laboratory</em></div>
-
-          <div class="pub-authors">
-            <b>Model:</b> RAF-750 Front Door Type<br>
-
-            <ul style="margin:0; padding-left:18px; font-size:0.95em; line-height:1.5;">
-              <li><b>External Dimensions:</b> Approx. W700 × D500 × H500 mm (custom order)</li>
-              <li><b>Material:</b> 5T acrylic panel (transparent type)</li>
-              <li><b>Gloves:</b> 1 × Latex glove (front center)</li>
-              <li><b>Gas Valves:</b> 2 × side-mounted gas valves (left/right)</li>
-            </ul>
-          </div>
+      <!-- Glove Box -->
+      <div class="spec-card sc">
+        <div class="spec-img"><img src="images/E_Glove.jpg" alt="Glove Box"></div>
+        <div class="spec-body">
+          <div class="spec-title">Glove Box</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
+          <div class="spec-model">RAF-750 Front Door Type</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>External Dimensions:</b> Approx. W700 × D500 × H500 mm (custom order)</li>
+            <li><b>Material:</b> 5T acrylic panel (transparent type)</li>
+            <li><b>Gloves:</b> 1 × Latex glove (front center)</li>
+            <li><b>Gas Valves:</b> 2 × side-mounted gas valves (left/right)</li>
+          </ul>
         </div>
       </div>
 
-      <div class="pub-item">
-        <div class="pub-img">
-          <img src="images\E_Datalogger.jpg" alt="Data Logger">
-        </div>
-
-        <div class="pub-details">
-          <div class="pub-title">Data Logger</div>
-          <div class="pub-meta"><em>@ Jeju Eco-Friendly Smart Vehicle Laboratory</em></div>
-
-          <div class="pub-authors">
-            <b>Model:</b> GL840<br>
-
-            <ul style="margin:0; padding-left:18px; font-size:0.95em; line-height:1.5;">
-              <li><b>Functions:</b> Trigger / Alarm / Pulse input / Calculation / Search / Backup / Check-sum / Scaling</li>
-              <li><b>Power Supply:</b> AC 100–240 V / DC 8.5–24 V / Dual 7.2 V 2900 mAh Battery Packs</li>
-              <li><b>Measurement Range:</b> Voltage (20 mV–100 V), Thermocouple & RTD (100–2000 °C), Humidity (0–100 % RH)</li>
-            </ul>
-          </div>
+      <!-- Data Logger -->
+      <div class="spec-card ea">
+        <div class="spec-img"><img src="images/E_Datalogger.jpg" alt="Data Logger"></div>
+        <div class="spec-body">
+          <div class="spec-title">Data Logger</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Jeju Eco-Friendly Smart Vehicle Laboratory</div>
+          <div class="spec-model">GL840</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Functions:</b> Trigger / Alarm / Pulse input / Calculation / Search / Backup / Check-sum / Scaling</li>
+            <li><b>Power Supply:</b> AC 100–240 V / DC 8.5–24 V / Dual 7.2 V 2900 mAh Battery Packs</li>
+            <li><b>Measurement Range:</b> Voltage (20 mV–100 V), Thermocouple &amp; RTD (100–2000 °C), Humidity (0–100 % RH)</li>
+          </ul>
         </div>
       </div>
 
-      <div class="pub-item">
-        <div class="pub-img">
-          <img src="images\E_Poten.jpg" alt="Potentiostat">
-        </div>
-        <div class="pub-details">
-          <div class="pub-title">Potentiostat</div>
-          <div class="pub-meta"><em>@ Mobility Hall</em></div>
-
-          <div class="pub-authors">
-            <b>Model:</b> BCS-915 (8-channel multichannel potentiostat)<br><br>
-
-            <ul style="margin:0; padding-left:18px; font-size:0.95em; line-height:1.5;">
-              <li><b>Voltage:</b> 0–9 V, Resolution 150 μV / Measurement 40 μV (18 bit)</li>
-              <li><b>Accuracy:</b> ±0.01 % of value ±0.3 mV, Slew rate 3 kV/s</li>
-              <li><b>Current:</b> ±15 A per channel (5 ranges from 10 A to 1 mA)</li>
-              <li><b>Resolution:</b> Control 80 nA / Measurement 20 nA (18 bit)</li>
-              <li><b>Accuracy:</b> 0.05 % of value ±0.015 % FSR (typ.)  |  Parallel up to ±120 A</li>
-              <li><b>EIS:</b> 8 channels, 10 kHz – 10 mHz range</li>
-              <li><b>Acquisition time:</b> 1 ms  |  <b>Time base:</b> 1 ms</li>
-            </ul>
-          </div>
+      <!-- Potentiostat -->
+      <div class="spec-card ea">
+        <div class="spec-img"><img src="images/E_Poten.jpg" alt="Potentiostat"></div>
+        <div class="spec-body">
+          <div class="spec-title">Potentiostat</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Mobility Hall</div>
+          <div class="spec-model">BCS-915 (8-channel)</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Voltage:</b> 0–9 V, Resolution 150 μV / Measurement 40 μV (18 bit)</li>
+            <li><b>Accuracy:</b> ±0.01% of value ±0.3 mV, Slew rate 3 kV/s</li>
+            <li><b>Current:</b> ±15 A per channel (5 ranges: 10 A – 1 mA)</li>
+            <li><b>Resolution:</b> Control 80 nA / Measurement 20 nA (18 bit)</li>
+            <li><b>Accuracy:</b> 0.05% of value ±0.015% FSR | Parallel up to ±120 A</li>
+            <li><b>EIS:</b> 8 channels, 10 kHz – 10 mHz | Acquisition time: 1 ms</li>
+          </ul>
         </div>
       </div>
 
-      <!--<div class="pub-item">
-        <div class="pub-img">
-          <img src="images\E_BTS5V15A.jpg" alt="Battery Testing Equipment">
-        </div>
-        <div class="pub-details">
-          <div class="pub-title">Battery Testing Equipment</div>
-          <div class="pub-meta"><em>@ Mobility Hall</em></div>
-
-          <div class="pub-authors">
-            <b>Model:</b> BTS-5V15A (8-channel battery testing system, BTS-4008Q-5V15A)<br><br>
-
-            <ul style="margin:0; padding-left:18px; font-size:0.95em; line-height:1.5;">
-              <li><b>Voltage:</b> 25 mV – 5 V (discharge min. 2 V), Accuracy ±0.02% FS, Stability ±0.04% FS</li>
-              <li><b>Current:</b> 4 ranges — 300 mA / 3 A / 6 A / 15 A, Accuracy ±0.02% FS, Stability ±0.1% FS</li>
-              <li><b>Resolution:</b> AD 24 bit / DA 24 bit  |  <b>Output power:</b> 75 W per channel</li>
-              <li><b>Charge modes:</b> CCC, CVC, CC&amp;CVC, CPC  |  <b>Discharge modes:</b> CCD, CPD, CRD, CVD, CC&amp;CVD</li>
-              <li><b>Pulse mode:</b> CCC, CPC (charge/discharge), min. pulse width 100 ms, up to 32 pulses</li>
-              <li><b>Timing:</b> Rise/switch time ≤1 ms / ≤10 ms  |  Step time format h:min:s:ms, up to 365×24 h/step</li>
-              <li><b>Cycle:</b> 1–65535 cycles, ≤255 steps, max 10-level nested loops  |  <b>DCIR:</b> by calculation</li>
-              <li><b>Communication:</b> TCP/IP via Ethernet  |  <b>Database:</b> MySQL  |  <b>Export:</b> Excel, TXT, Graph</li>
-            </ul>
-          </div>
-        </div>
-      </div>-->
-
-      <div class="pub-item">
-        <div class="pub-img">
-          <img src="images\E_Power.jpg" alt="DC Power Supply">
-        </div>
-
-        <div class="pub-details">
-          <div class="pub-title">DC Power Supply</div>
-          <div class="pub-meta"><em>@ Specialized Laboratory</em></div>
-
-          <div class="pub-authors">
-            <b>Model:</b> DP30-03TP (3-Channel DC Power Supply)<br>
-            <p style="margin:0.5em 0; font-size:0.95em;">
-              Converts AC voltage into a stable DC output for laboratory testing and electronic device evaluation.
-            </p>
-
-            <ul style="margin:0; padding-left:18px; font-size:0.95em; line-height:1.5;">
-              <li><b>Voltage:</b> 0 – 30 V (Resolution: 100 mV)</li>
-              <li><b>Current:</b> 0 – 3 A (1ch & 2ch, Resolution: 10 mA)</li>
-              <li><b>Power:</b> Max Output 180 W | Input: 115/230 V ±10%, 50/60 Hz</li>
-              <li><b>Line Fluctuation:</b> ±0.02% + 2 mV / 2 mA (for ±10% source voltage change)</li>
-              <li><b>Load Fluctuation:</b> ±0.02% + 5 mV / 5 mA (for 0–100% load variation)</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      
-      <div class="pub-item">
-        <div class="pub-img">
-          <img src="images\E_Chamber.jpg" alt="Constant Temperature Chamber">
-        </div>
-
-        <div class="pub-details">
-          <div class="pub-title">Constant Temperature Chamber</div>
-          <div class="pub-meta"><em>@ Mobility Hall</em></div>
-
-          <div class="pub-authors">
-            <b>Model:</b> S-CTC150R1<br><br>
-
-            <ul style="margin:0; padding-left:18px; font-size:0.95em; line-height:1.5;">
-              <li><b>Max Temp Range:</b> -25 ℃ – 150 ℃</li>
-              <li><b>Operating Range:</b> -20 ℃ – 120 ℃</li>
-            </ul>
-          </div>
+      <!-- DC Power Supply -->
+      <div class="spec-card ea">
+        <div class="spec-img"><img src="images/E_Power.jpg" alt="DC Power Supply"></div>
+        <div class="spec-body">
+          <div class="spec-title">DC Power Supply</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
+          <div class="spec-model">DP30-03TP (3-Channel)</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Voltage:</b> 0–30 V (Resolution: 100 mV)</li>
+            <li><b>Current:</b> 0–3 A (1ch &amp; 2ch, Resolution: 10 mA)</li>
+            <li><b>Power:</b> Max Output 180 W | Input: 115/230 V ±10%, 50/60 Hz</li>
+            <li><b>Line Fluctuation:</b> ±0.02% + 2 mV / 2 mA (for ±10% source voltage change)</li>
+            <li><b>Load Fluctuation:</b> ±0.02% + 5 mV / 5 mA (for 0–100% load variation)</li>
+          </ul>
         </div>
       </div>
 
-      <div class="pub-item">
-        <div class="pub-img">
-          <img src="images/E_Ion.jpg" alt="Ion Cluster Cabinet">
-        </div>
-
-        <div class="pub-details">
-          <div class="pub-title">Ion Cluster Cabinet</div>
-          <div class="pub-meta"><em>@ Mobility Hall</em></div>
-
-          <div class="pub-authors">
-            <b>Model:</b> ST-Ion 1001 F<br><br>
-
-            <ul style="margin:0; padding-left:18px; font-size:0.95em; line-height:1.5;">
-              <li><b>External Dimensions:</b> W800 × D550 × H1980 mm</li>
-              <li><b>Structure:</b> Steel plate with epoxy powder coating / Stainless handle</li>
-              <li><b>Door:</b> Polycarbonate window (5T), airtight sealing</li>
-              <li><b>Fan System:</b> AC sirocco fan with external motor — low noise & vibration minimized</li>
-              <li><b>Ion Cluster:</b> High-voltage ion cluster generator for oxidizing/removing harmful gases</li>
-              <li><b>Shelves:</b> Adjustable sliding shelves with perforated structure</li>
-              <li><b>Filter:</b> Carbon composite filter for chemical adsorption and deodorization</li>
-            </ul>
-          </div>
+      <!-- Constant Temperature Chamber -->
+      <div class="spec-card ea">
+        <div class="spec-img"><img src="images/E_Chamber.jpg" alt="Constant Temperature Chamber"></div>
+        <div class="spec-body">
+          <div class="spec-title">Constant Temperature Chamber</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Mobility Hall</div>
+          <div class="spec-model">S-CTC150R1</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Max Temp Range:</b> −25 ℃ – 150 ℃</li>
+            <li><b>Operating Range:</b> −20 ℃ – 120 ℃</li>
+          </ul>
         </div>
       </div>
 
-      <div class="pub-item">
-        <div class="pub-img">
-          <img src="images/E_INR21700-50G.jpg" alt="Samsung INR21700-50G 21700 Battery Cell">
-        </div>
-
-        <div class="pub-details">
-          <div class="pub-title">Samsung INR21700-50G Li-ion Battery Cell</div>
-          <div class="pub-meta"><em>@ Specialized Laboratory</em></div>
-
-          <div class="pub-authors">
-            <b>Model:</b> INR21700-50G (Lithium-ion 21700 cell)<br><br>
-
-            <ul style="margin:0; padding-left:18px; font-size:0.95em; line-height:1.5;">
-              <li><b>Standard Capacity:</b> 4,850 mAh (minimum)</li>
-              <li><b>Nominal Voltage:</b> 3.63 V</li>
-              <li><b>Charging Voltage:</b> 4.2 V (CC-CV method)</li>
-              <li><b>Max Discharge Current:</b> 9,700 mA (continuous) / 14,550 mA (peak)</li>
-              <li><b>Cell Type:</b> 21700 cylindrical (high-performance Li-ion)</li>
-              <li><b>Features:</b> High-energy density and stable performance for EV and power tools</li>
-            </ul>
-          </div>
+      <!-- Ion Cluster Cabinet -->
+      <div class="spec-card sc">
+        <div class="spec-img"><img src="images/E_Ion.jpg" alt="Ion Cluster Cabinet"></div>
+        <div class="spec-body">
+          <div class="spec-title">Ion Cluster Cabinet</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Mobility Hall</div>
+          <div class="spec-model">ST-Ion 1001 F</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>External Dimensions:</b> W800 × D550 × H1980 mm</li>
+            <li><b>Structure:</b> Steel plate with epoxy powder coating / Stainless handle</li>
+            <li><b>Door:</b> Polycarbonate window (5T), airtight sealing</li>
+            <li><b>Fan System:</b> AC sirocco fan — low noise &amp; vibration minimized</li>
+            <li><b>Ion Cluster:</b> High-voltage generator for oxidizing/removing harmful gases</li>
+            <li><b>Filter:</b> Carbon composite filter for chemical adsorption and deodorization</li>
+          </ul>
         </div>
       </div>
 
-      <div class="pub-item">
-        <div class="pub-img">
-          <img src="images/E_INR18650-35E.jpg" alt="Samsung INR18650-35E Li-ion Cell">
-        </div>
-
-        <div class="pub-details">
-          <div class="pub-title">Samsung INR18650-35E Li-ion Battery Cell</div>
-          <div class="pub-meta"><em>@ Specialized Laboratory</em></div>
-
-          <div class="pub-authors">
-            <b>Model:</b> INR18650-35E (Lithium-ion rechargeable cell)<br><br>
-
-            <ul style="margin:0; padding-left:18px; font-size:0.95em; line-height:1.5;">
-              <li><b>Standard Capacity:</b> 3,350 mAh (3.35 Ah)</li>
-              <li><b>Nominal Voltage:</b> 3.6 V (Charging Voltage 4.2 V)</li>
-              <li><b>Discharge Cut-off Voltage:</b> 2.65 V</li>
-              <li><b>Standard Charge Current:</b> 1,700 mA (4 hr charge time)</li>
-              <li><b>Max Charge Current:</b> 2,000 mA (2 A)</li>
-              <li><b>Max Discharge Current:</b> 8,000 mA (continuous)</li>
-              <li><b>Peak Discharge Current:</b> 13,000 mA (non-continuous)</li>
-              <li><b>Operating Temp Range:</b> Charge: 0–45 °C / Discharge: −10–60 °C</li>
-            </ul>
-          </div>
+      <!-- Samsung INR21700-50G -->
+      <div class="spec-card bat">
+        <div class="spec-img"><img src="images/E_INR21700-50G.jpg" alt="Samsung INR21700-50G"></div>
+        <div class="spec-body">
+          <div class="spec-title">Samsung INR21700-50G Li-ion Battery Cell</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
+          <div class="spec-model">INR21700-50G</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Standard Capacity:</b> 4,850 mAh (minimum)</li>
+            <li><b>Nominal Voltage:</b> 3.63 V | <b>Charging Voltage:</b> 4.2 V (CC-CV)</li>
+            <li><b>Max Discharge Current:</b> 9,700 mA (cont.) / 14,550 mA (peak)</li>
+            <li><b>Cell Type:</b> 21700 cylindrical — high-energy density for EV and power tools</li>
+          </ul>
         </div>
       </div>
 
-      <div class="pub-item">
-        <div class="pub-img">
-          <img src="images/E_EGMP.jpg" alt="E-GMP 4th Generation Battery Pack">
-        </div>
-
-        <div class="pub-details">
-          <div class="pub-title">E-GMP 4th Generation Battery Pack</div>
-          <div class="pub-meta"><em>@ Mobility Hall</em></div>
-
-          <div class="pub-authors">
-            <b>Manufacturer:</b> SK On<br><br>
-
-            <ul style="margin:0; padding-left:18px; font-size:0.95em; line-height:1.5;">
-              <li><b>Type:</b> 4th Generation High-Energy Density Battery</li>
-              <li><b>Total Capacity:</b> 84.0 kWh</li>
-              <li><b>Energy Density:</b> 670 Wh/L</li>
-              <li><b>Max Driving Range:</b> 485 km (per full charge)</li>
-              <li><b>Fast-Charging Time:</b> Within 18 minutes (ultra-fast charge)</li>
-              <li><b>Cell Chemistry:</b> Lithium-ion (Nickel-rich NCM type)</li>
-              <li><b>Platform:</b> Electric-Global Modular Platform (E-GMP)</li>
-              <li><b>Application:</b> Hyundai / Kia EV lineup including IONIQ 5, EV6, GV60</li>
-            </ul>
-          </div>
+      <!-- Samsung INR18650-35E -->
+      <div class="spec-card bat">
+        <div class="spec-img"><img src="images/E_INR18650-35E.jpg" alt="Samsung INR18650-35E"></div>
+        <div class="spec-body">
+          <div class="spec-title">Samsung INR18650-35E Li-ion Battery Cell</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
+          <div class="spec-model">INR18650-35E</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Standard Capacity:</b> 3,350 mAh | <b>Nominal Voltage:</b> 3.6 V</li>
+            <li><b>Discharge Cut-off:</b> 2.65 V | <b>Max Charge Current:</b> 2,000 mA</li>
+            <li><b>Max Discharge Current:</b> 8,000 mA (cont.) / 13,000 mA (peak)</li>
+            <li><b>Operating Temp:</b> Charge 0–45 °C / Discharge −10–60 °C</li>
+          </ul>
         </div>
       </div>
 
-      <div class="pub-item">
-        <div class="pub-img">
-          <img src="images/E_LF230.jpg" alt="EVE LF230 Lithium Iron Phosphate Cell">
-        </div>
-
-        <div class="pub-details">
-          <div class="pub-title">EVE LF230 LiFePO<sub>4</sub> Battery Cell</div>
-          <div class="pub-meta"><em>@ Mobility Hall</em></div>
-
-          <div class="pub-authors">
-            <b>Model:</b> LF230 (Prismatic LiFePO<sub>4</sub> Cell)<br><br>
-
-            <ul style="margin:0; padding-left:18px; font-size:0.95em; line-height:1.5;">
-              <li><b>Nominal Capacity:</b> 230 Ah</li>
-              <li><b>Nominal Voltage:</b> 3.2 V</li>
-              <li><b>Cycle Life:</b> ≈ 4000 cycles (0.5C charge/discharge)</li>
-              <li><b>Dimensions:</b> 173.9 × 53.8 × 207.2 mm</li>
-              <li><b>Weight:</b> 4.14 ± 0.12 kg</li>
-              <li><b>Charge/Discharge Rate:</b> 0.5C / 0.5C</li>
-              <li><b>Application:</b> Electric vehicles, buses, and energy storage systems</li>
-            </ul>
-          </div>
+      <!-- E-GMP -->
+      <div class="spec-card bat">
+        <div class="spec-img"><img src="images/E_EGMP.jpg" alt="E-GMP Battery Pack"></div>
+        <div class="spec-body">
+          <div class="spec-title">E-GMP 4th Generation Battery Pack</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Mobility Hall</div>
+          <div class="spec-model">SK On · E-GMP (IONIQ5)</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Total Capacity:</b> 84.0 kWh | <b>Energy Density:</b> 670 Wh/L</li>
+            <li><b>Max Driving Range:</b> 485 km (per full charge)</li>
+            <li><b>Fast-Charging Time:</b> Within 18 minutes (ultra-fast)</li>
+            <li><b>Chemistry:</b> Nickel-rich NCM | <b>Platform:</b> E-GMP</li>
+            <li><b>Application:</b> IONIQ 5, EV6, GV60</li>
+          </ul>
         </div>
       </div>
 
-      <div class="pub-item">
-        <div class="pub-img">
-          <img src="images\E_BIDIR.png" alt="EVE LF230 Lithium Iron Phosphate Cell">
-        </div>
-
-        <div class="pub-details">
-          <div class="pub-title">Texas Instrument LM5170EVM-BIDIR</div>
-          <div class="pub-meta"><em>@ Specialized Laboratory</em></div>
-
-          <div class="pub-authors">
-            <b>Model:</b> LM5170EVM-BIDIR<br><br>
-
-            <ul style="margin:0; padding-left:18px; font-size:0.95em; line-height:1.5;">
-              <li><b>Buck Mode:</b> 48 V port voltage range: 6 V – 75 V; 12 V port regulated at 14.5 V</li>
-              <li><b>Boost Mode:</b> 12 V port voltage range: 3 V – 48 V; 48 V port regulated at 50.5 V</li>
-              <li><b>Maximum DC Current:</b> 60 A input/output on 12 V port</li>
-              <li><b>Control Type:</b> Built-in analog voltage loop control; optional MCU-based digital voltage loop via interface connector</li>
-              <li><b>Multi-Phase Operation:</b> Supports interleaved 3-, 4-, 6-, and 8-phase daisy-chain operation for higher power capacity</li>
-            </ul>
-          </div>
+      <!-- EVE LF230 -->
+      <div class="spec-card bat">
+        <div class="spec-img"><img src="images/E_LF230.jpg" alt="EVE LF230"></div>
+        <div class="spec-body">
+          <div class="spec-title">EVE LF230 LiFePO<sub>4</sub> Battery Cell</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Mobility Hall</div>
+          <div class="spec-model">LF230 Prismatic LiFePO<sub>4</sub></div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Nominal Capacity:</b> 230 Ah | <b>Nominal Voltage:</b> 3.2 V</li>
+            <li><b>Cycle Life:</b> ≈ 4,000 cycles (0.5C charge/discharge)</li>
+            <li><b>Dimensions:</b> 173.9 × 53.8 × 207.2 mm | <b>Weight:</b> 4.14 ± 0.12 kg</li>
+            <li><b>Application:</b> Electric vehicles, buses, and energy storage systems</li>
+          </ul>
         </div>
       </div>
 
-      <div class="pub-item">
-        <div class="pub-img">
-          <img src="images\E_BQ.png" alt="EVE LF230 Lithium Iron Phosphate Cell">
-        </div>
-
-        <div class="pub-details">
-          <div class="pub-title">Texas Instrument BQ76952EVM</div>
-          <div class="pub-meta"><em>@ Specialized Laboratory</em></div>
-
-          <div class="pub-authors">
-            <b>Model:</b> BQ76952EVM<br><br>
-
-            <ul style="margin:0; padding-left:18px; font-size:0.95em; line-height:1.5;">
-              <li><b>Supported Cells:</b> 3 to 16 Li-ion or LiFePO₄ cells</li>
-              <li><b>Included Module:</b> Pre-assembled circuit module for 16-cell configuration</li>
-              <li><b>Communication Interface:</b> USB interface adapter included; 4-pin connector also available</li>
-              <li><b>Simulation Feature:</b> Built-in resistor-based cell simulator powered by external supply</li>
-              <li><b>Firmware & GUI:</b> Preloaded with tested firmware, graphical user interface, and demonstration files</li>
-              <li><b>Documentation:</b> Includes comprehensive startup and user guide</li>
-            </ul>
-          </div>
+      <!-- LM5170EVM-BIDIR -->
+      <div class="spec-card hw">
+        <div class="spec-img"><img src="images/E_BIDIR.png" alt="LM5170EVM-BIDIR"></div>
+        <div class="spec-body">
+          <div class="spec-title">Texas Instruments LM5170EVM-BIDIR</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
+          <div class="spec-model">LM5170EVM-BIDIR</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Buck Mode:</b> 48 V port 6–75 V; 12 V port regulated at 14.5 V</li>
+            <li><b>Boost Mode:</b> 12 V port 3–48 V; 48 V port regulated at 50.5 V</li>
+            <li><b>Max DC Current:</b> 60 A input/output on 12 V port</li>
+            <li><b>Control:</b> Built-in analog voltage loop; optional MCU-based digital loop</li>
+            <li><b>Multi-Phase:</b> Supports interleaved 3-/4-/6-/8-phase daisy-chain operation</li>
+          </ul>
         </div>
       </div>
 
-      <div class="pub-item">
-        <div class="pub-img">
-          <img src="images\E_C2000.png" alt="EVE LF230 Lithium Iron Phosphate Cell">
-        </div>
-
-        <div class="pub-details">
-          <div class="pub-title">C2000 Launchpad</div>
-          <div class="pub-meta"><em>@ Specialized Laboratory</em></div>
-
-          <div class="pub-authors">
-            <b>Model:</b> C2000 Launchpad<br><br>
-
-            <ul style="margin:0; padding-left:18px; font-size:0.95em; line-height:1.5;">
-              <li><b>Debug Interface:</b> USB-connected isolated XDS100v2 JTAG probe for real-time debugging and flash programming</li>
-              <li><b>Connectors:</b> 4 × 20-pin headers/connectors for versatile interfacing</li>
-              <li><b>User Interface:</b> Programmable buttons and LEDs included</li>
-              <li><b>Processor:</b> TMS320F28379D – 200 MHz dual C28x CPUs and dual CLAs, 1 MB Flash, 16-bit/12-bit ADCs, comparators, 12-bit DACs, delta-sigma sinc filters, HRPWMs, eCAPs, eQEPs, CAN interfaces, and more</li>
-              <li><b>Position Manager:</b> Delfino™ MCU position manager-ready; supports absolute encoders, resolvers, and SINCOS transducers</li>
-              <li><b>Expansion Support:</b> Compatible with two BoosterPack™ Plug-in Modules</li>
-              <li><b>Encoder Interfaces:</b> Two dedicated encoder connectors</li>
-              <li><b>Communication Interface:</b> Isolated CAN transceiver connector</li>
-            </ul>
-          </div>
+      <!-- BQ76952EVM -->
+      <div class="spec-card hw">
+        <div class="spec-img"><img src="images/E_BQ.png" alt="BQ76952EVM"></div>
+        <div class="spec-body">
+          <div class="spec-title">Texas Instruments BQ76952EVM</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
+          <div class="spec-model">BQ76952EVM</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Supported Cells:</b> 3 to 16 Li-ion or LiFePO₄ cells</li>
+            <li><b>Included Module:</b> Pre-assembled circuit module for 16-cell configuration</li>
+            <li><b>Communication:</b> USB interface adapter; 4-pin connector available</li>
+            <li><b>Simulation:</b> Built-in resistor-based cell simulator powered by external supply</li>
+            <li><b>Firmware &amp; GUI:</b> Preloaded firmware, GUI, and demonstration files</li>
+          </ul>
         </div>
       </div>
 
-      <div class="pub-item">
-        <div class="pub-img">
-          <img src="images\E_jig.png" alt="Battery Jig">
-        </div>
-
-        <div class="pub-details">
-          <div class="pub-title">Battery Jig</div>
-          <div class="pub-meta"><em>@ Specialized Laboratory</em></div>
-
-          <div class="pub-authors">
-            <b>Model:</b> for cylindrical cell<br><br>
-
-            <ul style="margin:0; padding-left:18px; font-size:0.95em; line-height:1.5;">
-              <li><b>Temperature Range:</b> –40℃ to 100℃</li>
-              <li><b>Max Allowable Current:</b> ≥ 30 A per channel</li>
-              <li><b>Base Plate:</b> Included</li>
-              <li><b>Material:</b> Bakelite (black)</li>
-              <li><b>Configuration:</b> 1 channel / 1 set</li>
-              <li><b>Cell Compatibility:</b> 18650, 21700, 4680 cells</li>
-            </ul>
-          </div>
+      <!-- C2000 Launchpad -->
+      <div class="spec-card hw">
+        <div class="spec-img"><img src="images/E_C2000.png" alt="C2000 Launchpad"></div>
+        <div class="spec-body">
+          <div class="spec-title">C2000 Launchpad</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
+          <div class="spec-model">TMS320F28379D</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Processor:</b> TMS320F28379D — 200 MHz dual C28x CPUs and dual CLAs, 1 MB Flash</li>
+            <li><b>Peripherals:</b> 16-bit/12-bit ADCs, comparators, 12-bit DACs, HRPWMs, eCAPs, eQEPs, CAN</li>
+            <li><b>Debug Interface:</b> USB-connected isolated XDS100v2 JTAG probe</li>
+            <li><b>Connectors:</b> 4 × 20-pin headers; programmable buttons and LEDs</li>
+            <li><b>Expansion:</b> Compatible with two BoosterPack™ plug-in modules</li>
+          </ul>
         </div>
       </div>
 
-      <div class="pub-item">
-        <div class="pub-img">
-          <img src="images\E_Pump.png" alt="EVE LF230 Lithium Iron Phosphate Cell">
-        </div>
-
-        <div class="pub-details">
-          <div class="pub-title">Gast Pump</div>
-          <div class="pub-meta"><em>@ Specialized Laboratory</em></div>
-
-          <div class="pub-authors">
-            <b>Model:</b> DOA-P704-AC<br><br>
-
-            <ul style="margin:0; padding-left:18px; font-size:0.95em; line-height:1.5;">
-              <li><b>Type:</b> Oil-less type; no oil replacement required</li>
-              <li><b>Gauge & Control:</b> Built-in gauges for pressure and vacuum with vacuum-control valve for convenient use</li>
-              <li><b>Performance:</b> Capacity 32 L/min, Max vacuum 25.5 hg, Max pressure 60 psi, Weight 8.7 kg, 115 V / 60 Hz, 1/8 HP</li>
-              <li><b>Application:</b> Optimal as a filtration pump for membranes or glass filters</li>
-            </ul>
-          </div>
+      <!-- Battery Jig -->
+      <div class="spec-card ea">
+        <div class="spec-img"><img src="images/E_jig.png" alt="Battery Jig"></div>
+        <div class="spec-body">
+          <div class="spec-title">Battery Jig</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
+          <div class="spec-model">For Cylindrical Cell</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Temperature Range:</b> −40 ℃ to 100 ℃</li>
+            <li><b>Max Current:</b> ≥ 30 A per channel</li>
+            <li><b>Material:</b> Bakelite (black) | <b>Config:</b> 1 channel / 1 set</li>
+            <li><b>Cell Compatibility:</b> 18650, 21700, 4680 cells</li>
+          </ul>
         </div>
       </div>
 
-      <div class="pub-item">
-        <div class="pub-img">
-          <img src="images\E_decci.png" alt="EVE LF230 Lithium Iron Phosphate Cell">
-        </div>
-
-        <div class="pub-details">
-          <div class="pub-title">Vacuum Desiccator</div>
-          <div class="pub-meta"><em>@ Specialized Laboratory</em></div>
-
-          <div class="pub-authors">
-            <b>Model:</b> VLHK<br><br>
-
-            <ul style="margin:0; padding-left:18px; font-size:0.95em; line-height:1.5;">
-              <li><b>Outer Dimensions:</b> 310 × 332 × 530 mm</li>
-              <li><b>Inner Dimensions:</b> 260 × 280 × 410 mm</li>
-              <li><b>Allowable Vacuum:</b> 1 Torr (approx. 133 Pa)</li>
-              <li><b>Recommended Vacuum Pump:</b> LL1-6685-31 (Rocker 810)</li>
-              <li><b>Material:</b> Transparent reinforced acrylic, 20t</li>
-              <li><b>Capacity:</b> 30 L</li>
-              <li><b>Weight:</b> 23 kg</li>
-              <li><b>Shelf Load Capacity:</b> Approx. 2 kg</li>
-              <li><b>Accessories:</b> 1 vacuum gauge, 3 shelves, 2 vacuum valves (Ø 8 mm)</li>
-            </ul>
-          </div>
+      <!-- Gast Pump -->
+      <div class="spec-card sc">
+        <div class="spec-img"><img src="images/E_Pump.png" alt="Gast Pump"></div>
+        <div class="spec-body">
+          <div class="spec-title">Gast Pump</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
+          <div class="spec-model">DOA-P704-AC</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Type:</b> Oil-less — no oil replacement required</li>
+            <li><b>Performance:</b> 32 L/min capacity, Max vacuum 25.5 hg, Max pressure 60 psi</li>
+            <li><b>Power:</b> 115 V / 60 Hz, 1/8 HP | <b>Weight:</b> 8.7 kg</li>
+            <li><b>Application:</b> Filtration pump for membranes or glass filters</li>
+          </ul>
         </div>
       </div>
 
-      <div class="pub-item">
-        <div class="pub-img">
-          <img src="images\E_Hood.png" alt="EVE LF230 Lithium Iron Phosphate Cell">
-        </div>
-
-        <div class="pub-details">
-          <div class="pub-title">Fume Hood</div>
-          <div class="pub-meta"><em>@ Specialized Laboratory</em></div>
-
-          <div class="pub-authors">
-            <b>Model:</b> CAFU-02-10<br><br>
-
-            <ul style="margin:0; padding-left:18px; font-size:0.95em; line-height:1.5;">
-              <li><b>Type:</b> arm hood type</li>
-              <li><b>Dimensions:</b> 390 × 390 × 710 mm (Ø 80 × 1300)</li>
-              <li><b>Noise Level:</b> ≤ 55 dB</li>
-              <li><b>Air Speed & Volume:</b> 9–13 m/s, 600 CMH</li>
-              <li><b>Power:</b> 220 V, 50/60 Hz, 120 W</li>
-              <li><b>Weight:</b> 36 kg</li>
-            </ul>
-          </div>
+      <!-- Vacuum Desiccator -->
+      <div class="spec-card sc">
+        <div class="spec-img"><img src="images/E_decci.png" alt="Vacuum Desiccator"></div>
+        <div class="spec-body">
+          <div class="spec-title">Vacuum Desiccator</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
+          <div class="spec-model">VLHK</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Outer Dimensions:</b> 310 × 332 × 530 mm | <b>Capacity:</b> 30 L | <b>Weight:</b> 23 kg</li>
+            <li><b>Inner Dimensions:</b> 260 × 280 × 410 mm</li>
+            <li><b>Allowable Vacuum:</b> 1 Torr (≈133 Pa)</li>
+            <li><b>Material:</b> Transparent reinforced acrylic, 20t</li>
+            <li><b>Accessories:</b> 1 vacuum gauge, 3 shelves, 2 vacuum valves (Ø 8 mm)</li>
+          </ul>
         </div>
       </div>
+
+      <!-- Fume Hood -->
+      <div class="spec-card sc">
+        <div class="spec-img"><img src="images/E_Hood.png" alt="Fume Hood"></div>
+        <div class="spec-body">
+          <div class="spec-title">Fume Hood</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
+          <div class="spec-model">CAFU-02-10</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Type:</b> Arm hood type</li>
+            <li><b>Dimensions:</b> 390 × 390 × 710 mm (Ø 80 × 1300)</li>
+            <li><b>Air Speed &amp; Volume:</b> 9–13 m/s, 600 CMH</li>
+            <li><b>Noise Level:</b> ≤ 55 dB | <b>Power:</b> 220 V, 120 W | <b>Weight:</b> 36 kg</li>
+          </ul>
+        </div>
+      </div>
+
+    </div><!-- /spec-list -->
   </main>
 
-  <!-- Footer -->
+  <!-- FOOTER -->
   <footer>
     <div class="footer-container">
       <div class="footer-left">
         <h3>Battery System Laboratory</h3>
         <p>KAIST, CCS Graduate School of Mobility<br>
-        193, Munji-ro, Yuseong-gu, Daejeon, 34051, Republic of Korea</p>
-        <p><strong>Location:</strong> Faculty Wing, F440</p>
+           193, Munji-ro, Yuseong-gu, Daejeon, 34051, Republic of Korea</p>
+        <p style="margin-top:.5em"><strong style="color:var(--text)">Location:</strong> Faculty Wing, F440</p>
       </div>
       <div class="footer-right">
-        <p><strong>Phone:</strong> +82 042-350-1762</p>
-        <p><strong>Email:</strong> <a href="mailto:yoonklee@kaist.ac.kr">yoonklee@kaist.ac.kr</a></p>
+        <p><strong style="color:var(--text)">Phone:</strong> +82 042-350-1762</p>
+        <p><strong style="color:var(--text)">Email:</strong>
+          <a href="mailto:yoonklee@kaist.ac.kr">yoonklee@kaist.ac.kr</a></p>
       </div>
     </div>
     <div class="footer-bottom">

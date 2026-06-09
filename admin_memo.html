@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>공지 & 메모 · BSL Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080e1a;--surface:#0d1b2e;--surface2:#112240;--surface3:#162a4a;
+  --border:rgba(102,204,255,0.12);--border2:rgba(102,204,255,0.25);
+  --accent:#007acc;--accent2:#66ccff;
+  --text:#dde2ef;--text2:#7a90b0;--text3:#3a5070;
+  --success:#3ecf8e;--warn:#f4a832;--danger:#f45c5c;--purple:#a78bfa;
+  --mono:'JetBrains Mono',monospace;--sans:'Pretendard',-apple-system,sans-serif;
+  --r:8px;--r2:14px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(102,204,255,0.018) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(102,204,255,0.018) 1px,transparent 1px);background-size:52px 52px}
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 35% at 50% -5%,rgba(167,139,250,0.05) 0%,transparent 60%)}
+
+header{position:sticky;top:0;z-index:200;background:rgba(8,14,26,0.92);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);height:64px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 2rem}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-badge{background:linear-gradient(135deg,#a78bfa,#c4b5fd);color:#080e1a;
+  font-family:var(--mono);font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;letter-spacing:1px}
+.logo-title{font-size:14px;font-weight:600;color:var(--text)}
+.logo-sub{font-size:11px;color:var(--text3);font-family:var(--mono)}
+.header-right{display:flex;align-items:center;gap:8px}
+.user-badge{display:flex;align-items:center;gap:7px;background:rgba(62,207,142,0.1);
+  border:1px solid rgba(62,207,142,0.25);padding:5px 13px;border-radius:30px}
+.user-badge-dot{width:7px;height:7px;border-radius:50%;background:var(--success);flex-shrink:0;
+  box-shadow:0 0 6px rgba(62,207,142,0.6)}
+.user-badge-name{font-family:var(--mono);font-size:12px;color:var(--success);letter-spacing:.5px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--border2);
+  color:var(--text2);padding:6px 14px;border-radius:7px;font-size:13px;font-family:var(--sans);
+  cursor:pointer;text-decoration:none;transition:all .18s}
+.back-btn:hover{border-color:var(--accent2);color:var(--accent2);background:rgba(102,204,255,0.06)}
+
+.main-layout{position:relative;z-index:1;display:grid;grid-template-columns:280px 1fr;
+  gap:20px;max-width:1200px;margin:0 auto;padding:2rem 2rem 5rem}
+@media(max-width:900px){.main-layout{grid-template-columns:1fr}}
+
+/* SIDEBAR */
+.sidebar{display:flex;flex-direction:column;gap:12px}
+.side-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden}
+.side-header{padding:13px 16px;border-bottom:1px solid var(--border);font-size:12px;font-weight:500;
+  color:var(--text2);display:flex;align-items:center;gap:8px;letter-spacing:.3px}
+.side-body{padding:12px}
+.add-btn{width:100%;padding:10px;background:linear-gradient(135deg,#7c3aed,#a78bfa);border:none;
+  color:white;font-size:13px;font-weight:700;font-family:var(--sans);border-radius:var(--r);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:opacity .18s}
+.add-btn:hover{opacity:.85}
+.filter-list{display:flex;flex-direction:column;gap:4px}
+.filter-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:6px;
+  cursor:pointer;font-size:13px;color:var(--text2);transition:all .18s;user-select:none}
+.filter-item:hover{background:var(--surface2);color:var(--text)}
+.filter-item.active{background:var(--surface2);color:var(--text);border-left:2px solid var(--purple)}
+.filter-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.filter-count{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--text3)}
+
+/* MEMO LIST */
+.memo-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden}
+.memo-toolbar{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.search-box{flex:1;min-width:160px;background:var(--surface2);border:1px solid var(--border2);
+  border-radius:var(--r);color:var(--text);font-family:var(--sans);font-size:13px;
+  padding:7px 12px;outline:none;transition:border-color .18s}
+.search-box:focus{border-color:rgba(167,139,250,0.5)}
+.search-box::placeholder{color:var(--text3)}
+.sort-select{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r);
+  color:var(--text2);font-size:12px;font-family:var(--sans);padding:7px 10px;cursor:pointer;
+  outline:none;appearance:none;-webkit-appearance:none}
+.sort-select option{background:var(--surface)}
+
+.memo-list{padding:16px;display:flex;flex-direction:column;gap:10px}
+.memo-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r2);
+  padding:16px 18px;cursor:pointer;transition:all .18s;position:relative}
+.memo-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.25)}
+.memo-card.pinned{border-color:rgba(244,168,50,0.3);background:rgba(244,168,50,0.04)}
+.memo-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.memo-pin-icon{font-size:11px;color:var(--warn);flex-shrink:0;margin-top:2px}
+.memo-title{font-size:14px;font-weight:600;color:var(--text);flex:1;line-height:1.4}
+.memo-priority{font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:3px;flex-shrink:0}
+.p-high{background:rgba(244,92,92,0.15);color:#f45c5c;border:1px solid rgba(244,92,92,0.25)}
+.p-mid{background:rgba(244,168,50,0.15);color:#f4a832;border:1px solid rgba(244,168,50,0.25)}
+.p-low{background:rgba(102,204,255,0.1);color:var(--accent2);border:1px solid rgba(102,204,255,0.2)}
+.memo-body{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:10px;
+  max-height:60px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;
+  -webkit-line-clamp:3;-webkit-box-orient:vertical}
+.memo-footer{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.memo-tag{font-size:10px;font-family:var(--mono);background:var(--surface3);
+  color:var(--text2);border:1px solid var(--border);padding:2px 7px;border-radius:4px}
+.memo-date{font-size:11px;font-family:var(--mono);color:var(--text3);margin-left:auto}
+.memo-author{font-size:10px;font-family:var(--mono);color:var(--text3);display:flex;align-items:center;gap:4px}
+.memo-cat{font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:4px}
+.cat-notice{background:rgba(59,130,246,0.15);color:#93c5fd;border:1px solid rgba(59,130,246,0.25)}
+.cat-research{background:rgba(62,207,142,0.12);color:#6ee7b7;border:1px solid rgba(62,207,142,0.2)}
+.cat-admin{background:rgba(167,139,250,0.12);color:#c4b5fd;border:1px solid rgba(167,139,250,0.2)}
+.cat-idea{background:rgba(244,168,50,0.12);color:#fcd34d;border:1px solid rgba(244,168,50,0.2)}
+.no-memos{padding:40px;text-align:center;color:var(--text3);font-size:13px}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.72);
+  backdrop-filter:blur(6px);align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r2);
+  padding:26px;width:520px;max-width:90vw;position:relative;animation:fadeUp .25s ease;max-height:90vh;overflow-y:auto}
+.modal-close{position:absolute;top:12px;right:16px;background:none;border:none;
+  color:rgba(255,255,255,0.35);font-size:1.3em;cursor:pointer;transition:color .15s}
+.modal-close:hover{color:white}
+.modal h3{font-size:15px;font-weight:600;margin-bottom:16px;color:var(--text)}
+.modal-author-info{display:flex;align-items:center;gap:8px;background:rgba(62,207,142,0.07);
+  border:1px solid rgba(62,207,142,0.18);border-radius:var(--r);padding:7px 12px;margin-bottom:14px;
+  font-size:12px;color:var(--text2)}
+.modal-author-info i{color:var(--success)}
+.modal-author-info strong{color:var(--success)}
+.form-row{margin-bottom:13px}
+.form-label{font-size:11px;font-family:var(--mono);color:var(--text2);letter-spacing:.5px;
+  text-transform:uppercase;display:block;margin-bottom:5px}
+.form-input,.form-select,.form-textarea{width:100%;background:var(--surface2);border:1px solid var(--border2);
+  border-radius:var(--r);color:var(--text);font-family:var(--sans);font-size:13px;padding:8px 12px;
+  outline:none;transition:border-color .18s;box-sizing:border-box}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:rgba(167,139,250,0.5);box-shadow:0 0 0 3px rgba(167,139,250,0.07)}
+.form-select{cursor:pointer;appearance:none;-webkit-appearance:none}
+.form-select option{background:var(--surface)}
+.form-textarea{resize:vertical;min-height:140px;font-size:13px;line-height:1.7}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:13px}
+.pin-toggle{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--surface2);
+  border:1px solid var(--border2);border-radius:var(--r);cursor:pointer;user-select:none;transition:all .18s}
+.pin-toggle:hover{border-color:rgba(244,168,50,0.4)}
+.pin-toggle.active{border-color:rgba(244,168,50,0.5);background:rgba(244,168,50,0.07)}
+.pin-toggle span{font-size:13px;color:var(--text2)}
+.modal-actions{display:flex;gap:10px;margin-top:16px}
+.btn-save{flex:1;padding:10px;background:linear-gradient(135deg,#7c3aed,#a78bfa);border:none;
+  border-radius:var(--r);color:white;font-size:13px;font-weight:700;font-family:var(--sans);cursor:pointer;transition:opacity .18s}
+.btn-save:hover{opacity:.85}
+.btn-delete{padding:10px 14px;background:rgba(244,92,92,0.12);border:1px solid rgba(244,92,92,0.25);
+  border-radius:var(--r);color:#f45c5c;font-size:13px;font-family:var(--sans);cursor:pointer;transition:all .18s}
+.btn-delete:hover{background:rgba(244,92,92,0.2)}
+.btn-cancel{padding:10px 16px;background:none;border:1px solid var(--border2);border-radius:var(--r);
+  color:var(--text2);font-size:13px;font-family:var(--sans);cursor:pointer;transition:all .18s}
+.btn-cancel:hover{border-color:#f45c5c;color:#f45c5c}
+
+footer{position:relative;z-index:1;background:rgba(8,14,26,0.95);border-top:1px solid var(--border);
+  padding:1.2rem 2rem;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--text3)}
+footer a{color:var(--text2);text-decoration:none}
+footer a:hover{color:var(--accent2)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="admin.html" class="logo">
+    <div class="logo-badge">BSL</div>
+    <div>
+      <div class="logo-title">공지 &amp; 메모</div>
+      <div class="logo-sub">Notes · localStorage</div>
+    </div>
+  </a>
+  <div class="header-right">
+    <div class="user-badge" id="userBadge" style="display:none">
+      <div class="user-badge-dot"></div>
+      <span class="user-badge-name" id="userBadgeName"></span>
+    </div>
+    <a href="admin.html" class="back-btn" id="backBtn"><i class="fa fa-arrow-left"></i> 대시보드</a>
+  </div>
+</header>
+
+<div class="main-layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="side-panel">
+      <div class="side-body">
+        <button class="add-btn" onclick="openAddModal()"><i class="fa fa-plus"></i> 새 메모 작성</button>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="side-header"><i class="fa fa-filter" style="color:var(--purple)"></i> 필터</div>
+      <div class="side-body">
+        <div class="filter-list" id="filterList">
+          <div class="filter-item active" data-filter="all" onclick="setFilter('all')">
+            <div class="filter-dot" style="background:var(--text2)"></div>전체
+            <span class="filter-count" id="fc-all">0</span>
+          </div>
+          <div class="filter-item" data-filter="pinned" onclick="setFilter('pinned')">
+            <div class="filter-dot" style="background:#f4a832"></div>📌 고정됨
+            <span class="filter-count" id="fc-pinned">0</span>
+          </div>
+          <div class="filter-item" data-filter="mine" onclick="setFilter('mine')">
+            <div class="filter-dot" style="background:var(--success)"></div>내 메모
+            <span class="filter-count" id="fc-mine">0</span>
+          </div>
+          <div class="filter-item" data-filter="notice" onclick="setFilter('notice')">
+            <div class="filter-dot" style="background:#3b82f6"></div>공지
+            <span class="filter-count" id="fc-notice">0</span>
+          </div>
+          <div class="filter-item" data-filter="research" onclick="setFilter('research')">
+            <div class="filter-dot" style="background:#3ecf8e"></div>연구
+            <span class="filter-count" id="fc-research">0</span>
+          </div>
+          <div class="filter-item" data-filter="admin" onclick="setFilter('admin')">
+            <div class="filter-dot" style="background:#a78bfa"></div>행정
+            <span class="filter-count" id="fc-admin">0</span>
+          </div>
+          <div class="filter-item" data-filter="idea" onclick="setFilter('idea')">
+            <div class="filter-dot" style="background:#f4a832"></div>아이디어
+            <span class="filter-count" id="fc-idea">0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEMO LIST -->
+  <div class="memo-panel">
+    <div class="memo-toolbar">
+      <input type="text" class="search-box" id="searchBox" placeholder="메모 검색..." oninput="renderList()">
+      <select class="sort-select" id="sortSelect" onchange="renderList()">
+        <option value="date-desc">최신순</option>
+        <option value="date-asc">오래된순</option>
+        <option value="priority">우선순위</option>
+        <option value="title">제목순</option>
+      </select>
+    </div>
+    <div class="memo-list" id="memoList"></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="memoModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <h3 id="modalTitle">새 메모</h3>
+
+    <!-- 작성자 표시 -->
+    <div class="modal-author-info" id="modalAuthorInfo">
+      <i class="fa fa-user-circle"></i>
+      <span><strong id="modalAuthorName">unknown</strong>으로 작성됩니다</span>
+    </div>
+
+    <div class="form-row">
+      <label class="form-label">제목 *</label>
+      <input type="text" class="form-input" id="mTitle" placeholder="메모 제목">
+    </div>
+    <div class="form-row">
+      <label class="form-label">내용</label>
+      <textarea class="form-textarea" id="mBody" placeholder="내용을 입력하세요."></textarea>
+    </div>
+    <div class="form-row-3">
+      <div>
+        <label class="form-label">카테고리</label>
+        <select class="form-select" id="mCat">
+          <option value="notice">📢 공지</option>
+          <option value="research">🔬 연구</option>
+          <option value="admin">🗂 행정</option>
+          <option value="idea">💡 아이디어</option>
+        </select>
+      </div>
+      <div>
+        <label class="form-label">우선순위</label>
+        <select class="form-select" id="mPriority">
+          <option value="high">🔴 높음</option>
+          <option value="mid" selected>🟡 보통</option>
+          <option value="low">🔵 낮음</option>
+        </select>
+      </div>
+      <div>
+        <label class="form-label">태그</label>
+        <input type="text" class="form-input" id="mTags" placeholder="태그,콤마구분">
+      </div>
+    </div>
+    <div class="pin-toggle" id="pinToggle" onclick="togglePin()">
+      <i class="fa fa-thumbtack" style="color:var(--warn)"></i>
+      <span>상단 고정</span>
+    </div>
+
+    <!-- 수정 모드: 원작성자 표시 -->
+    <div id="editAuthorRow" style="display:none;font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:10px">
+      <i class="fa fa-user"></i> 원작성자: <span id="editAuthorText"></span>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-save" onclick="saveMemo()">저장</button>
+      <button class="btn-delete" id="deleteBtn" onclick="deleteMemo()" style="display:none">삭제</button>
+      <button class="btn-cancel" onclick="closeModal()">취소</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>© 2025 Battery System Laboratory — 메모는 브라우저에 자동 저장됩니다</span>
+  <a href="admin.html" id="footerBack"><i class="fa fa-th-large"></i> 대시보드로</a>
+</footer>
+
+<script>
+// ── 접속자 ID
+const urlParams  = new URLSearchParams(location.search);
+const currentUser = urlParams.get('user') || sessionStorage.getItem('bsl_admin_user') || '(미확인)';
+
+(function initUser() {
+  if (currentUser && currentUser !== '(미확인)') {
+    document.getElementById('userBadge').style.display = 'flex';
+    document.getElementById('userBadgeName').textContent = currentUser;
+  }
+  document.getElementById('modalAuthorName').textContent = currentUser;
+  const adminHref = 'admin.html?user=' + encodeURIComponent(currentUser);
+  document.getElementById('backBtn').href  = adminHref;
+  document.getElementById('footerBack').href = adminHref;
+})();
+
+let memos = [], editingId = null, currentFilter = 'all', pinned = false;
+const CAT_INFO = {
+  notice:  {label:'공지',    cls:'cat-notice'},
+  research:{label:'연구',    cls:'cat-research'},
+  admin:   {label:'행정',    cls:'cat-admin'},
+  idea:    {label:'아이디어',cls:'cat-idea'},
+};
+const PRI_INFO = {
+  high:{label:'높음',cls:'p-high'},
+  mid: {label:'보통',cls:'p-mid'},
+  low: {label:'낮음',cls:'p-low'},
+};
+
+(function init(){
+  try{memos=JSON.parse(localStorage.getItem('bsl_memos')||'[]');}catch{memos=[];}
+  renderList(); updateCounts();
+})();
+
+function saveMemos(){localStorage.setItem('bsl_memos',JSON.stringify(memos));}
+
+function setFilter(f){
+  currentFilter=f;
+  document.querySelectorAll('.filter-item').forEach(el=>el.classList.toggle('active',el.dataset.filter===f));
+  renderList();
+}
+
+function updateCounts(){
+  document.getElementById('fc-all').textContent    = memos.length;
+  document.getElementById('fc-pinned').textContent = memos.filter(m=>m.pinned).length;
+  document.getElementById('fc-mine').textContent   = memos.filter(m=>m.author===currentUser).length;
+  ['notice','research','admin','idea'].forEach(cat=>{
+    const el=document.getElementById('fc-'+cat);
+    if(el) el.textContent=memos.filter(m=>m.cat===cat).length;
+  });
+}
+
+function renderList(){
+  const search=document.getElementById('searchBox').value.toLowerCase();
+  const sort=document.getElementById('sortSelect').value;
+  let list=[...memos];
+  if(currentFilter==='pinned')   list=list.filter(m=>m.pinned);
+  else if(currentFilter==='mine')list=list.filter(m=>m.author===currentUser);
+  else if(currentFilter!=='all') list=list.filter(m=>m.cat===currentFilter);
+  if(search) list=list.filter(m=>(m.title+m.body+(m.tags||'')).toLowerCase().includes(search));
+  if(sort==='date-desc') list.sort((a,b)=>b.created-a.created);
+  else if(sort==='date-asc') list.sort((a,b)=>a.created-b.created);
+  else if(sort==='priority'){const o={high:0,mid:1,low:2};list.sort((a,b)=>(o[a.priority]||1)-(o[b.priority]||1));}
+  else if(sort==='title') list.sort((a,b)=>a.title.localeCompare(b.title));
+  list.sort((a,b)=>(b.pinned?1:0)-(a.pinned?1:0));
+  const el=document.getElementById('memoList');
+  if(!list.length){
+    el.innerHTML='<div class="no-memos"><i class="fa fa-sticky-note" style="font-size:2em;margin-bottom:8px;display:block;opacity:.3"></i>메모가 없습니다</div>';
+    return;
+  }
+  el.innerHTML=list.map(m=>{
+    const cat=CAT_INFO[m.cat]||CAT_INFO.notice;
+    const pri=PRI_INFO[m.priority]||PRI_INFO.mid;
+    const date=new Date(m.created).toLocaleDateString('ko-KR',{month:'short',day:'numeric'});
+    const tags=(m.tags||'').split(',').map(t=>t.trim()).filter(Boolean).map(t=>`<span class="memo-tag">${esc(t)}</span>`).join('');
+    const isMe = m.author === currentUser;
+    const authorHtml = m.author
+      ? `<span class="memo-author" title="${esc(m.author)}"><i class="fa fa-user" style="font-size:9px"></i>${esc(m.author)}${isMe?' (나)':''}</span>`
+      : '';
+    return `<div class="memo-card${m.pinned?' pinned':''}" onclick="openEditModal('${m.id}')">
+      <div class="memo-top">
+        ${m.pinned?'<div class="memo-pin-icon"><i class="fa fa-thumbtack"></i></div>':''}
+        <div class="memo-title">${esc(m.title)}</div>
+        <span class="memo-priority ${pri.cls}">${pri.label}</span>
+      </div>
+      ${m.body?`<div class="memo-body">${esc(m.body)}</div>`:''}
+      <div class="memo-footer">
+        <span class="memo-cat ${cat.cls}">${cat.label}</span>
+        ${tags}
+        ${authorHtml}
+        <span class="memo-date">${date}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openAddModal(){
+  editingId=null; pinned=false;
+  document.getElementById('modalTitle').textContent='새 메모';
+  document.getElementById('mTitle').value='';
+  document.getElementById('mBody').value='';
+  document.getElementById('mCat').value='notice';
+  document.getElementById('mPriority').value='mid';
+  document.getElementById('mTags').value='';
+  document.getElementById('pinToggle').classList.remove('active');
+  document.getElementById('deleteBtn').style.display='none';
+  document.getElementById('modalAuthorInfo').style.display='flex';
+  document.getElementById('modalAuthorName').textContent=currentUser;
+  document.getElementById('editAuthorRow').style.display='none';
+  document.getElementById('memoModal').classList.add('open');
+  setTimeout(()=>document.getElementById('mTitle').focus(),100);
+}
+
+function openEditModal(id){
+  const m=memos.find(x=>x.id===id); if(!m) return;
+  editingId=id; pinned=m.pinned||false;
+  document.getElementById('modalTitle').textContent='메모 수정';
+  document.getElementById('mTitle').value=m.title;
+  document.getElementById('mBody').value=m.body||'';
+  document.getElementById('mCat').value=m.cat;
+  document.getElementById('mPriority').value=m.priority||'mid';
+  document.getElementById('mTags').value=m.tags||'';
+  document.getElementById('pinToggle').classList.toggle('active',pinned);
+  document.getElementById('deleteBtn').style.display='';
+  document.getElementById('modalAuthorInfo').style.display='flex';
+  document.getElementById('modalAuthorName').textContent=currentUser+' (수정 중)';
+  if(m.author){
+    document.getElementById('editAuthorRow').style.display='block';
+    document.getElementById('editAuthorText').textContent=m.author+' · '+new Date(m.created).toLocaleDateString('ko-KR');
+  } else {
+    document.getElementById('editAuthorRow').style.display='none';
+  }
+  document.getElementById('memoModal').classList.add('open');
+}
+
+function closeModal(){document.getElementById('memoModal').classList.remove('open');}
+document.getElementById('memoModal').addEventListener('click',e=>{if(e.target===document.getElementById('memoModal'))closeModal();});
+function togglePin(){pinned=!pinned;document.getElementById('pinToggle').classList.toggle('active',pinned);}
+
+function saveMemo(){
+  const title=document.getElementById('mTitle').value.trim();
+  if(!title){alert('제목을 입력해 주세요.');return;}
+  const existing=editingId?memos.find(x=>x.id===editingId):null;
+  const m={
+    id:editingId||Date.now().toString(36)+Math.random().toString(36).slice(2,6),
+    title,
+    body:document.getElementById('mBody').value.trim(),
+    cat:document.getElementById('mCat').value,
+    priority:document.getElementById('mPriority').value,
+    tags:document.getElementById('mTags').value.trim(),
+    pinned,
+    author: existing?.author || currentUser,
+    created:existing?.created||Date.now(),
+    updated:Date.now(),
+    updatedBy: editingId ? currentUser : undefined,
+  };
+  if(editingId){const idx=memos.findIndex(x=>x.id===editingId);if(idx>=0)memos[idx]=m;}
+  else memos.unshift(m);
+  saveMemos(); closeModal(); renderList(); updateCounts();
+}
+
+function deleteMemo(){
+  if(!editingId||!confirm('이 메모를 삭제할까요?'))return;
+  memos=memos.filter(m=>m.id!==editingId);
+  saveMemos(); closeModal(); renderList(); updateCounts();
+}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+</script>
+</body>
+</html>

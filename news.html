@@ -2,364 +2,177 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>News - Battery System Laboratory</title>
+  <title>Board · Battery System Laboratory</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    body {
-      margin: 0;
-      font-family: "Noto Sans KR", "Arial", sans-serif;
-      line-height: 1.6;
-      scroll-behavior: smooth;
-      background: 
-        linear-gradient(rgba(245, 245, 245, 0.85), rgba(245, 245, 245, 0.85)),
-        url("https://img.hankyung.com/photo/202405/AA.36677880.1.jpg") no-repeat center/cover;
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    :root {
+      --bg:#0c1828; --surface:#132338; --surface2:#192e4a; --surface3:#1e3a5e;
+      --border:rgba(102,204,255,0.16); --border2:rgba(102,204,255,0.30);
+      --accent:#007acc; --accent2:#66ccff;
+      --text:#dde2ef; --text2:#96a8c8; --text3:#4a6080;
+      --gold:#f4a832; --purple:#a78bfa; --green:#3ecf8e; --red:#f45c5c;
+      --mono:'JetBrains Mono',monospace; --sans:'Pretendard',-apple-system,sans-serif;
+      --r:12px;
+    }
+    html { scroll-behavior:smooth; }
+    body { margin:0; font-family:var(--sans); line-height:1.6; background:var(--bg); color:var(--text); min-height:100vh; }
+    body::before {
+      content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+      background-image:
+        linear-gradient(rgba(102,204,255,0.032) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(102,204,255,0.032) 1px,transparent 1px);
+      background-size:52px 52px;
+    }
+    body::after {
+      content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+      background:radial-gradient(ellipse 80% 40% at 50% -5%,rgba(0,122,204,0.14) 0%,transparent 65%);
     }
 
-    header {
-      background-color: #0a1321;
-      color: white;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 2em;          /* 위아래 padding 제거 → 높이 고정 효과 */
-      min-height: 80px;            /* ✅ 상단 바 높이 고정 */
-    }
+    /* HEADER */
+    header { position:sticky; top:0; z-index:200; background:rgba(12,24,40,0.90); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border-bottom:1px solid var(--border); color:white; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; padding:0 2em; min-height:72px; }
+    .logo { font-weight:bold; display:flex; align-items:center; gap:10px; font-size:1.5em; }
+    .logo-icon { width:80px; height:80px; object-fit:contain; }
+    .logo-link { text-decoration:none; color:white; font-weight:700; font-size:1em; transition:color .2s; }
+    .logo-link:hover { color:var(--accent2); }
+    nav { display:flex; align-items:center; gap:2px; padding-bottom:8px; }
+    nav a { color:rgba(255,255,255,0.72); text-decoration:none; margin-left:18px; font-size:.93em; font-weight:400; position:relative; cursor:pointer; transition:color .2s; }
+    nav a:hover { color:var(--accent2); }
+    nav a::after { content:""; position:absolute; left:0; bottom:-4px; width:0; height:2px; background:var(--accent2); border-radius:2px; transition:width .3s ease; }
+    nav a:hover::after { width:100%; }
 
-    .logo {
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    /* HERO */
+    .hero { position:relative; z-index:1; background:linear-gradient(rgba(8,16,30,0.70),rgba(12,24,40,0.50)),url("images/background.png") no-repeat center/cover; height:44vh; min-height:250px; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; color:white; overflow:hidden; }
+    .hero::after { content:''; position:absolute; bottom:0; left:0; right:0; height:100px; background:linear-gradient(transparent,var(--bg)); pointer-events:none; z-index:2; }
+    .hero-logo { max-height:68px; margin-bottom:.9em; opacity:.85; animation:fadeInDown 1s ease-out; filter:drop-shadow(0 0 16px rgba(102,204,255,0.2)); }
+    .hero-eyebrow { font-family:var(--mono); font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--accent2); background:rgba(102,204,255,0.08); border:1px solid rgba(102,204,255,0.2); padding:4px 14px; border-radius:30px; margin-bottom:.9em; animation:fadeInDown .8s ease-out; display:inline-block; }
+    .hero h1 { font-size:2.4em; font-weight:700; margin-bottom:.25em; animation:fadeInDown 1.1s ease-out; background:linear-gradient(120deg,#fff 0%,var(--accent2) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .hero p { font-size:1em; color:rgba(255,255,255,0.55); font-weight:300; animation:fadeInUp 1.4s ease-out; }
 
-    .logo-icon {
-      width: 96px; 
-      height: 96px;
-      object-fit: contain;     /* ✅ 비율 유지하면서 들어가도록 */
-    }
-    .logo { font-weight: bold; font-size: 1.5em; }
+    /* MAIN */
+    main { position:relative; z-index:1; padding:2em 2em 5em; max-width:1000px; margin:auto; }
 
-    .logo-link {
-      text-decoration: none;   /* 밑줄 제거 */
-      color: white;            /* 기존 header의 글자색과 동일 */
-      font-weight: bold;
-      font-size: 1.0em;
-    }
+    /* TABS */
+    .tab-container { display:flex; justify-content:center; align-items:center; gap:6px; padding:1.4em 0 0; border-bottom:1px solid var(--border); margin-bottom:2em; }
+    .tab-btn { background:none; border:none; text-decoration:none; color:var(--text2); font-size:.9em; font-weight:500; font-family:var(--mono); letter-spacing:1px; text-transform:uppercase; padding:.55em 1.6em; cursor:pointer; position:relative; transition:color .2s; border-radius:8px 8px 0 0; }
+    .tab-btn::after { content:""; position:absolute; bottom:-1px; left:50%; transform:translateX(-50%); width:0; height:2px; background:var(--accent2); border-radius:2px; transition:width .3s; }
+    .tab-btn:hover { color:var(--accent2); }
+    .tab-btn.active { color:var(--accent2); }
+    .tab-btn.active::after { width:75%; }
 
-    .logo-link:hover {
-      color: #66ccff;          /* 마우스 올렸을 때 약간 강조 */
-    }
+    /* TAB CONTENT */
+    .tab-content { display:none; }
+    .tab-content.active { display:block; }
 
-    nav {
-      display: flex;
-      align-items: center;
-      gap: 4.5px;   /* ✅ margin 대신 간격統一 */
-      padding-bottom: 10px;
-    }
+    .section-header { display:flex; align-items:center; gap:14px; margin:0 0 1.5rem; }
+    .section-header h2 { font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:2.5px; text-transform:uppercase; color:var(--accent2); background:rgba(102,204,255,0.08); border:1px solid rgba(102,204,255,0.18); padding:5px 14px; border-radius:30px; white-space:nowrap; }
+    .section-line { flex:1; height:1px; background:var(--border); }
 
-    nav a {
-      color: white;
-      text-decoration: none;
-      margin-left: 20px;
-      font-size: 1em;
-      position: relative;
-      cursor: pointer;
-    }
-    nav a::after {
-      content: "";
-      position: absolute;
-      left: 0; bottom: -3px;
-      width: 0; height: 2px;
-      background: #66ccff;
-      transition: width 0.3s;
-    }
-    nav a:hover::after { width: 100%; }
-
-    /* Hero */
-    .hero {
-      position: relative;
-      background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.30)),
-                  url("images/background.png") no-repeat center/cover;
-      height: 45vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      color: white;
-    }
-    .hero-logo { 
-      max-height: 80px; margin-bottom: 1em; opacity: 0.85; 
-      animation: fadeInDown 1s ease-out;
-    }
-    .hero h1 { 
-      font-size: 2.5em; margin-bottom: 0.3em; 
-      animation: fadeInDown 1.2s ease-out;
-    }
-    .hero p { 
-      font-size: 1.2em; 
-      animation: fadeInUp 1.5s ease-out;
-    }
-
-    main {
-      padding: 2em;
-      max-width: 1000px;
-      margin: auto;
-    }
-
-    h2 { 
-      color: #003366; 
-      margin-top: 1.5em; 
-      text-align: center;
-      animation: fadeInDown 1.5s ease-in-out;
-    }
-
-    /* Tab 메뉴 */
-    .tab-container {
-      text-align: center;
-      margin: 2em 0;
-      border-bottom: 2px solid #ddd;
-    }
-    .tab-btn {
-      background: none;
-      border: none;
-      color: #003366;
-      font-size: 1.2em;
-      font-weight: bold;
-      margin: 0 1em;
-      padding: 0.5em;
-      cursor: pointer;
-      position: relative;
-    }
-    .tab-btn::after {
-      content: "";
-      position: absolute;
-      bottom: 0; left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 3px;
-      background: #66ccff;
-      transition: width 0.3s;
-    }
-    .tab-btn.active::after {
-      width: 100%;
-    }
-    .tab-btn:hover { color: #66ccff; }
-
-    /* News 아이템 */
+    /* NEWS ITEMS */
     .news-item {
-      background: white;
-      border-radius: 8px;
-      padding: 1em 1.5em;
-      margin: 1em 0;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      animation: fadeInUp 1s ease-in-out;
-      transition: transform 0.3s, box-shadow 0.3s;
+      background:var(--surface); border:1px solid var(--border);
+      border-left:3px solid var(--accent2);
+      border-radius:var(--r); padding:1em 1.4em;
+      margin:0 0 10px; transition:transform .2s, border-color .2s, box-shadow .2s;
+      animation:fadeInUp .5s ease-in-out;
     }
-    .news-item:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-    }
-    .news-date { font-size: 0.9em; color: #666; }
-    .news-title { font-size: 1.2em; font-weight: bold; margin-top: 0.3em; }
-    .news-desc { margin-top: 0.5em; line-height: 1.5; }
+    .news-item:hover { transform:translateY(-2px); border-color:var(--border2); box-shadow:0 6px 24px rgba(0,0,0,0.25); }
+    .news-item.type-report  { border-left-color:var(--accent2); }
+    .news-item.type-event   { border-left-color:var(--purple); }
+    .news-item.type-welcome { border-left-color:var(--gold); }
+    .news-item.type-other   { border-left-color:var(--text3); }
 
-    /* Gallery */
-    .gallery-list {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.5em;
-      margin-top: 1em;
-    }
+    .news-header { display:flex; align-items:center; gap:10px; margin-bottom:.4em; flex-wrap:wrap; }
+    .news-date { font-family:var(--mono); font-size:.78em; color:var(--text3); }
+    .news-type-badge { font-family:var(--mono); font-size:.7em; font-weight:600; padding:2px 9px; border-radius:20px; }
+    .badge-report  { background:rgba(102,204,255,0.1); color:var(--accent2); border:1px solid rgba(102,204,255,0.2); }
+    .badge-event   { background:rgba(167,139,250,0.1); color:var(--purple); border:1px solid rgba(167,139,250,0.2); }
+    .badge-welcome { background:rgba(244,168,50,0.1); color:var(--gold); border:1px solid rgba(244,168,50,0.2); }
+    .badge-other   { background:var(--surface2); color:var(--text3); border:1px solid var(--border); }
 
-    /* 모바일에서 1열로 정렬 */
-    @media (max-width: 800px) {
-      .gallery-list {
-        grid-template-columns: repeat(1, 1fr);
-      }
+    .news-title { font-size:1em; font-weight:700; color:var(--text); line-height:1.4; }
+    .news-desc { margin-top:.4em; font-size:.88em; color:var(--text2); line-height:1.65; }
+    .news-desc em { color:var(--text3); font-style:italic; }
+    .news-desc a { color:var(--accent2); text-decoration:none; }
+    .news-desc a:hover { color:#fff; }
+
+    /* PAGINATION */
+    #pagination { display:flex; justify-content:center; gap:6px; margin-top:1.5em; flex-wrap:wrap; }
+    .page-btn {
+      background:var(--surface2); border:1px solid var(--border);
+      color:var(--text2); width:36px; height:36px; border-radius:8px;
+      font-family:var(--mono); font-size:.82em; cursor:pointer;
+      transition:all .18s; display:flex; align-items:center; justify-content:center;
     }
+    .page-btn:hover { border-color:var(--border2); color:var(--accent2); background:rgba(102,204,255,0.07); }
+    .page-btn.active { background:rgba(102,204,255,0.14); border-color:var(--accent2); color:var(--accent2); font-weight:700; }
+
+    /* GALLERY GRID */
+    .gallery-list { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:1em; }
+    @media(max-width:800px){ .gallery-list { grid-template-columns:1fr; } }
 
     .gallery-item {
-      background: white;
-      border-radius: 8px;
-
-      width: 100%;           /* 🔥 부모 너비에 맞춰 자동 축소 */
-      max-width: 500px;      /* 🔥 PC에서는 기존 500px 유지 */
-      aspect-ratio: 1 / 1;   /* 🔥 width = height (정사각형 유지) */
-
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      animation: fadeInUp 1s ease-in-out;
-
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-      padding: 0.8em;
-      box-sizing: border-box;
-      overflow: hidden;
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--r); overflow:hidden;
+      aspect-ratio:1/1; position:relative;
+      transition:transform .22s, border-color .22s, box-shadow .22s;
+      animation:fadeInUp .6s ease-in-out backwards;
+      display:flex; flex-direction:column;
     }
+    .gallery-item:hover { transform:translateY(-3px); border-color:var(--border2); box-shadow:0 8px 28px rgba(0,0,0,0.35); }
 
-    .gallery-date, 
-    .gallery-title {
-      align-self: flex-start;   /* 🔹 왼쪽 정렬 */
-      margin: 0.2em 0;          /* 🔹 간격 줄임 */
-    }
+    .gallery-meta { padding:.6em .8em .5em; flex-shrink:0; }
+    .gallery-date  { font-family:var(--mono); font-size:.72em; color:var(--text3); }
+    .gallery-title { font-size:.85em; font-weight:600; color:var(--text); margin-top:2px; line-height:1.3; }
 
-    .gallery-item img {
-      width: 100%;
-      height: 85%;         /* 🔥 정사각형 박스 안을 꽉 채움 */
-      object-fit: cover;    /* 🔥 비율 유지하면서 꽉 채움 */
-      border-radius: 6px;
-      margin-top: 0.5em;
-      cursor: pointer;
-      transition: transform 0.3s;
-    }
+    .gallery-img-wrap { flex:1; overflow:hidden; position:relative; }
+    .gallery-img-wrap img { width:100%; height:100%; object-fit:cover; display:block; cursor:pointer; transition:transform .3s; }
+    .gallery-img-wrap img:hover { transform:scale(1.06); }
 
-    .gallery-item img:hover { transform: scale(1.05); }
-    .gallery-date { font-size: 0.85em; color: #666; }
-    .gallery-title { font-size: 1em; font-weight: bold; margin: 0.3em 0; }
-
-    /* 모달 */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.7);
-      justify-content: center;
-      align-items: center;
-    }
-    .modal-content {
-      max-width: 80%;
-      max-height: 80%;
-    }
-    .modal-content img {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
-    }
-    .modal-close {
-      position: absolute;
-      top: 20px; right: 30px;
-      font-size: 2em;
-      color: white;
-      cursor: pointer;
-    }
-
-    footer {
-      background-color: #01022c;
-      color: white;
-      padding: 2em 3em;
-      margin-top: 3em;
-      font-size: 0.95em;
-    }
-
-    .footer-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2em;
-    }
-
-    .footer-left, .footer-right {
-      flex: 1;
-      min-width: 250px;
-    }
-
-    .footer-left h3 {
-      margin-top: 0;
-      color: #66ccff;
-    }
-
-    .footer-right p {
-      margin: 0;       /* ✅ 문단 사이 간격 — 기본보다 조금 넓게 */
-      line-height: 0;      /* ✅ 줄 자체 높이 조정 (가독성 향상) */
-      padding-top: 4em;
-    }
-
-    .footer-right p:nth-child(2) {
-      margin-top: -1.8em; /* 간격을 줄이는 음수 여백 */
-    }
-
-    .footer-right a {
-      color: #66ccff;
-      text-decoration: none;
-    }
-
-    .footer-right a:hover {
-      text-decoration: underline;
-    }
-
-    .footer-bottom {
-      text-align: center;
-      border-top: 1px solid rgba(255,255,255,0.2);
-      margin-top: 1.5em;
-      padding-top: 1em;
-      font-size: 0.85em;
-      color: #cccccc;
-    }
-
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-30px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-
-    /* --- Gallery Slider --- */
-    .gallery-slider {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      border-radius: 6px;
-    }
-
-    .slide-track {
-      display: flex;
-      transition: transform 0.4s ease;
-      height: 100%;
-    }
-
-    .slide-track img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      flex-shrink: 0;
-    }
-
+    /* SLIDER */
+    .gallery-slider { position:relative; width:100%; height:100%; overflow:hidden; }
+    .slide-track { display:flex; transition:transform 0.4s ease; height:100%; }
+    .slide-track img { width:100%; height:100%; object-fit:cover; flex-shrink:0; cursor:pointer; }
     .slide-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(0,0,0,0.4);
-      color: white;
-      border: none;
-      font-size: 2em;
-      padding: 0 10px;
-      cursor: pointer;
-      border-radius: 4px;
-      z-index: 10;
+      position:absolute; top:50%; transform:translateY(-50%);
+      background:rgba(8,14,26,0.6); color:white; border:none;
+      font-size:1.6em; padding:4px 10px; cursor:pointer;
+      border-radius:6px; z-index:10; transition:background .18s;
     }
+    .slide-btn:hover { background:rgba(8,14,26,0.88); }
+    .slide-btn.prev { left:8px; }
+    .slide-btn.next { right:8px; }
 
-    .slide-btn:hover {
-      background: rgba(0,0,0,0.6);
-    }
+    /* MODAL */
+    .modal { display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.82); backdrop-filter:blur(8px); justify-content:center; align-items:center; }
+    .modal-content { max-width:85%; max-height:85%; }
+    .modal-content img { width:100%; height:auto; border-radius:var(--r); box-shadow:0 20px 60px rgba(0,0,0,0.5); }
+    .modal-close { position:absolute; top:20px; right:28px; font-size:2em; color:rgba(255,255,255,0.7); cursor:pointer; transition:color .15s; line-height:1; }
+    .modal-close:hover { color:white; }
 
-    .slide-btn.prev { left: 10px; }
-    .slide-btn.next { right: 10px; }
+    /* FOOTER */
+    footer { position:relative; z-index:1; background:var(--surface); border-top:1px solid var(--border); color:white; padding:2.5em 3em; font-size:.92em; }
+    .footer-container { display:flex; flex-wrap:wrap; gap:2em; }
+    .footer-left h3  { margin-top:0; color:var(--accent2); font-size:1em; margin-bottom:.6em; }
+    .footer-left p   { color:var(--text2); font-size:.9em; line-height:1.7; }
+    .footer-right    { flex:1; min-width:250px; padding-top:.5em; }
+    .footer-right p  { color:var(--text2); font-size:.9em; line-height:2; margin:0; }
+    .footer-right a  { color:var(--accent2); text-decoration:none; }
+    .footer-right a:hover { color:white; }
+    .footer-bottom { text-align:center; border-top:1px solid var(--border); margin-top:1.5em; padding-top:1em; font-size:.82em; color:var(--text3); }
+
+    @keyframes fadeInDown { from{opacity:0;transform:translateY(-24px)}to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeInUp   { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
   </style>
 </head>
 <body>
+
+  <!-- HEADER -->
   <header>
     <div class="logo">
       <a href="index.html" class="logo-link">Battery System Laboratory</a>
-      <img src="images\NEWLOGO.png" alt="Lab Logo" class="logo-icon">
+      <img src="images/NEWLOGO.png" alt="Lab Logo" class="logo-icon">
     </div>
     <nav>
       <a href="index.html">Home</a>
@@ -373,639 +186,587 @@
     </nav>
   </header>
 
-
+  <!-- HERO -->
   <section class="hero">
-    <img src="https://mo.kaist.ac.kr/wp-content/uploads/2022/08/logo_new-1-e1661933714657.png" 
+    <img src="https://mo.kaist.ac.kr/wp-content/uploads/2022/08/logo_new-1-e1661933714657.png"
          alt="KAIST Mobility Logo" class="hero-logo">
+    <div class="hero-eyebrow">Battery System Laboratory</div>
     <h1>Board</h1>
     <p>Latest updates from our lab</p>
   </section>
 
   <main>
-    <!-- Tab 메뉴 -->
+    <!-- TABS -->
     <div class="tab-container">
-      <button class="tab-btn active" data-target="news">News</button>
-      <button class="tab-btn" data-target="gallery">Gallery</button>
+      <button class="tab-btn active" data-target="news">
+        <i class="fa fa-newspaper" style="font-size:.85em;margin-right:5px"></i>News
+      </button>
+      <button class="tab-btn" data-target="gallery">
+        <i class="fa fa-images" style="font-size:.85em;margin-right:5px"></i>Gallery
+      </button>
     </div>
 
-    <!-- News Content -->
+    <!-- NEWS -->
     <div id="news" class="tab-content active">
-      <h2>Recent News</h2>
-      <div class="news-item"><div class="news-date">05/18/2026</div><div class="news-title">Report</div><div class="news-desc">Yeonghwan Jang got best poster award from KECS!<br><em> His paper "Physics-informed neural networks for battery SOH estimation with degradation-aware multi-feature input" was selected as a best paper in KECS 2026 spring conference!</em></div></div>
-      <div class="news-item"><div class="news-date">05/14/2026</div><div class="news-title">Report</div><div class="news-desc">Jinho Ha was invited to LG Tech Conference<br><em> Conference on Latest Technology Trends in LG</em></div></div>
-      <div class="news-item"><div class="news-date">04/28/2026</div><div class="news-title">Report</div><div class="news-desc">Seminar with Dr. Sean Oh from Mathworks<br><em> About Battery & System Modeling with MATLAB and Simulink</em></div></div>
-      <div class="news-item"><div class="news-date">04/03/2026</div><div class="news-title">Event</div><div class="news-desc">BSL @ CCS Graduate School of Mobility Spring Semester Party!<br><em> We enjoyed a party with members from various research labs</em></div></div>
-      <div class="news-item"><div class="news-date">03/05/2026</div><div class="news-title">Report</div><div class="news-desc">Lab Seminar with Dr. Sean Oh from Mathworks<br><em> About battery thermal runaway early warning method</em></div></div>
-      <div class="news-item"><div class="news-date">03/01/2026</div><div class="news-title">Greeting! New Member</div><div class="news-desc">Donghae Kim started his M.S. course with BSL. Keep it up!</div></div>
-      <div class="news-item"><div class="news-date">02/26/2026</div><div class="news-title">Greeting! New Member</div><div class="news-desc">Dr. Jinho Ha joined our group as a postdoc. welcome!</div></div>
-      <div class="news-item"><div class="news-date">02/23/2026</div><div class="news-title">Greeting! New Member</div><div class="news-desc">Uiyeon Kim joined our group as an intern. Welcome!</div></div>
-      <div class="news-item"><div class="news-date">02/10/2026</div><div class="news-title">Greeting! New Member</div><div class="news-desc">Cheoljin Shin joined our group as an intern. Welcome!</div></div>
-      <div class="news-item"><div class="news-date">01/23/2026</div><div class="news-title">Report</div><div class="news-desc">BSL @ KRISO<br><em> Dongmin Kim, Dain Kim, Donghae Kim, and Hyoungbin Seo visited KRISO for Eco-friendly research infrastructure and electric vessel</em></div></div>
-      <div class="news-item"><div class="news-date">01/21/2026</div><div class="news-title">Report</div><div class="news-desc">Donghae Kim was invited to MOIP<br><em> He participated in the 2026 youth communication forum hosted by MOIP(지식재산처) and KIPA(한국발명진흥회)</em></div></div>
-      <div class="news-item"><div class="news-date">01/12/2026</div><div class="news-title">Greeting! New Member</div><div class="news-desc">Jaehee Kim joined our group as an intern. Welcome!</div></div>
-      <div class="news-item"><div class="news-date">01/05/2026</div><div class="news-title">Greeting! New Member</div><div class="news-desc">Hyoungbin Seo joined our group as an intern. Welcome!</div></div>
-      <div class="news-item"><div class="news-date">12/22/2025</div><div class="news-title">Event</div><div class="news-desc">BSL @ CCS Graduate School of Mobility Year-end Event<br><em> We shared our research achievements and had a meal together with members from other laboratories.</em></div></div>
-      <div class="news-item"><div class="news-date">12/16/2025</div><div class="news-title">Report</div><div class="news-desc">Lab Seminar with Prof. Hosop Shin from Purdue University<br><em> About remanufactured battery technologies</em></div></div>
-      <div class="news-item"><div class="news-date">12/08/2025</div><div class="news-title">Report</div><div class="news-desc">Dongmin Kim's domestic patent has been filed!<br><em> "System and Method for Simulating Real-World Driving Performance of Electric Vehicles" with professor Yoonkoo Lee and Kitae Jang!</em></div></div>
-      <div class="news-item"><div class="news-date">12/05/2025</div><div class="news-title">Report</div><div class="news-desc">BSL @ 2025 COMSOL Conference<br><em> Yeonghwan Jang, Dongwook Kim, Dain Kim and Donghae Kim participate in the conference</em></div></div>
-      <div class="news-item"><div class="news-date">11/10/2025</div><div class="news-title">Report</div><div class="news-desc">Dongwook Kim and Donghae Kim won paper award @ KSME! <br><em> Dongwook Kim won Top prize and Donghae Kim won Excellence Prize in KSME 2025 chungcheong branch fall conference!</em></div></div>
-      <div class="news-item"><div class="news-date">11/04/2025</div><div class="news-title">Report</div><div class="news-desc">BSL research was selected to KAIST College of Engineering Highlight!<br><em>Our next-gen potassium-ion battery research was featured as a departmental highlight in "KAIST 공학자의 오리연못 (2025-2)"</em></div></div>
-      <div class="news-item"><div class="news-date">10/31/2025</div><div class="news-title">Report</div><div class="news-desc">BSL team got excellence award in "2025 미래내일 청년 일경험 지원사업"<br><em>Yeonghwan Jang, Dain Kim, Dongwook Kim, Donghae Kim got award. Grats!</em></div></div>
-      <div class="news-item"><div class="news-date">10/31/2025</div><div class="news-title">Report</div><div class="news-desc">BSL researchers participated in the HRD Final Report Meeting<br><em>Yeonghwan Jang, Dain Kim, Dongwook Kim participated in Final Research Meeting to present their work!</em></div></div>
-      <div class="news-item"><div class="news-date">10/31/2025</div><div class="news-title">Report</div><div class="news-desc">Donghae Kim was selected to visit Hyundai Motors High-Tech Center<br><em>Hyundai Motor Company Goyang High-Tech Center, Goyang Motor Studio; studied about latest mobility diagnosis/maintenance cases</em></div></div>
-      <div class="news-item"><div class="news-date">09/19/2025</div><div class="news-title">Event</div><div class="news-desc">Fall semester opening event!<br><em>We enjoyed a party with members from various research laboratories to celebrate the beginning of the fall semester.</em></div></div>
-      <div class="news-item"><div class="news-date">09/01/2025</div><div class="news-title">Greeting! New Member</div><div class="news-desc">Dain Kim started his M.S. course with BSL. Keep it up!</div></div>
-      <div class="news-item"><div class="news-date">08/29/2025</div><div class="news-title">Event</div><div class="news-desc">Co-Workshop of CCS Graduate School of Mobility held in KAIST Munji Campus<br><em>We shared research topics and discussed potential areas for collaboration with professors and students from various mobility-related research laboratories.</em></div></div>
-      <div class="news-item"><div class="news-date">08/21/2025</div><div class="news-title">Report</div><div class="news-desc">BSL researchers participated in the HRD research program.<br><em>Through the HRD program, Dongmin Kim, Yeonghwan Jang, Dain Kim, Dongwook Kim and Donghae Kim conduct research on estimating deviations among battery cells and receive related funding support for two months.</em></div></div>
-      <div class="news-item"><div class="news-date">08/19/2025</div><div class="news-title">Report</div><div class="news-desc">Donghae Kim was invited to SNUG Korea 2025 by Synopsys<br><em>Gain insights about design software tools and industrial value chain</em></div></div>
-      <div class="news-item"><div class="news-date">06/25/2025</div><div class="news-title">Greeting! New Member</div><div class="news-desc">Donghae Kim joined our group as an intern. Welcome!</div></div>
-      <div class="news-item"><div class="news-date">05/27/2025</div><div class="news-title">Report</div><div class="news-desc">We held our lab's first seminar at KAIST Munji Campus!<br>Prof. Jonghyun Park (Missouri S&T) and Prof. Jimin Oh (Kyungpook National University) joined as speakers, sharing insights on secondary batteries.</div></div>
-      <div class="news-item"><div class="news-date">03/01/2025</div><div class="news-title">Greeting! New Member</div><div class="news-desc">Yeonghwan Jang started his Ph.D. course with BSL. Keep it up!</div></div>
-      <div class="news-item"><div class="news-date">03/01/2025</div><div class="news-title">Greeting! New Member</div><div class="news-desc">Dr. Dongmin Kim joined our group as a postdoc. Welcome!</div></div>
-      <div class="news-item"><div class="news-date">09/02/2024</div><div class="news-title">Greeting! New Member</div><div class="news-desc">Dain Kim joined our group as an intern. Welcome!</div></div>
-      <div class="news-item"><div class="news-date">09/02/2024</div><div class="news-title">Greeting! New Member</div><div class="news-desc">Dongwook Kim joined our group as a M.S. course student. Welcome!</div></div>      
-      <div class="news-item"><div class="news-date">09/01/2024</div><div class="news-title">Report</div><div class="news-desc">Our research was featured in the Research Webzine, <strong>KAIST Breakthroughs 2024 Fall Vol. 23</strong>. Congratulations!<br><span class="news-link"><a href="https://breakthroughs.kaist.ac.kr/sub02/view/id/524" target="_blank">Read more</a></span></div></div>
-      <div class="news-item"><div class="news-date">07/01/2024</div><div class="news-title">Report</div><div class="news-desc">A discussion between our lab's professor and our department's professor on future mobility was featured in <strong>KAISTian Newsletter 2024 Spring&Summer</strong>.<br><span class="news-link"><a href="https://www.kaist.ac.kr/kr/html/kaist/01050301.html" target="_blank">Read PDF</a></span></div></div>
-      <div class="news-item"><div class="news-date">05/23/2024</div><div class="news-title">Greeting! New Member</div><div class="news-desc">Yeonghwan Jang joined our group as an intern. Welcome!</div></div>
+      <div class="section-header">
+        <h2>Recent News</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="news-item type-report">
+        <div class="news-header">
+          <span class="news-date">05/18/2026</span>
+          <span class="news-type-badge badge-report">📋 Report</span>
+        </div>
+        <div class="news-title">Yeonghwan Jang got best poster award from KECS!</div>
+        <div class='news-desc'>Yeonghwan Jang got best poster award from KECS!<br><em>His paper "Physics-informed neural networks for battery SOH estimation with degradation-aware multi-feature input" was selected as a best paper in KECS 2026 spring conference!</em></div>
+      </div>
+      <div class="news-item type-report">
+        <div class="news-header">
+          <span class="news-date">05/14/2026</span>
+          <span class="news-type-badge badge-report">📋 Report</span>
+        </div>
+        <div class="news-title">Jinho Ha was invited to LG Tech Conference</div>
+        <div class='news-desc'>Jinho Ha was invited to LG Tech Conference<br><em>Conference on Latest Technology Trends in LG</em></div>
+      </div>
+      <div class="news-item type-report">
+        <div class="news-header">
+          <span class="news-date">04/28/2026</span>
+          <span class="news-type-badge badge-report">📋 Report</span>
+        </div>
+        <div class="news-title">Seminar with Dr. Sean Oh from Mathworks</div>
+        <div class='news-desc'>Seminar with Dr. Sean Oh from Mathworks<br><em>About Battery &amp; System Modeling with MATLAB and Simulink</em></div>
+      </div>
+      <div class="news-item type-event">
+        <div class="news-header">
+          <span class="news-date">04/03/2026</span>
+          <span class="news-type-badge badge-event">🎊 Event</span>
+        </div>
+        <div class="news-title">BSL @ CCS Graduate School of Mobility Spring Semester Party!</div>
+        <div class='news-desc'>BSL @ CCS Graduate School of Mobility Spring Semester Party!<br><em>We enjoyed a party with members from various research labs</em></div>
+      </div>
+      <div class="news-item type-report">
+        <div class="news-header">
+          <span class="news-date">03/05/2026</span>
+          <span class="news-type-badge badge-report">📋 Report</span>
+        </div>
+        <div class="news-title">Lab Seminar with Dr. Sean Oh from Mathworks</div>
+        <div class='news-desc'>Lab Seminar with Dr. Sean Oh from Mathworks<br><em>About battery thermal runaway early warning method</em></div>
+      </div>
+      <div class="news-item type-welcome">
+        <div class="news-header">
+          <span class="news-date">03/01/2026</span>
+          <span class="news-type-badge badge-welcome">🎉 New Member</span>
+        </div>
+        <div class="news-title">Donghae Kim started his M.S. course with BSL. Keep it up!</div>
+        <div class='news-desc'>Donghae Kim started his M.S. course with BSL. Keep it up!</div>
+      </div>
+      <div class="news-item type-welcome">
+        <div class="news-header">
+          <span class="news-date">02/26/2026</span>
+          <span class="news-type-badge badge-welcome">🎉 New Member</span>
+        </div>
+        <div class="news-title">Dr. Jinho Ha joined our group as a postdoc. welcome!</div>
+        <div class='news-desc'>Dr. Jinho Ha joined our group as a postdoc. welcome!</div>
+      </div>
+      <div class="news-item type-welcome">
+        <div class="news-header">
+          <span class="news-date">02/23/2026</span>
+          <span class="news-type-badge badge-welcome">🎉 New Member</span>
+        </div>
+        <div class="news-title">Uiyeon Kim joined our group as an intern. Welcome!</div>
+        <div class='news-desc'>Uiyeon Kim joined our group as an intern. Welcome!</div>
+      </div>
+      <div class="news-item type-welcome">
+        <div class="news-header">
+          <span class="news-date">02/10/2026</span>
+          <span class="news-type-badge badge-welcome">🎉 New Member</span>
+        </div>
+        <div class="news-title">Cheoljin Shin joined our group as an intern. Welcome!</div>
+        <div class='news-desc'>Cheoljin Shin joined our group as an intern. Welcome!</div>
+      </div>
+      <div class="news-item type-report">
+        <div class="news-header">
+          <span class="news-date">01/23/2026</span>
+          <span class="news-type-badge badge-report">📋 Report</span>
+        </div>
+        <div class="news-title">BSL @ KRISO</div>
+        <div class='news-desc'>BSL @ KRISO<br><em>Dongmin Kim, Dain Kim, Donghae Kim, and Hyoungbin Seo visited KRISO for Eco-friendly research infrastructure and electric vessel</em></div>
+      </div>
+      <div class="news-item type-report">
+        <div class="news-header">
+          <span class="news-date">01/21/2026</span>
+          <span class="news-type-badge badge-report">📋 Report</span>
+        </div>
+        <div class="news-title">Donghae Kim was invited to MOIP</div>
+        <div class='news-desc'>Donghae Kim was invited to MOIP<br><em>He participated in the 2026 youth communication forum hosted by MOIP(지식재산처) and KIPA(한국발명진흥회)</em></div>
+      </div>
+      <div class="news-item type-welcome">
+        <div class="news-header">
+          <span class="news-date">01/12/2026</span>
+          <span class="news-type-badge badge-welcome">🎉 New Member</span>
+        </div>
+        <div class="news-title">Jaehee Kim joined our group as an intern. Welcome!</div>
+        <div class='news-desc'>Jaehee Kim joined our group as an intern. Welcome!</div>
+      </div>
+      <div class="news-item type-welcome">
+        <div class="news-header">
+          <span class="news-date">01/05/2026</span>
+          <span class="news-type-badge badge-welcome">🎉 New Member</span>
+        </div>
+        <div class="news-title">Hyoungbin Seo joined our group as an intern. Welcome!</div>
+        <div class='news-desc'>Hyoungbin Seo joined our group as an intern. Welcome!</div>
+      </div>
+      <div class="news-item type-event">
+        <div class="news-header">
+          <span class="news-date">12/22/2025</span>
+          <span class="news-type-badge badge-event">🎊 Event</span>
+        </div>
+        <div class="news-title">BSL @ CCS Graduate School of Mobility Year-end Event</div>
+        <div class='news-desc'><em>We shared our research achievements and had a meal together with members from other laboratories.</em></div>
+      </div>
+      <div class="news-item type-report">
+        <div class="news-header">
+          <span class="news-date">12/16/2025</span>
+          <span class="news-type-badge badge-report">📋 Report</span>
+        </div>
+        <div class="news-title">Lab Seminar with Prof. Hosop Shin from Purdue University</div>
+        <div class='news-desc'>Lab Seminar with Prof. Hosop Shin from Purdue University<br><em>About remanufactured battery technologies</em></div>
+      </div>
+      <div class="news-item type-report">
+        <div class="news-header">
+          <span class="news-date">12/08/2025</span>
+          <span class="news-type-badge badge-report">📋 Report</span>
+        </div>
+        <div class="news-title">Dongmin Kim's domestic patent has been filed!</div>
+        <div class='news-desc'>Dongmin Kim's domestic patent has been filed!<br><em>"System and Method for Simulating Real-World Driving Performance of Electric Vehicles" with professor Yoonkoo Lee and Kitae Jang!</em></div>
+      </div>
+      <div class="news-item type-report">
+        <div class="news-header">
+          <span class="news-date">12/05/2025</span>
+          <span class="news-type-badge badge-report">📋 Report</span>
+        </div>
+        <div class="news-title">BSL @ 2025 COMSOL Conference</div>
+        <div class='news-desc'>BSL @ 2025 COMSOL Conference<br><em>Yeonghwan Jang, Dongwook Kim, Dain Kim and Donghae Kim participate in the conference</em></div>
+      </div>
+      <div class="news-item type-report">
+        <div class="news-header">
+          <span class="news-date">11/10/2025</span>
+          <span class="news-type-badge badge-report">📋 Report</span>
+        </div>
+        <div class="news-title">Dongwook Kim and Donghae Kim won paper award @ KSME!</div>
+        <div class='news-desc'>Dongwook Kim and Donghae Kim won paper award @ KSME!<br><em>Dongwook Kim won Top prize and Donghae Kim won Excellence Prize in KSME 2025 chungcheong branch fall conference!</em></div>
+      </div>
+      <div class="news-item type-report">
+        <div class="news-header">
+          <span class="news-date">11/04/2025</span>
+          <span class="news-type-badge badge-report">📋 Report</span>
+        </div>
+        <div class="news-title">BSL research was selected to KAIST College of Engineering Highlight!</div>
+        <div class='news-desc'>BSL research was selected to KAIST College of Engineering Highlight!<br><em>Our next-gen potassium-ion battery research was featured as a departmental highlight in "KAIST 공학자의 오리연못 (2025-2)"</em></div>
+      </div>
+      <div class="news-item type-report">
+        <div class="news-header">
+          <span class="news-date">10/31/2025</span>
+          <span class="news-type-badge badge-report">📋 Report</span>
+        </div>
+        <div class="news-title">BSL team got excellence award in "2025 미래내일 청년 일경험 지원사업"</div>
+        <div class='news-desc'>BSL team got excellence award in "2025 미래내일 청년 일경험 지원사업"<br><em>Yeonghwan Jang, Dain Kim, Dongwook Kim, Donghae Kim got award. Grats!</em></div>
+      </div>
+      <div class="news-item type-report">
+        <div class="news-header">
+          <span class="news-date">10/31/2025</span>
+          <span class="news-type-badge badge-report">📋 Report</span>
+        </div>
+        <div class="news-title">BSL researchers participated in the HRD Final Report Meeting</div>
+        <div class='news-desc'><em>Yeonghwan Jang, Dain Kim, Dongwook Kim participated in Final Research Meeting to present their work!</em></div>
+      </div>
+      <div class="news-item type-report">
+        <div class="news-header">
+          <span class="news-date">10/31/2025</span>
+          <span class="news-type-badge badge-report">📋 Report</span>
+        </div>
+        <div class="news-title">Donghae Kim was selected to visit Hyundai Motors High-Tech Center</div>
+        <div class='news-desc'>Donghae Kim was selected to visit Hyundai Motors High-Tech Center<br><em>Hyundai Motor Company Goyang High-Tech Center, Goyang Motor Studio; studied about latest mobility diagnosis/maintenance cases</em></div>
+      </div>
+      <div class="news-item type-event">
+        <div class="news-header">
+          <span class="news-date">09/19/2025</span>
+          <span class="news-type-badge badge-event">🎊 Event</span>
+        </div>
+        <div class="news-title">Fall semester opening event!</div>
+        <div class='news-desc'>Fall semester opening event!<br><em>We enjoyed a party with members from various research laboratories to celebrate the beginning of the fall semester.</em></div>
+      </div>
+      <div class="news-item type-welcome">
+        <div class="news-header">
+          <span class="news-date">09/01/2025</span>
+          <span class="news-type-badge badge-welcome">🎉 New Member</span>
+        </div>
+        <div class="news-title">Dain Kim started his M.S. course with BSL. Keep it up!</div>
+        <div class='news-desc'>Dain Kim started his M.S. course with BSL. Keep it up!</div>
+      </div>
+      <div class="news-item type-event">
+        <div class="news-header">
+          <span class="news-date">08/29/2025</span>
+          <span class="news-type-badge badge-event">🎊 Event</span>
+        </div>
+        <div class="news-title">Co-Workshop of CCS Graduate School of Mobility held in KAIST Munji Campus</div>
+        <div class='news-desc'>Co-Workshop of CCS Graduate School of Mobility held in KAIST Munji Campus<br><em>We shared research topics and discussed potential areas for collaboration with professors and students from various mobility-related research laboratories.</em></div>
+      </div>
+      <div class="news-item type-report">
+        <div class="news-header">
+          <span class="news-date">08/21/2025</span>
+          <span class="news-type-badge badge-report">📋 Report</span>
+        </div>
+        <div class="news-title">BSL researchers participated in the HRD research program.</div>
+        <div class='news-desc'>BSL researchers participated in the HRD research program.<br><em>Through the HRD program, Dongmin Kim, Yeonghwan Jang, Dain Kim, Dongwook Kim and Donghae Kim conduct research on estimating deviations among battery cells and receive related funding support for two months.</em></div>
+      </div>
+      <div class="news-item type-report">
+        <div class="news-header">
+          <span class="news-date">08/19/2025</span>
+          <span class="news-type-badge badge-report">📋 Report</span>
+        </div>
+        <div class="news-title">Donghae Kim was invited to SNUG Korea 2025 by Synopsys</div>
+        <div class='news-desc'>Donghae Kim was invited to SNUG Korea 2025 by Synopsys<br><em>Gain insights about design software tools and industrial value chain</em></div>
+      </div>
+      <div class="news-item type-welcome">
+        <div class="news-header">
+          <span class="news-date">06/25/2025</span>
+          <span class="news-type-badge badge-welcome">🎉 New Member</span>
+        </div>
+        <div class="news-title">Donghae Kim joined our group as an intern. Welcome!</div>
+        <div class='news-desc'>Donghae Kim joined our group as an intern. Welcome!</div>
+      </div>
+      <div class="news-item type-report">
+        <div class="news-header">
+          <span class="news-date">05/27/2025</span>
+          <span class="news-type-badge badge-report">📋 Report</span>
+        </div>
+        <div class="news-title">We held our lab's first seminar at KAIST Munji Campus!</div>
+        <div class='news-desc'>We held our lab's first seminar at KAIST Munji Campus!<br><em>Prof. Jonghyun Park (Missouri S&amp;T) and Prof. Jimin Oh (Kyungpook National University) joined as speakers, sharing insights on secondary batteries.</em></div>
+      </div>
+      <div class="news-item type-welcome">
+        <div class="news-header">
+          <span class="news-date">03/01/2025</span>
+          <span class="news-type-badge badge-welcome">🎉 New Member</span>
+        </div>
+        <div class="news-title">Yeonghwan Jang started his Ph.D. course with BSL. Keep it up!</div>
+        <div class='news-desc'>Yeonghwan Jang started his Ph.D. course with BSL. Keep it up!</div>
+      </div>
+      <div class="news-item type-welcome">
+        <div class="news-header">
+          <span class="news-date">03/01/2025</span>
+          <span class="news-type-badge badge-welcome">🎉 New Member</span>
+        </div>
+        <div class="news-title">Dr. Dongmin Kim joined our group as a postdoc. Welcome!</div>
+        <div class='news-desc'>Dr. Dongmin Kim joined our group as a postdoc. Welcome!</div>
+      </div>
+      <div class="news-item type-welcome">
+        <div class="news-header">
+          <span class="news-date">09/02/2024</span>
+          <span class="news-type-badge badge-welcome">🎉 New Member</span>
+        </div>
+        <div class="news-title">Dain Kim joined our group as an intern. Welcome!</div>
+        <div class='news-desc'>Dain Kim joined our group as an intern. Welcome!</div>
+      </div>
+      <div class="news-item type-welcome">
+        <div class="news-header">
+          <span class="news-date">09/02/2024</span>
+          <span class="news-type-badge badge-welcome">🎉 New Member</span>
+        </div>
+        <div class="news-title">Dongwook Kim joined our group as a M.S. course student. Welcome!</div>
+        <div class='news-desc'>Dongwook Kim joined our group as a M.S. course student. Welcome!</div>
+      </div>
+      <div class="news-item type-report">
+        <div class="news-header">
+          <span class="news-date">09/01/2024</span>
+          <span class="news-type-badge badge-report">📋 Report</span>
+        </div>
+        <div class="news-title">Our research was featured in the Research Webzine, <strong>KAIST Breakthroughs 2024 Fall Vol. 23</strong>. Congratulations!</div>
+        <div class='news-desc'>Our research was featured in the Research Webzine, <strong>KAIST Breakthroughs 2024 Fall Vol. 23</strong>. Congratulations!<br><em><a href="https://breakthroughs.kaist.ac.kr/sub02/view/id/524" target="_blank">Read more</a></em></div>
+      </div>
+      <div class="news-item type-report">
+        <div class="news-header">
+          <span class="news-date">07/01/2024</span>
+          <span class="news-type-badge badge-report">📋 Report</span>
+        </div>
+        <div class="news-title">A discussion between our lab's professor and our department's professor on future mobility was featured in <strong>KAISTian Newsletter 2024 Spring&amp;Summer</strong>.</div>
+        <div class='news-desc'>A discussion between our lab's professor and our department's professor on future mobility was featured in <strong>KAISTian Newsletter 2024 Spring&amp;Summer</strong>.<br><em><a href="https://www.kaist.ac.kr/kr/html/kaist/01050301.html" target="_blank">Read PDF</a></em></div>
+      </div>
+      <div class="news-item type-welcome">
+        <div class="news-header">
+          <span class="news-date">05/23/2024</span>
+          <span class="news-type-badge badge-welcome">🎉 New Member</span>
+        </div>
+        <div class="news-title">Yeonghwan Jang joined our group as an intern. Welcome!</div>
+        <div class='news-desc'>Yeonghwan Jang joined our group as an intern. Welcome!</div>
+      </div>
+
+      <div id="pagination"></div>
     </div>
 
-    <!-- Gallery Content -->
+    <!-- GALLERY -->
     <div id="gallery" class="tab-content">
-      <h2>Gallery</h2>
+      <div class="section-header">
+        <h2>Gallery</h2>
+        <div class="section-line"></div>
+      </div>
       <div class="gallery-list">
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">06/03/2026</div><div class="gallery-title">Sejong Chungman's Night</div></div><div class="gallery-img-wrap"><img src="images/260602Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">06/02/2026</div><div class="gallery-title">BSL X KRISO Project Meeting</div></div><div class="gallery-img-wrap"><img src="images/260601Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">05/21/2026</div><div class="gallery-title">BSL @ Osulloc Tea Museum Jeju!</div></div><div class="gallery-img-wrap"><img src="images/260521Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">05/20/2026</div><div class="gallery-title">BSL @ KSAE 2026 Spring Conference</div></div><div class="gallery-img-wrap"><img src="images/260520Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">05/18/2026</div><div class="gallery-title">Yeonghwan got best paper award in KECS!</div></div><div class="gallery-img-wrap"><img src="images/260518Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">05/17/2026</div><div class="gallery-title">Happy birthday Donghae!</div></div><div class="gallery-img-wrap"><img src="images/260517Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">05/15/2026</div><div class="gallery-title">Happy Professor's Day!</div></div><div class="gallery-img-wrap"><img src="images/260515Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">05/06/2026</div><div class="gallery-title">BSL @ 2026 Spring Conference, KSME CAE</div></div><div class="gallery-img-wrap"><img src="images/260506Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">04/28/2026</div><div class="gallery-title">Matlab and Simulink Seminar with Dr. Sean Oh</div></div><div class="gallery-img-wrap"><img src="images/260428Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">04/23/2026</div><div class="gallery-title">Chikorita Dongwook</div></div><div class="gallery-img-wrap"><img src="images/260423Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">04/22/2026</div><div class="gallery-title">Beer Party after Midterm!</div></div><div class="gallery-img-wrap"><img src="images/260422Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">04/09/2026</div><div class="gallery-title">Super safe ABCD</div></div><div class="gallery-img-wrap"><img src="images/260409Gallery.jpg"></div></div>
         <div class="gallery-item">
-          <div class="gallery-date">05/21/2026</div>
-          <div class="gallery-title">Sejong Chungman's Night</div>
-          <img src="images\260602Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">06/01/2026</div>
-          <div class="gallery-title">BSL X KRISO Project Meeting</div>
-          <img src="images\260601Gallery.jpg">
-        </div>
-        <!--<div class="gallery-item">
-          <div class="gallery-date">05/24/2026</div>
-          <div class="gallery-title">ZZAS Duo</div>
-          <img src="images\260524Gallery.jpg">
-        </div>-->
-        <div class="gallery-item">
-          <div class="gallery-date">05/21/2026</div>
-          <div class="gallery-title">BSL @ Osulloc Tea Museum Jeju!</div>
-          <img src="images\260521Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">05/20/2026</div>
-          <div class="gallery-title">BSL @ KSAE 2026 Spring Conference</div>
-          <img src="images\260520Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">05/18/2026</div>
-          <div class="gallery-title">Yeonghwan got best paper award in KECS!</div>
-          <img src="images\260518Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">05/17/2026</div>
-          <div class="gallery-title">Happy birthday Donghae!</div>
-          <img src="images\260517Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">05/15/2026</div>
-          <div class="gallery-title">Happy Professor's Day!</div>
-          <img src="images\260515Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">05/06/2026</div>
-          <div class="gallery-title">BSL @ 2026 Spring Conference, KSME CAE</div>
-          <img src="images\260506Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">04/28/2026</div>
-          <div class="gallery-title">Matlab and Simulink Seminar with Dr. Sean Oh</div>
-          <img src="images\260428Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">04/23/2026</div>
-          <div class="gallery-title">Chikorita Dongwook</div>
-          <img src="images\260423Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">04/22/2026</div>
-          <div class="gallery-title">Beer Party after Midterm!</div>
-          <img src="images\260422Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">04/09/2026</div>
-          <div class="gallery-title">Super safe ABCD</div>
-          <img src="images\260409Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">04/04/2026</div>
-          <div class="gallery-title">BSL @ 2026 Spring Conference, KECS</div>
-          <div class="gallery-slider">
-            <button class="slide-btn prev">‹</button>
-            <div class="slide-track">
-              <img src="images\260404Gallery.jpg">
-              <img src="images\260404Gallery2.png">
-              <img src="images\260404Gallery3.png">
-              <img src="images\260404Gallery4.png">
-              <img src="images\260404Gallery5.jpg">
+          <div class="gallery-meta"><div class="gallery-date">04/04/2026</div><div class="gallery-title">BSL @ 2026 Spring Conference, KECS</div></div>
+          <div class="gallery-img-wrap">
+            <div class="gallery-slider">
+              <button class="slide-btn prev">&#8249;</button>
+              <div class="slide-track">
+                <img src="images/260404Gallery.jpg"><img src="images/260404Gallery2.png"><img src="images/260404Gallery3.png"><img src="images/260404Gallery4.png"><img src="images/260404Gallery5.jpg">
+              </div>
+              <button class="slide-btn next">&#8250;</button>
             </div>
-            <button class="slide-btn next">›</button>
           </div>
         </div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">04/03/2026</div><div class="gallery-title">Happy Birthday Dongwook!</div></div><div class="gallery-img-wrap"><img src="images/260403Gallery2.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">04/03/2026</div><div class="gallery-title">Spring Semester Opening Event!</div></div><div class="gallery-img-wrap"><img src="images/260403Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">04/02/2026</div><div class="gallery-title">Battery Strawberry Lab!</div></div><div class="gallery-img-wrap"><img src="images/260402Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">03/27/2026</div><div class="gallery-title">Happy Birthday Jinho!!</div></div><div class="gallery-img-wrap"><img src="images/260327Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">03/18/2026</div><div class="gallery-title">I'm not cute anymore~</div></div><div class="gallery-img-wrap"><img src="images/260318Gallery.jpg"></div></div>
         <div class="gallery-item">
-          <div class="gallery-date">04/03/2026</div>
-          <div class="gallery-title">Happy Birthday Dongwook!</div>
-          <img src="images\260403Gallery2.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">04/03/2026</div>
-          <div class="gallery-title">Spring Semester Opening Event!</div>
-          <img src="images\260403Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">04/02/2026</div>
-          <div class="gallery-title">Battery Strawberry Lab!</div>
-          <img src="images\260402Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">03/27/2026</div>
-          <div class="gallery-title">Happy Birthday Jinho!!</div>
-          <img src="images\260327Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">03/18/2026</div>
-          <div class="gallery-title">I'm not cute anymore~</div>
-          <img src="images\260318Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">03/13/2026</div>
-          <div class="gallery-title">Don't scroll to picture#3</div>
-          <div class="gallery-slider">
-            <button class="slide-btn prev">‹</button>
-            <div class="slide-track">
-              <img src="images\260313Gallery_1.jpg">
-              <img src="images\260313Gallery_2.jpg">
-              <img src="images\260313Gallery_3.jpg">
+          <div class="gallery-meta"><div class="gallery-date">03/13/2026</div><div class="gallery-title">Don't scroll to picture#3</div></div>
+          <div class="gallery-img-wrap">
+            <div class="gallery-slider">
+              <button class="slide-btn prev">&#8249;</button>
+              <div class="slide-track">
+                <img src="images/260313Gallery_1.jpg"><img src="images/260313Gallery_2.jpg"><img src="images/260313Gallery_3.jpg">
+              </div>
+              <button class="slide-btn next">&#8250;</button>
             </div>
-            <button class="slide-btn next">›</button>
           </div>
         </div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">03/11/2026</div><div class="gallery-title">How Egyptian people built Pyramid</div></div><div class="gallery-img-wrap"><img src="images/260311Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">03/05/2026</div><div class="gallery-title">New semester dinner party!</div></div><div class="gallery-img-wrap"><img src="images/260305Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">03/04/2026</div><div class="gallery-title">Battery disassembly in truth hall</div></div><div class="gallery-img-wrap"><img src="images/260304Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">02/23/2026</div><div class="gallery-title">for Perfect Wet Lab</div></div><div class="gallery-img-wrap"><img src="images/260223Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">02/15/2026</div><div class="gallery-title">Happy Birthday Dongmin!!</div></div><div class="gallery-img-wrap"><img src="images/260215Gallery.png"></div></div>
         <div class="gallery-item">
-          <div class="gallery-date">03/11/2026</div>
-          <div class="gallery-title">How Egyptian people built Pyramid</div>
-          <img src="images\260311Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">03/05/2026</div>
-          <div class="gallery-title">New semester dinner party!</div>
-          <img src="images\260305Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">03/04/2026</div>
-          <div class="gallery-title">Battery disassembly in truth hall</div>
-          <img src="images\260304Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">02/23/2026</div>
-          <div class="gallery-title">for Perfect Wet Lab</div>
-          <img src="images\260223Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">02/15/2026</div>
-          <div class="gallery-title">Happy Birthday Dongmin!!</div>
-          <img src="images\260215Gallery.png">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">02/11/2026</div>
-          <div class="gallery-title">2026 Spring Conference, KSCM</div>
-          <div class="gallery-slider">
-            <button class="slide-btn prev">‹</button>
-            <div class="slide-track">
-              <img src="images\260211Gallery_1.jpg">
-              <img src="images\260211Gallery_2.jpg">
-              <img src="images\260211Gallery_3.jpg">
+          <div class="gallery-meta"><div class="gallery-date">02/11/2026</div><div class="gallery-title">2026 Spring Conference, KSCM</div></div>
+          <div class="gallery-img-wrap">
+            <div class="gallery-slider">
+              <button class="slide-btn prev">&#8249;</button>
+              <div class="slide-track">
+                <img src="images/260211Gallery_1.jpg"><img src="images/260211Gallery_2.jpg"><img src="images/260211Gallery_3.jpg">
+              </div>
+              <button class="slide-btn next">&#8250;</button>
             </div>
-            <button class="slide-btn next">›</button>
           </div>
         </div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">02/09/2026</div><div class="gallery-title">BSL @ Play Burger</div></div><div class="gallery-img-wrap"><img src="images/260209Gallery.jpg"></div></div>
         <div class="gallery-item">
-          <div class="gallery-date">02/09/2026</div>
-          <div class="gallery-title">BSL @ Play Burger</div>
-          <img src="images\260209Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">02/03/2026</div>
-          <div class="gallery-title">Baskin Robins 31 years old</div>
-          <div class="gallery-slider">
-            <button class="slide-btn prev">‹</button>
-            <div class="slide-track">
-              <img src="images\260203Gallery_1.jpg">
-              <img src="images\260203Gallery_2.jpg">
+          <div class="gallery-meta"><div class="gallery-date">02/03/2026</div><div class="gallery-title">Baskin Robins 31 years old</div></div>
+          <div class="gallery-img-wrap">
+            <div class="gallery-slider">
+              <button class="slide-btn prev">&#8249;</button>
+              <div class="slide-track">
+                <img src="images/260203Gallery_1.jpg"><img src="images/260203Gallery_2.jpg">
+              </div>
+              <button class="slide-btn next">&#8250;</button>
             </div>
-            <button class="slide-btn next">›</button>
           </div>
         </div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">02/02/2026</div><div class="gallery-title">No Up and Down Elsa</div></div><div class="gallery-img-wrap"><img src="images/260202Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">01/29/2026</div><div class="gallery-title">Dinner After Meeting</div></div><div class="gallery-img-wrap"><img src="images/260129Gallery.png"></div></div>
         <div class="gallery-item">
-          <div class="gallery-date">02/02/2026</div>
-          <div class="gallery-title">No Up and Down Elsa</div>
-          <img src="images\260202Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">01/29/2026</div>
-          <div class="gallery-title">Dinner After Meeting</div>
-          <img src="images\260129Gallery.png">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">01/22/2026</div>
-          <div class="gallery-title">BSL @ KRISO</div>
-          <div class="gallery-slider">
-            <button class="slide-btn prev">‹</button>
-            <div class="slide-track">
-              <img src="images\260123Gallery_1.jpg">
-              <img src="images\260123Gallery_2.jpg">
+          <div class="gallery-meta"><div class="gallery-date">01/22/2026</div><div class="gallery-title">BSL @ KRISO</div></div>
+          <div class="gallery-img-wrap">
+            <div class="gallery-slider">
+              <button class="slide-btn prev">&#8249;</button>
+              <div class="slide-track">
+                <img src="images/260123Gallery_1.jpg"><img src="images/260123Gallery_2.jpg">
+              </div>
+              <button class="slide-btn next">&#8250;</button>
             </div>
-            <button class="slide-btn next">›</button>
           </div>
         </div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">01/02/2026</div><div class="gallery-title">Dain Kim X PIXAR</div></div><div class="gallery-img-wrap"><img src="images/260102Gallery.jpg"></div></div>
         <div class="gallery-item">
-          <div class="gallery-date">01/02/2026</div>
-          <div class="gallery-title">Dain Kim X PIXAR</div>
-          <img src="images\260102Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">12/22/2025</div>
-          <div class="gallery-title">Goodbye to our Best Year 2025!</div>
-          <div class="gallery-slider">
-            <button class="slide-btn prev">‹</button>
-            <div class="slide-track">
-              <img src="images\251222Gallery_2.jpg">
-              <img src="images\251222Gallery_3.jpg">
+          <div class="gallery-meta"><div class="gallery-date">12/22/2025</div><div class="gallery-title">Goodbye to our Best Year 2025!</div></div>
+          <div class="gallery-img-wrap">
+            <div class="gallery-slider">
+              <button class="slide-btn prev">&#8249;</button>
+              <div class="slide-track">
+                <img src="images/251222Gallery_2.jpg"><img src="images/251222Gallery_3.jpg">
+              </div>
+              <button class="slide-btn next">&#8250;</button>
             </div>
-            <button class="slide-btn next">›</button>
           </div>
         </div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">12/22/2025</div><div class="gallery-title">Thinking Back to our Military Days..</div></div><div class="gallery-img-wrap"><img src="images/251222Gallery_1.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">12/19/2025</div><div class="gallery-title">ICCC 2025 @ Taipei S&amp;T, Taiwan</div></div><div class="gallery-img-wrap"><img src="images/251219Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">12/18/2025</div><div class="gallery-title">Happy Birthday Dain!!</div></div><div class="gallery-img-wrap"><img src="images/251218Gallery.png"></div></div>
         <div class="gallery-item">
-          <div class="gallery-date">12/22/2025</div>
-          <div class="gallery-title">Thinking Back to our Military Days..</div>
-          <img src="images\251222Gallery_1.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">12/19/2025</div>
-          <div class="gallery-title">ICCC 2025 @ Taipei S&T, Taiwan</div>
-          <img src="images\251219Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">12/18/2025</div>
-          <div class="gallery-title">Happy Birthday Dain!!</div>
-          <img src="images\251218Gallery.png">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">12/12/2025</div>
-          <div class="gallery-title">BSL Home Economics Class</div>
-          <div class="gallery-slider">
-            <button class="slide-btn prev">‹</button>
-            <div class="slide-track">
-              <!--<img src="images\251212Gallery_1.jpg">-->
-              <img src="images\251212Gallery_2.jpg">
-              <img src="images\251212Gallery_3.jpg">
+          <div class="gallery-meta"><div class="gallery-date">12/12/2025</div><div class="gallery-title">BSL Home Economics Class</div></div>
+          <div class="gallery-img-wrap">
+            <div class="gallery-slider">
+              <button class="slide-btn prev">&#8249;</button>
+              <div class="slide-track">
+                <img src="images/251212Gallery_2.jpg"><img src="images/251212Gallery_3.jpg">
+              </div>
+              <button class="slide-btn next">&#8250;</button>
             </div>
-            <button class="slide-btn next">›</button>
           </div>
         </div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">12/05/2025</div><div class="gallery-title">COMSOL Conference 2025</div></div><div class="gallery-img-wrap"><img src="images/251205Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">12/03/2025</div><div class="gallery-title">Chung-Man Chicken Night</div></div><div class="gallery-img-wrap"><img src="images/251203Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">11/21/2025</div><div class="gallery-title">KECS 2025 Fall Conference</div></div><div class="gallery-img-wrap"><img src="images/251121Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">11/13/2025</div><div class="gallery-title">96 duo's Love-Shot</div></div><div class="gallery-img-wrap"><img src="images/251113Gallery.jpg"></div></div>
         <div class="gallery-item">
-          <div class="gallery-date">12/05/2025</div>
-          <div class="gallery-title">COMSOL Conference 2025</div>
-          <img src="images\251205Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">12/03/2025</div>
-          <div class="gallery-title">Chung-Man Chicken Night</div>
-          <img src="images\251203Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">11/21/2025</div>
-          <div class="gallery-title">KECS 2025 Fall Conference</div>
-          <img src="images\251121Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">11/13/2025</div>
-          <div class="gallery-title">96 duo's Love-Shot</div>
-          <img src="images\251113Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">11/12/2025</div>
-          <div class="gallery-title">BSL @ KSAE 2025 Fall Conference</div>
-          <div class="gallery-slider">
-            <button class="slide-btn prev">‹</button>
-            <div class="slide-track">
-              <img src="images\251112Gallery_1.jpg">
-              <img src="images\251112Gallery_2.jpg">
-              <img src="images\251112Gallery_3.jpg">
-              <img src="images\251112Gallery_4.jpg">
-              <img src="images\251112Gallery_5.jpg">
+          <div class="gallery-meta"><div class="gallery-date">11/12/2025</div><div class="gallery-title">BSL @ KSAE 2025 Fall Conference</div></div>
+          <div class="gallery-img-wrap">
+            <div class="gallery-slider">
+              <button class="slide-btn prev">&#8249;</button>
+              <div class="slide-track">
+                <img src="images/251112Gallery_1.jpg"><img src="images/251112Gallery_2.jpg"><img src="images/251112Gallery_3.jpg"><img src="images/251112Gallery_4.jpg"><img src="images/251112Gallery_5.jpg">
+              </div>
+              <button class="slide-btn next">&#8250;</button>
             </div>
-            <button class="slide-btn next">›</button>
           </div>
         </div>
-        <div class="gallery-item">
-          <div class="gallery-date">11/11/2025</div>
-          <div class="gallery-title">Happy Pocky Day! (Thank you Dongmin!!)</div>
-          <img src="images\251111Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">11/10/2025</div>
-          <div class="gallery-title">KSME 2025 Chungcheong Branch Fall Conference</div>
-          <img src="images\251110Gallery.jpg" alt="Professor Yoonkoo Lee's Birthday Party with BSL!">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">11/07/2025</div>
-          <div class="gallery-title">BSL @ Dunkin Doughnut</div>
-          <img src="images\251107Gallery.jpg">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">10/31/2025</div>
-          <div class="gallery-title">HRD Project Final Presentation</div>
-          <img src="images\251031Gallery.jpg" alt="Professor Yoonkoo Lee's Birthday Party with BSL!">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">10/25/2025</div>
-          <div class="gallery-title">Tired Lab Leader...</div>
-          <img src="images\251025Gallery.png" alt="Professor Yoonkoo Lee's Birthday Party with BSL!">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">10/24/2025</div>
-          <div class="gallery-title">Happy Birthday Jeu!!</div>
-          <img src="images\251024Gallery.jpg" alt="Professor Yoonkoo Lee's Birthday Party with BSL!">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">09/29/2025</div>
-          <div class="gallery-title">BSL Dinner Party</div>
-          <img src="images\250929Gallery.png" alt="Professor Yoonkoo Lee's Birthday Party with BSL!">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">09/19/2025</div>
-          <div class="gallery-title">Semester Opening Event</div>
-          <img src="images\250919Gallery.jpg" alt="Professor Yoonkoo Lee's Birthday Party with BSL!">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">09/05/2025</div>
-          <div class="gallery-title">Professor's Birthday!!</div>
-          <img src="images\250905Gallery.png" alt="Professor Yoonkoo Lee's Birthday Party with BSL!">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">09/02/2025</div>
-          <div class="gallery-title">BSL @ KAIST Carrier Fair</div>
-          <img src="images\250902Gallery.png" alt="Professor Yoonkoo Lee's Birthday Party with BSL!">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">08/29/2025</div>
-          <div class="gallery-title">Alpha Male Dain KIM</div>
-          <img src="images\250829Gallery.png" alt="Professor Yoonkoo Lee's Birthday Party with BSL!">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">08/10/2025</div>
-          <div class="gallery-title">Pre-URP Final Presentation Day</div>
-          <img src="images\250810Gallery.jpg" alt="Last night with Pre-URP students from Science Highschool">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">08/08/2025</div>
-          <div class="gallery-title">Pre-URP Farewell Dinner</div>
-          <img src="images\250808Gallery.jpg" alt="Last night with Pre-URP students from Science Highschool">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">08/01/2025</div>
-          <div class="gallery-title">Table Tennis Competition</div>
-          <img src="images\250801Gallery.png" alt="Last night with Pre-URP students from Science Highschool">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">07/28/2025</div>
-          <div class="gallery-title">Board Game! Professor vs Candidates!</div>
-          <img src="images\250728Gallery.png" alt="Last night with Pre-URP students from Science Highschool">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">06/02/2025</div>
-          <div class="gallery-title">Meeting and Dinner with DOL (Korea Univ. Sejong Campus)</div>
-          <img src="images\250602Gallery.png" alt="Last night with Pre-URP students from Science Highschool">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">05/21/2025</div>
-          <div class="gallery-title">KSAE 2025 conference in Jeju</div>
-          <img src="images\250521Gallery.png" alt="Last night with Pre-URP students from Science Highschool">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">05/15/2025</div>
-          <div class="gallery-title">Teacher's Day @ BSL!</div>
-          <img src="images\250515Gallery.png" alt="Last night with Pre-URP students from Science Highschool">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">05/09/2025</div>
-          <div class="gallery-title">KAIST Battery mini Workshop in Daejeon</div>
-          <img src="images\250509Gallery.png" alt="-">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">04/17/2025</div>
-          <div class="gallery-title">KSME 2025 conference in Jeju</div>
-          <img src="images\250417Gallery.png" alt="-">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">04/11/2025</div>
-          <div class="gallery-title">Spring semester opening event</div>
-          <img src="images\250411Gallery.png" alt="-">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">04/08/2025</div>
-          <div class="gallery-title">MATLAB EXPO 2025 Korea in Coex, Seoul</div>
-          <img src="images\250408Gallery.png" alt="-">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">04/04/2025</div>
-          <div class="gallery-title">KECS 2025 conference in Jeju</div>
-          <img src="images\250404Gallery.png" alt="-">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">04/03/2025</div>
-          <div class="gallery-title">Happy Birthday to King-Dongwook Kim-God</div>
-          <img src="images\250403Gallery.png" alt="-">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">03/31/2025</div>
-          <div class="gallery-title">Spring strawberry party @ KAIST</div>
-          <img src="images\250331Gallery.png" alt="-">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">02/28/2025</div>
-          <div class="gallery-title">Welcome party for Dongmin Kim!</div>
-          <img src="images\250228Gallery.png" alt="-">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">02/03/2025</div>
-          <div class="gallery-title">Happy Birthday to Lab Leader Yeonghwan Jang!</div>
-          <img src="images\250203Gallery.png" alt="-">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">11/06/2024</div>
-          <div class="gallery-title">KSME 2024 conference in Jeju</div>
-          <img src="images\241106Gallery.png" alt="-">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">10/11/2024</div>
-          <div class="gallery-title">Autumn semester opening event</div>
-          <img src="images\241011Gallery.png" alt="-">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">09/11/2024</div>
-          <div class="gallery-title">Welcone party for Dain Kim and Dongwook Kim!</div>
-          <img src="images\240911Gallery.png" alt="-">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">09/06/2024</div>
-          <div class="gallery-title">Happy Birthday Professor!</div>
-          <img src="images\240906Gallery.png" alt="-">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">08/27/2024</div>
-          <div class="gallery-title">Visiting Eco-Friendly Smart Vehicle Research Center</div>
-          <img src="images\240827Gallery.png" alt="-">
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-date">06/28/2024</div>
-          <div class="gallery-title">Welcome party for Yeonghwan Jang!</div>
-          <img src="images\240628Gallery.png" alt="-">
-        </div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">11/11/2025</div><div class="gallery-title">Happy Pocky Day! (Thank you Dongmin!!)</div></div><div class="gallery-img-wrap"><img src="images/251111Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">11/10/2025</div><div class="gallery-title">KSME 2025 Chungcheong Branch Fall Conference</div></div><div class="gallery-img-wrap"><img src="images/251110Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">11/07/2025</div><div class="gallery-title">BSL @ Dunkin Doughnut</div></div><div class="gallery-img-wrap"><img src="images/251107Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">10/31/2025</div><div class="gallery-title">HRD Project Final Presentation</div></div><div class="gallery-img-wrap"><img src="images/251031Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">10/25/2025</div><div class="gallery-title">Tired Lab Leader...</div></div><div class="gallery-img-wrap"><img src="images/251025Gallery.png"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">10/24/2025</div><div class="gallery-title">Happy Birthday Jeu!!</div></div><div class="gallery-img-wrap"><img src="images/251024Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">09/29/2025</div><div class="gallery-title">BSL Dinner Party</div></div><div class="gallery-img-wrap"><img src="images/250929Gallery.png"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">09/19/2025</div><div class="gallery-title">Semester Opening Event</div></div><div class="gallery-img-wrap"><img src="images/250919Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">09/05/2025</div><div class="gallery-title">Professor's Birthday!!</div></div><div class="gallery-img-wrap"><img src="images/250905Gallery.png"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">09/02/2025</div><div class="gallery-title">BSL @ KAIST Carrier Fair</div></div><div class="gallery-img-wrap"><img src="images/250902Gallery.png"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">08/29/2025</div><div class="gallery-title">Alpha Male Dain KIM</div></div><div class="gallery-img-wrap"><img src="images/250829Gallery.png"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">08/10/2025</div><div class="gallery-title">Pre-URP Final Presentation Day</div></div><div class="gallery-img-wrap"><img src="images/250810Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">08/08/2025</div><div class="gallery-title">Pre-URP Farewell Dinner</div></div><div class="gallery-img-wrap"><img src="images/250808Gallery.jpg"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">08/01/2025</div><div class="gallery-title">Table Tennis Competition</div></div><div class="gallery-img-wrap"><img src="images/250801Gallery.png"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">07/28/2025</div><div class="gallery-title">Board Game! Professor vs Candidates!</div></div><div class="gallery-img-wrap"><img src="images/250728Gallery.png"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">06/02/2025</div><div class="gallery-title">Meeting and Dinner with DOL (Korea Univ. Sejong Campus)</div></div><div class="gallery-img-wrap"><img src="images/250602Gallery.png"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">05/21/2025</div><div class="gallery-title">KSAE 2025 conference in Jeju</div></div><div class="gallery-img-wrap"><img src="images/250521Gallery.png"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">05/15/2025</div><div class="gallery-title">Teacher's Day @ BSL!</div></div><div class="gallery-img-wrap"><img src="images/250515Gallery.png"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">05/09/2025</div><div class="gallery-title">KAIST Battery mini Workshop in Daejeon</div></div><div class="gallery-img-wrap"><img src="images/250509Gallery.png"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">04/17/2025</div><div class="gallery-title">KSME 2025 conference in Jeju</div></div><div class="gallery-img-wrap"><img src="images/250417Gallery.png"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">04/11/2025</div><div class="gallery-title">Spring semester opening event</div></div><div class="gallery-img-wrap"><img src="images/250411Gallery.png"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">04/08/2025</div><div class="gallery-title">MATLAB EXPO 2025 Korea in Coex, Seoul</div></div><div class="gallery-img-wrap"><img src="images/250408Gallery.png"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">04/04/2025</div><div class="gallery-title">KECS 2025 conference in Jeju</div></div><div class="gallery-img-wrap"><img src="images/250404Gallery.png"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">04/03/2025</div><div class="gallery-title">Happy Birthday to King-Dongwook Kim-God</div></div><div class="gallery-img-wrap"><img src="images/250403Gallery.png"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">03/31/2025</div><div class="gallery-title">Spring strawberry party @ KAIST</div></div><div class="gallery-img-wrap"><img src="images/250331Gallery.png"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">02/28/2025</div><div class="gallery-title">Welcome party for Dongmin Kim!</div></div><div class="gallery-img-wrap"><img src="images/250228Gallery.png"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">02/03/2025</div><div class="gallery-title">Happy Birthday to Lab Leader Yeonghwan Jang!</div></div><div class="gallery-img-wrap"><img src="images/250203Gallery.png"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">11/06/2024</div><div class="gallery-title">KSME 2024 conference in Jeju</div></div><div class="gallery-img-wrap"><img src="images/241106Gallery.png"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">10/11/2024</div><div class="gallery-title">Autumn semester opening event</div></div><div class="gallery-img-wrap"><img src="images/241011Gallery.png"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">09/11/2024</div><div class="gallery-title">Welcome party for Dain Kim and Dongwook Kim!</div></div><div class="gallery-img-wrap"><img src="images/240911Gallery.png"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">09/06/2024</div><div class="gallery-title">Happy Birthday Professor!</div></div><div class="gallery-img-wrap"><img src="images/240906Gallery.png"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">08/27/2024</div><div class="gallery-title">Visiting Eco-Friendly Smart Vehicle Research Center</div></div><div class="gallery-img-wrap"><img src="images/240827Gallery.png"></div></div>
+        <div class="gallery-item"><div class="gallery-meta"><div class="gallery-date">06/28/2024</div><div class="gallery-title">Welcome party for Yeonghwan Jang!</div></div><div class="gallery-img-wrap"><img src="images/240628Gallery.png"></div></div>
+
       </div>
     </div>
   </main>
 
-  <!-- Modal -->
+  <!-- MODAL -->
   <div class="modal" id="imageModal">
     <span class="modal-close" id="closeModal">&times;</span>
     <div class="modal-content"><img id="modalImg" src="" alt=""></div>
   </div>
 
+  <!-- FOOTER -->
   <footer>
     <div class="footer-container">
-      <!-- 왼쪽: 연구실 정보 -->
       <div class="footer-left">
         <h3>Battery System Laboratory</h3>
-        <p>
-          KAIST, CCS Graduate School of Mobility
-          193, Munji-ro, Yuseong-gu, Daejeon, 34051, Republic of Korea
-        </p>
-        <p><strong>Location:</strong> Faculty Wing, F440</p>
+        <p>KAIST, CCS Graduate School of Mobility<br>
+           193, Munji-ro, Yuseong-gu, Daejeon, 34051, Republic of Korea</p>
+        <p style="margin-top:.5em"><strong style="color:var(--text)">Location:</strong> Faculty Wing, F440</p>
       </div>
-
-      <!-- 오른쪽: 연락처 정보 -->
       <div class="footer-right">
-        <p><strong>Phone:</strong> +82 042-350-1762</p>
-        <p><strong>Email:</strong> <a href="mailto:yoonklee@kaist.ac.kr">yoonklee@kaist.ac.kr</a></p>
+        <p><strong style="color:var(--text)">Phone:</strong> +82 042-350-1762</p>
+        <p><strong style="color:var(--text)">Email:</strong>
+          <a href="mailto:yoonklee@kaist.ac.kr">yoonklee@kaist.ac.kr</a></p>
       </div>
     </div>
-
     <div class="footer-bottom">
       <p>&copy; 2025 Battery System Laboratory | All Rights Reserved</p>
     </div>
   </footer>
 
-  <script>
-    const tabButtons = document.querySelectorAll(".tab-btn");
-    const tabContents = document.querySelectorAll(".tab-content");
 
-    // ✅ 탭 전환 기능
+  <script>
+    /* TAB */
+    const tabButtons  = document.querySelectorAll(".tab-btn");
+    const tabContents = document.querySelectorAll(".tab-content");
     tabButtons.forEach(btn => {
       btn.addEventListener("click", () => {
-        tabButtons.forEach(b => b.classList.remove("active"));
+        tabButtons.forEach(b  => b.classList.remove("active"));
         tabContents.forEach(c => c.classList.remove("active"));
         btn.classList.add("active");
         document.getElementById(btn.dataset.target).classList.add("active");
       });
     });
 
-    // ✅ News 페이지네이션
-    const newsItems = document.querySelectorAll("#news .news-item");
+    /* PAGINATION */
+    const newsItems    = document.querySelectorAll("#news .news-item");
     const itemsPerPage = 10;
-    const paginationContainer = document.createElement("div");
-    paginationContainer.id = "pagination";
-    paginationContainer.style.textAlign = "center";
-    paginationContainer.style.marginTop = "1.5em";
-
-    const totalPages = Math.ceil(newsItems.length / itemsPerPage);
+    const totalPages   = Math.ceil(newsItems.length / itemsPerPage);
+    const pagination   = document.getElementById("pagination");
 
     function showPage(page) {
-      newsItems.forEach((item, index) => {
-        item.style.display = 
-          index >= (page - 1) * itemsPerPage && index < page * itemsPerPage 
-            ? "block" : "none";
+      newsItems.forEach((item, i) => {
+        item.style.display = (i >= (page-1)*itemsPerPage && i < page*itemsPerPage) ? "block" : "none";
       });
-
-      // 버튼 활성화 상태 갱신
-      document.querySelectorAll(".page-btn").forEach(btn => btn.classList.remove("active"));
-      document.querySelector(`.page-btn[data-page="${page}"]`).classList.add("active");
+      document.querySelectorAll(".page-btn").forEach(b => b.classList.remove("active"));
+      const active = document.querySelector(`.page-btn[data-page="${page}"]`);
+      if (active) active.classList.add("active");
     }
 
-    // 페이지 버튼 생성
     for (let i = 1; i <= totalPages; i++) {
       const btn = document.createElement("button");
       btn.textContent = i;
-      btn.className = "page-btn";
+      btn.className   = "page-btn";
       btn.dataset.page = i;
-      btn.style.margin = "0 5px";
-      btn.style.padding = "6px 12px";
-      btn.style.border = "1px solid #ccc";
-      btn.style.borderRadius = "4px";
-      btn.style.background = "white";
-      btn.style.cursor = "pointer";
       btn.addEventListener("click", () => showPage(i));
-      paginationContainer.appendChild(btn);
+      pagination.appendChild(btn);
     }
+    showPage(1);
 
-    // 페이지네이션을 News 섹션 마지막에 추가
-    document.getElementById("news").appendChild(paginationContainer);
-    showPage(1); // 첫 페이지 표시
-
-
-    // ✅ Gallery 이미지 모달
-    const modal = document.getElementById("imageModal");
+    /* MODAL */
+    const modal    = document.getElementById("imageModal");
     const modalImg = document.getElementById("modalImg");
-    const closeModal = document.getElementById("closeModal");
+    const closeBtn = document.getElementById("closeModal");
 
-    document.querySelectorAll(".gallery-item img").forEach(img => {
+    document.querySelectorAll(".gallery-img-wrap img").forEach(img => {
       img.addEventListener("click", () => {
         modal.style.display = "flex";
         modalImg.src = img.src;
       });
     });
+    closeBtn.addEventListener("click", () => { modal.style.display = "none"; });
+    window.addEventListener("click", e => { if (e.target === modal) modal.style.display = "none"; });
 
-    closeModal.addEventListener("click", () => { modal.style.display = "none"; });
-    window.addEventListener("click", (e) => { 
-      if (e.target === modal) modal.style.display = "none"; 
-    });
-
+    /* SLIDER */
     document.querySelectorAll(".gallery-slider").forEach(slider => {
-
-      const track = slider.querySelector(".slide-track");
+      const track  = slider.querySelector(".slide-track");
       const slides = track.querySelectorAll("img");
-
-      let index = 0;
-
-      const prevBtn = slider.querySelector(".prev");
-      const nextBtn = slider.querySelector(".next");
-
-      function updateSlide() {
-        track.style.transform = `translateX(-${index * 100}%)`;
-      }
-
-      nextBtn.addEventListener("click", () => {
-        if (index < slides.length - 1) index++;
-        else index = 0;   // 🔄 마지막에서 다시 처음으로 (옵션)
-        updateSlide();
-      });
-
-      prevBtn.addEventListener("click", () => {
-        if (index > 0) index--;
-        else index = slides.length - 1; // 🔄 첫 슬라이드에서 마지막으로 (옵션)
-        updateSlide();
-      });
+      let index    = 0;
+      const prev   = slider.querySelector(".prev");
+      const next   = slider.querySelector(".next");
+      function update() { track.style.transform = `translateX(-${index * 100}%)`; }
+      next.addEventListener("click", () => { index = index < slides.length-1 ? index+1 : 0; update(); });
+      prev.addEventListener("click", () => { index = index > 0 ? index-1 : slides.length-1; update(); });
     });
   </script>
 

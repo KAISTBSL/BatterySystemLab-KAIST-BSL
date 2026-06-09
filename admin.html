@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BSL Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080e1a;--surface:#0d1b2e;--surface2:#112240;--surface3:#162a4a;
+  --border:rgba(102,204,255,0.12);--border2:rgba(102,204,255,0.25);
+  --accent:#007acc;--accent2:#66ccff;--accent3:#3399ff;
+  --text:#dde2ef;--text2:#7a90b0;--text3:#3a5070;
+  --success:#3ecf8e;--warn:#f4a832;--danger:#f45c5c;
+  --mono:'JetBrains Mono',monospace;--sans:'Pretendard',-apple-system,sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(102,204,255,0.018) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(102,204,255,0.018) 1px,transparent 1px);background-size:52px 52px}
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 35% at 50% -5%,rgba(0,122,204,0.08) 0%,transparent 60%)}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:200;background:rgba(8,14,26,0.92);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);height:64px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 2rem}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-badge{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#080e1a;
+  font-family:var(--mono);font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;letter-spacing:1px}
+.logo-title{font-size:14px;font-weight:600;color:var(--text);letter-spacing:.3px}
+.logo-sub{font-size:11px;color:var(--text3);font-family:var(--mono)}
+.header-right{display:flex;align-items:center;gap:8px}
+
+/* 접속자 배지 */
+.user-badge{
+  display:flex;align-items:center;gap:7px;
+  background:rgba(62,207,142,0.1);border:1px solid rgba(62,207,142,0.25);
+  padding:5px 13px;border-radius:30px;
+}
+.user-badge-dot{width:7px;height:7px;border-radius:50%;background:var(--success);flex-shrink:0;
+  box-shadow:0 0 6px rgba(62,207,142,0.6)}
+.user-badge-name{font-family:var(--mono);font-size:12px;color:var(--success);letter-spacing:.5px}
+
+.admin-tag{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--accent2);
+  background:rgba(102,204,255,0.1);border:1px solid rgba(102,204,255,0.2);
+  padding:3px 10px;border-radius:20px;text-transform:uppercase}
+.back-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--border2);
+  color:var(--text2);padding:6px 14px;border-radius:7px;font-size:13px;font-family:var(--sans);
+  cursor:pointer;text-decoration:none;transition:all .18s}
+.back-btn:hover{border-color:var(--accent2);color:var(--accent2);background:rgba(102,204,255,0.06)}
+
+/* HERO */
+.hero{position:relative;z-index:1;
+  background:linear-gradient(rgba(8,14,26,0.72),rgba(8,14,26,0.88)),url("images/background.png") no-repeat center/cover;
+  min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:3rem 2rem 2.5rem}
+.hero h1{font-size:2.2em;font-weight:700;margin-bottom:.3em;
+  background:linear-gradient(120deg,var(--accent2) 0%,#fff 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:1em;color:var(--text2);font-weight:300}
+.hero-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:2.5px;color:var(--accent2);
+  text-transform:uppercase;background:rgba(102,204,255,0.08);border:1px solid rgba(102,204,255,0.2);
+  padding:4px 14px;border-radius:30px;margin-bottom:1em;display:inline-block}
+.hero-user{margin-top:1em;font-family:var(--mono);font-size:13px;color:rgba(255,255,255,0.45);
+  display:flex;align-items:center;justify-content:center;gap:8px}
+.hero-user span{color:var(--success);font-weight:600}
+
+/* STATS BAR */
+.stats-bar{position:relative;z-index:1;display:grid;grid-template-columns:repeat(4,1fr);
+  gap:0;border-bottom:1px solid var(--border)}
+.stat-item{padding:1.2rem 1.5rem;border-right:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.stat-item:last-child{border-right:none}
+.stat-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1em;flex-shrink:0}
+.stat-num{font-family:var(--mono);font-size:1.5em;font-weight:600;color:var(--text);line-height:1}
+.stat-label{font-size:11px;color:var(--text2);margin-top:2px}
+
+/* MAIN */
+main{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:2.5rem 2rem 5rem}
+
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;margin-top:2.5rem}
+.section-title{font-size:13px;font-family:var(--mono);color:var(--text2);letter-spacing:1.5px;
+  text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.section-line{flex:1;height:1px;background:var(--border);margin-left:12px}
+
+/* CATEGORY LABEL */
+.cat-label{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;
+  padding:3px 10px;border-radius:20px;
+}
+.cat-admin{background:rgba(244,168,50,0.1);color:var(--warn);border:1px solid rgba(244,168,50,0.22)}
+.cat-search{background:rgba(62,207,142,0.1);color:var(--success);border:1px solid rgba(62,207,142,0.22)}
+.cat-coming{background:rgba(102,204,255,0.08);color:var(--text3);border:1px solid rgba(102,204,255,0.14)}
+
+/* FEATURE GRID */
+.feature-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:1rem}
+@media(max-width:700px){.feature-grid{grid-template-columns:1fr}}
+
+.feature-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.8rem;
+  display:flex;flex-direction:column;gap:14px;transition:all .22s;cursor:pointer;
+  text-decoration:none;position:relative;overflow:hidden}
+.feature-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .22s;
+  background:linear-gradient(135deg,rgba(0,122,204,0.06),rgba(102,204,255,0.04))}
+.feature-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,0.3)}
+.feature-card:hover::before{opacity:1}
+.feature-card.disabled{opacity:.45;pointer-events:none;cursor:default}
+
+.card-top{display:flex;align-items:flex-start;justify-content:space-between}
+.card-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4em;flex-shrink:0}
+.card-badge{font-family:var(--mono);font-size:10px;letter-spacing:1px;padding:3px 9px;border-radius:20px;text-transform:uppercase}
+.badge-live{background:rgba(62,207,142,0.15);color:var(--success);border:1px solid rgba(62,207,142,0.25)}
+.badge-new{background:rgba(102,204,255,0.12);color:var(--accent2);border:1px solid rgba(102,204,255,0.22)}
+.badge-beta{background:rgba(244,168,50,0.12);color:var(--warn);border:1px solid rgba(244,168,50,0.22)}
+.badge-soon{background:rgba(255,255,255,0.06);color:var(--text3);border:1px solid rgba(255,255,255,0.1)}
+
+.card-title{font-size:1.15em;font-weight:600;color:var(--text);margin-bottom:4px}
+.card-desc{font-size:.87em;color:var(--text2);line-height:1.7}
+.card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border)}
+.card-tags{display:flex;gap:6px;flex-wrap:wrap}
+.card-tag{font-size:10px;font-family:var(--mono);background:var(--surface2);color:var(--text2);
+  border:1px solid var(--border);padding:2px 8px;border-radius:4px}
+.card-link{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;
+  color:var(--accent2);text-decoration:none;transition:gap .15s}
+.card-link:hover{gap:8px}
+.card-link.muted{color:var(--text3)}
+
+/* QUICK LINKS */
+.activity-list{display:flex;flex-direction:column;gap:8px}
+.activity-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:12px 16px;display:flex;align-items:center;gap:12px}
+.activity-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.activity-text{font-size:13px;color:var(--text2);flex:1}
+.activity-time{font-size:11px;font-family:var(--mono);color:var(--text3)}
+
+/* FOOTER */
+footer{position:relative;z-index:1;background:rgba(8,14,26,0.95);border-top:1px solid var(--border);
+  padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--text3)}
+footer a{color:var(--text2);text-decoration:none}
+footer a:hover{color:var(--accent2)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.feature-card{animation:fadeUp .4s ease backwards}
+.feature-card:nth-child(1){animation-delay:.05s}
+.feature-card:nth-child(2){animation-delay:.10s}
+.feature-card:nth-child(3){animation-delay:.15s}
+.feature-card:nth-child(4){animation-delay:.20s}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">
+    <div class="logo-badge">BSL</div>
+    <div>
+      <div class="logo-title">Battery System Laboratory</div>
+      <div class="logo-sub">Admin Dashboard</div>
+    </div>
+  </a>
+  <div class="header-right">
+    <!-- 접속자 배지 (JS로 채움) -->
+    <div class="user-badge" id="userBadge" style="display:none">
+      <div class="user-badge-dot"></div>
+      <span class="user-badge-name" id="userBadgeName"></span>
+    </div>
+    <span class="admin-tag">Admin</span>
+    <a href="index.html" class="back-btn"><i class="fa fa-arrow-left"></i> 메인으로</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-eyebrow">Admin Panel</div>
+  <h1>BSL 관리자 도구</h1>
+  <p>연구실 업무 자동화 및 데이터 관리 플랫폼</p>
+  <div class="hero-user" id="heroUser" style="display:none">
+    <i class="fa fa-circle-check" style="color:var(--success)"></i>
+    <span id="heroUserName"></span>으로 접속 중
+  </div>
+</section>
+
+<!-- STATS BAR (JS로 도구 수 동적 반영) -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-icon" style="background:rgba(0,122,204,0.15);color:#66ccff"><i class="fa fa-tools"></i></div>
+    <div><div class="stat-num" id="statTotal">2</div><div class="stat-label">사용 가능한 도구</div></div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-icon" style="background:rgba(244,168,50,0.15);color:#f4a832"><i class="fa fa-folder-open"></i></div>
+    <div><div class="stat-num">1</div><div class="stat-label">활성 카테고리</div></div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-icon" style="background:rgba(62,207,142,0.15);color:#3ecf8e"><i class="fa fa-search"></i></div>
+    <div><div class="stat-num">0</div><div class="stat-label">검색 도구</div></div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-icon" style="background:rgba(167,139,250,0.15);color:#a78bfa"><i class="fa fa-bolt"></i></div>
+    <div><div class="stat-num">API</div><div class="stat-label">외부 연동</div></div>
+  </div>
+</div>
+
+<main>
+
+  <!-- ── 행정 탭 ── -->
+  <div class="section-header">
+    <div class="section-title">
+      <i class="fa fa-folder-open" style="color:var(--warn)"></i>
+      행정 도구
+    </div>
+    <span class="cat-label cat-admin">Admin</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="feature-grid" id="adminTools">
+    <a href="admin_schedule.html" class="feature-card" id="link-schedule">
+      <div class="card-top">
+        <div class="card-icon" style="background:rgba(244,168,50,0.12);color:#f4a832">
+          <i class="fa fa-calendar-alt"></i>
+        </div>
+        <span class="card-badge badge-live">Live</span>
+      </div>
+      <div>
+        <div class="card-title">일정 관리</div>
+        <div class="card-desc">연구실 일정을 월별 캘린더로 관리합니다. 미팅·마감일·발표·실험 등 유형별 색상 구분, 일정 추가·수정·삭제, 브라우저에 자동 저장됩니다.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-tags">
+          <span class="card-tag">캘린더</span>
+          <span class="card-tag">자동저장</span>
+          <span class="card-tag">유형별 색상</span>
+        </div>
+        <span class="card-link">열기 →</span>
+      </div>
+    </a>
+
+    <a href="admin_memo.html" class="feature-card" id="link-memo">
+      <div class="card-top">
+        <div class="card-icon" style="background:rgba(167,139,250,0.12);color:#a78bfa">
+          <i class="fa fa-sticky-note"></i>
+        </div>
+        <span class="card-badge badge-live">Live</span>
+      </div>
+      <div>
+        <div class="card-title">공지 &amp; 메모</div>
+        <div class="card-desc">연구실 내부 공지 및 메모를 작성하고 관리합니다. 중요도 태그, 즐겨찾기, 카테고리 필터, 작성자 기록을 지원합니다.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-tags">
+          <span class="card-tag">메모</span>
+          <span class="card-tag">우선순위</span>
+          <span class="card-tag">자동저장</span>
+        </div>
+        <span class="card-link">열기 →</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- ── 검색 도구 (준비 중) ── -->
+  <div class="section-header">
+    <div class="section-title">
+      <i class="fa fa-search" style="color:var(--success)"></i>
+      검색 도구
+    </div>
+    <span class="cat-label cat-coming">준비 중</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="feature-grid">
+    <div class="feature-card disabled">
+      <div class="card-top">
+        <div class="card-icon" style="background:rgba(62,207,142,0.08);color:var(--text3)">
+          <i class="fa fa-book-open"></i>
+        </div>
+        <span class="card-badge badge-soon">Soon</span>
+      </div>
+      <div>
+        <div class="card-title" style="color:var(--text2)">논문 검색</div>
+        <div class="card-desc">Semantic Scholar · CrossRef 기반 학술논문 통합 검색 도구. 준비 중입니다.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-tags"><span class="card-tag">준비 중</span></div>
+        <span class="card-link muted">Coming soon</span>
+      </div>
+    </div>
+
+    <div class="feature-card disabled">
+      <div class="card-top">
+        <div class="card-icon" style="background:rgba(102,204,255,0.08);color:var(--text3)">
+          <i class="fa fa-flask"></i>
+        </div>
+        <span class="card-badge badge-soon">Soon</span>
+      </div>
+      <div>
+        <div class="card-title" style="color:var(--text2)">특허 검색</div>
+        <div class="card-desc">KIPRIS · Google Patents 기반 국내외 특허 검색 도구. 준비 중입니다.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-tags"><span class="card-tag">준비 중</span></div>
+        <span class="card-link muted">Coming soon</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 빠른 링크 ── -->
+  <div class="section-header">
+    <div class="section-title">
+      <i class="fa fa-link" style="color:var(--accent2)"></i>
+      외부 리소스
+    </div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="activity-list">
+    <div class="activity-item">
+      <div class="activity-dot" style="background:#3ecf8e"></div>
+      <div class="activity-text">Semantic Scholar — 무료 학술논문 API (키 불필요)</div>
+      <a href="https://www.semanticscholar.org" target="_blank" class="back-btn" style="font-size:11px;padding:4px 10px">바로가기</a>
+    </div>
+    <div class="activity-item">
+      <div class="activity-dot" style="background:#66ccff"></div>
+      <div class="activity-text">SerpApi — Google Patents 검색 API (월 100회 무료)</div>
+      <a href="https://serpapi.com" target="_blank" class="back-btn" style="font-size:11px;padding:4px 10px">바로가기</a>
+    </div>
+    <div class="activity-item">
+      <div class="activity-dot" style="background:#f4a832"></div>
+      <div class="activity-text">KIPRIS — 국내 특허정보 Open API (무료)</div>
+      <a href="https://plus.kipris.or.kr" target="_blank" class="back-btn" style="font-size:11px;padding:4px 10px">바로가기</a>
+    </div>
+    <div class="activity-item">
+      <div class="activity-dot" style="background:#a78bfa"></div>
+      <div class="activity-text">CrossRef — DOI 기반 논문 메타데이터 API (키 불필요)</div>
+      <a href="https://www.crossref.org" target="_blank" class="back-btn" style="font-size:11px;padding:4px 10px">바로가기</a>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <span>© 2025 Battery System Laboratory · Admin Panel</span>
+  <a href="index.html"><i class="fa fa-home"></i> 메인 홈페이지로</a>
+</footer>
+
+<script>
+// ── 접속자 ID를 URL 파라미터에서 읽어 표시 & 하위 페이지 링크에 전달
+(function() {
+  const params = new URLSearchParams(location.search);
+  const user   = params.get('user') || '';
+
+  if (user) {
+    // 헤더 배지
+    document.getElementById('userBadge').style.display = 'flex';
+    document.getElementById('userBadgeName').textContent = user;
+    // 히어로 메시지
+    document.getElementById('heroUser').style.display = 'flex';
+    document.getElementById('heroUserName').textContent = user;
+    // 하위 페이지 링크에 user 파라미터 붙이기
+    document.getElementById('link-schedule').href = 'admin_schedule.html?user=' + encodeURIComponent(user);
+    document.getElementById('link-memo').href     = 'admin_memo.html?user='     + encodeURIComponent(user);
+  }
+
+  // 사용 가능한 도구 수 동적 계산 (disabled 아닌 것만)
+  const activeTools = document.querySelectorAll('#adminTools .feature-card:not(.disabled)').length;
+  document.getElementById('statTotal').textContent = activeTools;
+
+  // user를 sessionStorage에도 저장 (하위 페이지에서 참조 가능)
+  if (user) sessionStorage.setItem('bsl_admin_user', user);
+})();
+</script>
+</body>
+</html>
