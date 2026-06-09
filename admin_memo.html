@@ -44,11 +44,28 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,14,26,0.92);backdrop-
   cursor:pointer;text-decoration:none;transition:all .18s}
 .back-btn:hover{border-color:var(--accent2);color:var(--accent2);background:rgba(102,204,255,0.06)}
 
+.toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--surface2);
+  border:1px solid var(--border2);border-radius:10px;padding:10px 18px;font-size:13px;color:var(--text);
+  display:flex;align-items:center;gap:10px;box-shadow:0 8px 30px rgba(0,0,0,0.4);
+  opacity:0;transform:translateY(10px);transition:all .25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.ok i{color:var(--success)}
+.toast.err i{color:var(--danger)}
+.toast.loading i{color:var(--warn)}
+
+.loading-overlay{position:fixed;inset:0;z-index:500;background:rgba(8,14,26,0.7);
+  backdrop-filter:blur(4px);display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:14px;opacity:0;pointer-events:none;transition:opacity .2s}
+.loading-overlay.show{opacity:1;pointer-events:all}
+.spinner{width:36px;height:36px;border:3px solid var(--border2);border-top-color:var(--accent2);
+  border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-family:var(--mono);font-size:12px;color:var(--text2);letter-spacing:1px}
+
 .main-layout{position:relative;z-index:1;display:grid;grid-template-columns:280px 1fr;
   gap:20px;max-width:1200px;margin:0 auto;padding:2rem 2rem 5rem}
 @media(max-width:900px){.main-layout{grid-template-columns:1fr}}
 
-/* SIDEBAR */
 .sidebar{display:flex;flex-direction:column;gap:12px}
 .side-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden}
 .side-header{padding:13px 16px;border-bottom:1px solid var(--border);font-size:12px;font-weight:500;
@@ -66,7 +83,6 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,14,26,0.92);backdrop-
 .filter-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .filter-count{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--text3)}
 
-/* MEMO LIST */
 .memo-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden}
 .memo-toolbar{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .search-box{flex:1;min-width:160px;background:var(--surface2);border:1px solid var(--border2);
@@ -106,7 +122,6 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,14,26,0.92);backdrop-
 .cat-idea{background:rgba(244,168,50,0.12);color:#fcd34d;border:1px solid rgba(244,168,50,0.2)}
 .no-memos{padding:40px;text-align:center;color:var(--text3);font-size:13px}
 
-/* MODAL */
 .modal-bg{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.72);
   backdrop-filter:blur(6px);align-items:center;justify-content:center}
 .modal-bg.open{display:flex}
@@ -137,6 +152,7 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,14,26,0.92);backdrop-
 .pin-toggle:hover{border-color:rgba(244,168,50,0.4)}
 .pin-toggle.active{border-color:rgba(244,168,50,0.5);background:rgba(244,168,50,0.07)}
 .pin-toggle span{font-size:13px;color:var(--text2)}
+.edit-author-row{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:10px}
 .modal-actions{display:flex;gap:10px;margin-top:16px}
 .btn-save{flex:1;padding:10px;background:linear-gradient(135deg,#7c3aed,#a78bfa);border:none;
   border-radius:var(--r);color:white;font-size:13px;font-weight:700;font-family:var(--sans);cursor:pointer;transition:opacity .18s}
@@ -157,12 +173,19 @@ footer a:hover{color:var(--accent2)}
 </head>
 <body>
 
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-text">Firestore 연결 중...</div>
+</div>
+
+<div class="toast" id="toast"><i class="fa fa-circle-check"></i><span id="toastMsg"></span></div>
+
 <header>
   <a href="admin.html" class="logo">
     <div class="logo-badge">BSL</div>
     <div>
       <div class="logo-title">공지 &amp; 메모</div>
-      <div class="logo-sub">Notes · localStorage</div>
+      <div class="logo-sub">Notes · Firestore</div>
     </div>
   </a>
   <div class="header-right">
@@ -175,7 +198,6 @@ footer a:hover{color:var(--accent2)}
 </header>
 
 <div class="main-layout">
-  <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="side-panel">
       <div class="side-body">
@@ -185,20 +207,20 @@ footer a:hover{color:var(--accent2)}
     <div class="side-panel">
       <div class="side-header"><i class="fa fa-filter" style="color:var(--purple)"></i> 필터</div>
       <div class="side-body">
-        <div class="filter-list" id="filterList">
-          <div class="filter-item active" data-filter="all" onclick="setFilter('all')">
+        <div class="filter-list">
+          <div class="filter-item active" data-filter="all"      onclick="setFilter('all')">
             <div class="filter-dot" style="background:var(--text2)"></div>전체
             <span class="filter-count" id="fc-all">0</span>
           </div>
-          <div class="filter-item" data-filter="pinned" onclick="setFilter('pinned')">
+          <div class="filter-item" data-filter="pinned"   onclick="setFilter('pinned')">
             <div class="filter-dot" style="background:#f4a832"></div>📌 고정됨
             <span class="filter-count" id="fc-pinned">0</span>
           </div>
-          <div class="filter-item" data-filter="mine" onclick="setFilter('mine')">
+          <div class="filter-item" data-filter="mine"     onclick="setFilter('mine')">
             <div class="filter-dot" style="background:var(--success)"></div>내 메모
             <span class="filter-count" id="fc-mine">0</span>
           </div>
-          <div class="filter-item" data-filter="notice" onclick="setFilter('notice')">
+          <div class="filter-item" data-filter="notice"   onclick="setFilter('notice')">
             <div class="filter-dot" style="background:#3b82f6"></div>공지
             <span class="filter-count" id="fc-notice">0</span>
           </div>
@@ -206,11 +228,11 @@ footer a:hover{color:var(--accent2)}
             <div class="filter-dot" style="background:#3ecf8e"></div>연구
             <span class="filter-count" id="fc-research">0</span>
           </div>
-          <div class="filter-item" data-filter="admin" onclick="setFilter('admin')">
+          <div class="filter-item" data-filter="admin"    onclick="setFilter('admin')">
             <div class="filter-dot" style="background:#a78bfa"></div>행정
             <span class="filter-count" id="fc-admin">0</span>
           </div>
-          <div class="filter-item" data-filter="idea" onclick="setFilter('idea')">
+          <div class="filter-item" data-filter="idea"     onclick="setFilter('idea')">
             <div class="filter-dot" style="background:#f4a832"></div>아이디어
             <span class="filter-count" id="fc-idea">0</span>
           </div>
@@ -219,7 +241,6 @@ footer a:hover{color:var(--accent2)}
     </div>
   </div>
 
-  <!-- MEMO LIST -->
   <div class="memo-panel">
     <div class="memo-toolbar">
       <input type="text" class="search-box" id="searchBox" placeholder="메모 검색..." oninput="renderList()">
@@ -234,18 +255,14 @@ footer a:hover{color:var(--accent2)}
   </div>
 </div>
 
-<!-- MODAL -->
 <div class="modal-bg" id="memoModal">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">&times;</button>
     <h3 id="modalTitle">새 메모</h3>
-
-    <!-- 작성자 표시 -->
-    <div class="modal-author-info" id="modalAuthorInfo">
+    <div class="modal-author-info">
       <i class="fa fa-user-circle"></i>
-      <span><strong id="modalAuthorName">unknown</strong>으로 작성됩니다</span>
+      <span><strong id="modalAuthorName"></strong>으로 작성됩니다</span>
     </div>
-
     <div class="form-row">
       <label class="form-label">제목 *</label>
       <input type="text" class="form-input" id="mTitle" placeholder="메모 제목">
@@ -281,12 +298,9 @@ footer a:hover{color:var(--accent2)}
       <i class="fa fa-thumbtack" style="color:var(--warn)"></i>
       <span>상단 고정</span>
     </div>
-
-    <!-- 수정 모드: 원작성자 표시 -->
-    <div id="editAuthorRow" style="display:none;font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:10px">
+    <div class="edit-author-row" id="editAuthorRow" style="display:none">
       <i class="fa fa-user"></i> 원작성자: <span id="editAuthorText"></span>
     </div>
-
     <div class="modal-actions">
       <button class="btn-save" onclick="saveMemo()">저장</button>
       <button class="btn-delete" id="deleteBtn" onclick="deleteMemo()" style="display:none">삭제</button>
@@ -296,13 +310,29 @@ footer a:hover{color:var(--accent2)}
 </div>
 
 <footer>
-  <span>© 2025 Battery System Laboratory — 메모는 브라우저에 자동 저장됩니다</span>
+  <span>© 2025 Battery System Laboratory — Firestore 실시간 동기화</span>
   <a href="admin.html" id="footerBack"><i class="fa fa-th-large"></i> 대시보드로</a>
 </footer>
 
-<script>
-// ── 접속자 ID
-const urlParams  = new URLSearchParams(location.search);
+<script type="module">
+import { initializeApp }                          from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, doc,
+         onSnapshot, addDoc, updateDoc,
+         deleteDoc, serverTimestamp }             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyCyTqv6CIDSLqt4bFGXXQF12UtxmCI-teE",
+  authDomain:        "bsladmin.firebaseapp.com",
+  projectId:         "bsladmin",
+  storageBucket:     "bsladmin.firebasestorage.app",
+  messagingSenderId: "790486750368",
+  appId:             "1:790486750368:web:b442d205314b67bd0165c5"
+};
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+// ── 접속자
+const urlParams   = new URLSearchParams(location.search);
 const currentUser = urlParams.get('user') || sessionStorage.getItem('bsl_admin_user') || '(미확인)';
 
 (function initUser() {
@@ -312,11 +342,11 @@ const currentUser = urlParams.get('user') || sessionStorage.getItem('bsl_admin_u
   }
   document.getElementById('modalAuthorName').textContent = currentUser;
   const adminHref = 'admin.html?user=' + encodeURIComponent(currentUser);
-  document.getElementById('backBtn').href  = adminHref;
+  document.getElementById('backBtn').href    = adminHref;
   document.getElementById('footerBack').href = adminHref;
 })();
 
-let memos = [], editingId = null, currentFilter = 'all', pinned = false;
+// ── 상수
 const CAT_INFO = {
   notice:  {label:'공지',    cls:'cat-notice'},
   research:{label:'연구',    cls:'cat-research'},
@@ -329,57 +359,81 @@ const PRI_INFO = {
   low: {label:'낮음',cls:'p-low'},
 };
 
-(function init(){
-  try{memos=JSON.parse(localStorage.getItem('bsl_memos')||'[]');}catch{memos=[];}
-  renderList(); updateCounts();
-})();
+// ── 상태
+let memos = [], editingId = null, currentFilter = 'all', pinned = false;
 
-function saveMemos(){localStorage.setItem('bsl_memos',JSON.stringify(memos));}
-
-function setFilter(f){
-  currentFilter=f;
-  document.querySelectorAll('.filter-item').forEach(el=>el.classList.toggle('active',el.dataset.filter===f));
-  renderList();
+// ── 토스트
+function showToast(msg, type='ok') {
+  const t = document.getElementById('toast');
+  t.querySelector('i').className = type==='ok'?'fa fa-circle-check':type==='err'?'fa fa-circle-xmark':'fa fa-spinner fa-spin';
+  t.className = `toast ${type}`;
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  if (type !== 'loading') setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-function updateCounts(){
+// ── Firestore 실시간 구독
+const overlay = document.getElementById('loadingOverlay');
+overlay.classList.add('show');
+
+onSnapshot(collection(db, 'memos'), snapshot => {
+  memos = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+  overlay.classList.remove('show');
+  renderList();
+  updateCounts();
+}, err => {
+  overlay.classList.remove('show');
+  showToast('Firestore 오류: ' + err.message, 'err');
+});
+
+// ── 필터
+function setFilter(f) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-item').forEach(el =>
+    el.classList.toggle('active', el.dataset.filter === f));
+  renderList();
+}
+window.setFilter = setFilter;
+
+function updateCounts() {
   document.getElementById('fc-all').textContent    = memos.length;
-  document.getElementById('fc-pinned').textContent = memos.filter(m=>m.pinned).length;
-  document.getElementById('fc-mine').textContent   = memos.filter(m=>m.author===currentUser).length;
-  ['notice','research','admin','idea'].forEach(cat=>{
-    const el=document.getElementById('fc-'+cat);
-    if(el) el.textContent=memos.filter(m=>m.cat===cat).length;
+  document.getElementById('fc-pinned').textContent = memos.filter(m => m.pinned).length;
+  document.getElementById('fc-mine').textContent   = memos.filter(m => m.author === currentUser).length;
+  ['notice','research','admin','idea'].forEach(cat => {
+    const el = document.getElementById('fc-'+cat);
+    if (el) el.textContent = memos.filter(m => m.cat === cat).length;
   });
 }
 
-function renderList(){
-  const search=document.getElementById('searchBox').value.toLowerCase();
-  const sort=document.getElementById('sortSelect').value;
-  let list=[...memos];
-  if(currentFilter==='pinned')   list=list.filter(m=>m.pinned);
-  else if(currentFilter==='mine')list=list.filter(m=>m.author===currentUser);
-  else if(currentFilter!=='all') list=list.filter(m=>m.cat===currentFilter);
-  if(search) list=list.filter(m=>(m.title+m.body+(m.tags||'')).toLowerCase().includes(search));
-  if(sort==='date-desc') list.sort((a,b)=>b.created-a.created);
-  else if(sort==='date-asc') list.sort((a,b)=>a.created-b.created);
-  else if(sort==='priority'){const o={high:0,mid:1,low:2};list.sort((a,b)=>(o[a.priority]||1)-(o[b.priority]||1));}
-  else if(sort==='title') list.sort((a,b)=>a.title.localeCompare(b.title));
-  list.sort((a,b)=>(b.pinned?1:0)-(a.pinned?1:0));
-  const el=document.getElementById('memoList');
-  if(!list.length){
-    el.innerHTML='<div class="no-memos"><i class="fa fa-sticky-note" style="font-size:2em;margin-bottom:8px;display:block;opacity:.3"></i>메모가 없습니다</div>';
+function renderList() {
+  const search = document.getElementById('searchBox').value.toLowerCase();
+  const sort   = document.getElementById('sortSelect').value;
+  let list = [...memos];
+  if      (currentFilter === 'pinned')  list = list.filter(m => m.pinned);
+  else if (currentFilter === 'mine')    list = list.filter(m => m.author === currentUser);
+  else if (currentFilter !== 'all')     list = list.filter(m => m.cat === currentFilter);
+  if (search) list = list.filter(m => (m.title+m.body+(m.tags||'')).toLowerCase().includes(search));
+  if      (sort === 'date-desc') list.sort((a,b) => (b.created||0)-(a.created||0));
+  else if (sort === 'date-asc')  list.sort((a,b) => (a.created||0)-(b.created||0));
+  else if (sort === 'priority')  { const o={high:0,mid:1,low:2}; list.sort((a,b) => (o[a.priority]||1)-(o[b.priority]||1)); }
+  else if (sort === 'title')     list.sort((a,b) => a.title.localeCompare(b.title));
+  list.sort((a,b) => (b.pinned?1:0)-(a.pinned?1:0));
+  const el = document.getElementById('memoList');
+  if (!list.length) {
+    el.innerHTML = '<div class="no-memos"><i class="fa fa-sticky-note" style="font-size:2em;margin-bottom:8px;display:block;opacity:.3"></i>메모가 없습니다</div>';
     return;
   }
-  el.innerHTML=list.map(m=>{
-    const cat=CAT_INFO[m.cat]||CAT_INFO.notice;
-    const pri=PRI_INFO[m.priority]||PRI_INFO.mid;
-    const date=new Date(m.created).toLocaleDateString('ko-KR',{month:'short',day:'numeric'});
-    const tags=(m.tags||'').split(',').map(t=>t.trim()).filter(Boolean).map(t=>`<span class="memo-tag">${esc(t)}</span>`).join('');
+  el.innerHTML = list.map(m => {
+    const cat  = CAT_INFO[m.cat]  || CAT_INFO.notice;
+    const pri  = PRI_INFO[m.priority] || PRI_INFO.mid;
+    const date = m.created ? new Date(m.created).toLocaleDateString('ko-KR',{month:'short',day:'numeric'}) : '';
+    const tags = (m.tags||'').split(',').map(t=>t.trim()).filter(Boolean)
+                   .map(t=>`<span class="memo-tag">${esc(t)}</span>`).join('');
     const isMe = m.author === currentUser;
     const authorHtml = m.author
-      ? `<span class="memo-author" title="${esc(m.author)}"><i class="fa fa-user" style="font-size:9px"></i>${esc(m.author)}${isMe?' (나)':''}</span>`
+      ? `<span class="memo-author"><i class="fa fa-user" style="font-size:9px"></i>${esc(m.author)}${isMe?' (나)':''}</span>`
       : '';
-    return `<div class="memo-card${m.pinned?' pinned':''}" onclick="openEditModal('${m.id}')">
+    return `<div class="memo-card${m.pinned?' pinned':''}" onclick="window._openMemoEdit('${m.id}')">
       <div class="memo-top">
         ${m.pinned?'<div class="memo-pin-icon"><i class="fa fa-thumbtack"></i></div>':''}
         <div class="memo-title">${esc(m.title)}</div>
@@ -388,85 +442,112 @@ function renderList(){
       ${m.body?`<div class="memo-body">${esc(m.body)}</div>`:''}
       <div class="memo-footer">
         <span class="memo-cat ${cat.cls}">${cat.label}</span>
-        ${tags}
-        ${authorHtml}
+        ${tags}${authorHtml}
         <span class="memo-date">${date}</span>
       </div>
     </div>`;
   }).join('');
 }
+window.renderList = renderList;
 
-function openAddModal(){
-  editingId=null; pinned=false;
-  document.getElementById('modalTitle').textContent='새 메모';
-  document.getElementById('mTitle').value='';
-  document.getElementById('mBody').value='';
-  document.getElementById('mCat').value='notice';
-  document.getElementById('mPriority').value='mid';
-  document.getElementById('mTags').value='';
+// ── 모달
+function openAddModal() {
+  editingId = null; pinned = false;
+  document.getElementById('modalTitle').textContent  = '새 메모';
+  document.getElementById('mTitle').value    = '';
+  document.getElementById('mBody').value     = '';
+  document.getElementById('mCat').value      = 'notice';
+  document.getElementById('mPriority').value = 'mid';
+  document.getElementById('mTags').value     = '';
   document.getElementById('pinToggle').classList.remove('active');
-  document.getElementById('deleteBtn').style.display='none';
-  document.getElementById('modalAuthorInfo').style.display='flex';
-  document.getElementById('modalAuthorName').textContent=currentUser;
-  document.getElementById('editAuthorRow').style.display='none';
+  document.getElementById('deleteBtn').style.display    = 'none';
+  document.getElementById('editAuthorRow').style.display = 'none';
+  document.getElementById('modalAuthorName').textContent = currentUser;
   document.getElementById('memoModal').classList.add('open');
-  setTimeout(()=>document.getElementById('mTitle').focus(),100);
+  setTimeout(() => document.getElementById('mTitle').focus(), 100);
 }
+window.openAddModal = openAddModal;
 
-function openEditModal(id){
-  const m=memos.find(x=>x.id===id); if(!m) return;
-  editingId=id; pinned=m.pinned||false;
-  document.getElementById('modalTitle').textContent='메모 수정';
-  document.getElementById('mTitle').value=m.title;
-  document.getElementById('mBody').value=m.body||'';
-  document.getElementById('mCat').value=m.cat;
-  document.getElementById('mPriority').value=m.priority||'mid';
-  document.getElementById('mTags').value=m.tags||'';
-  document.getElementById('pinToggle').classList.toggle('active',pinned);
-  document.getElementById('deleteBtn').style.display='';
-  document.getElementById('modalAuthorInfo').style.display='flex';
-  document.getElementById('modalAuthorName').textContent=currentUser+' (수정 중)';
-  if(m.author){
-    document.getElementById('editAuthorRow').style.display='block';
-    document.getElementById('editAuthorText').textContent=m.author+' · '+new Date(m.created).toLocaleDateString('ko-KR');
+function openEditModal(id) {
+  const m = memos.find(x => x.id === id); if (!m) return;
+  editingId = id; pinned = m.pinned || false;
+  document.getElementById('modalTitle').textContent  = '메모 수정';
+  document.getElementById('mTitle').value    = m.title;
+  document.getElementById('mBody').value     = m.body     || '';
+  document.getElementById('mCat').value      = m.cat;
+  document.getElementById('mPriority').value = m.priority || 'mid';
+  document.getElementById('mTags').value     = m.tags     || '';
+  document.getElementById('pinToggle').classList.toggle('active', pinned);
+  document.getElementById('deleteBtn').style.display     = '';
+  document.getElementById('modalAuthorName').textContent = currentUser + ' (수정 중)';
+  if (m.author) {
+    document.getElementById('editAuthorRow').style.display = 'block';
+    document.getElementById('editAuthorText').textContent  = m.author + (m.created ? ' · '+new Date(m.created).toLocaleDateString('ko-KR') : '');
   } else {
-    document.getElementById('editAuthorRow').style.display='none';
+    document.getElementById('editAuthorRow').style.display = 'none';
   }
   document.getElementById('memoModal').classList.add('open');
 }
+window._openMemoEdit = openEditModal;
 
-function closeModal(){document.getElementById('memoModal').classList.remove('open');}
-document.getElementById('memoModal').addEventListener('click',e=>{if(e.target===document.getElementById('memoModal'))closeModal();});
-function togglePin(){pinned=!pinned;document.getElementById('pinToggle').classList.toggle('active',pinned);}
+function closeModal() { document.getElementById('memoModal').classList.remove('open'); }
+window.closeModal = closeModal;
+document.getElementById('memoModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('memoModal')) closeModal();
+});
 
-function saveMemo(){
-  const title=document.getElementById('mTitle').value.trim();
-  if(!title){alert('제목을 입력해 주세요.');return;}
-  const existing=editingId?memos.find(x=>x.id===editingId):null;
-  const m={
-    id:editingId||Date.now().toString(36)+Math.random().toString(36).slice(2,6),
+function togglePin() {
+  pinned = !pinned;
+  document.getElementById('pinToggle').classList.toggle('active', pinned);
+}
+window.togglePin = togglePin;
+
+async function saveMemo() {
+  const title = document.getElementById('mTitle').value.trim();
+  if (!title) { alert('제목을 입력해 주세요.'); return; }
+  const existing = editingId ? memos.find(x => x.id === editingId) : null;
+  const data = {
     title,
-    body:document.getElementById('mBody').value.trim(),
-    cat:document.getElementById('mCat').value,
-    priority:document.getElementById('mPriority').value,
-    tags:document.getElementById('mTags').value.trim(),
+    body:      document.getElementById('mBody').value.trim(),
+    cat:       document.getElementById('mCat').value,
+    priority:  document.getElementById('mPriority').value,
+    tags:      document.getElementById('mTags').value.trim(),
     pinned,
-    author: existing?.author || currentUser,
-    created:existing?.created||Date.now(),
-    updated:Date.now(),
-    updatedBy: editingId ? currentUser : undefined,
+    author:    existing?.author || currentUser,
+    created:   existing?.created || Date.now(),
+    updated:   Date.now(),
+    updatedBy: currentUser,
+    updatedAt: serverTimestamp(),
   };
-  if(editingId){const idx=memos.findIndex(x=>x.id===editingId);if(idx>=0)memos[idx]=m;}
-  else memos.unshift(m);
-  saveMemos(); closeModal(); renderList(); updateCounts();
+  showToast('저장 중...', 'loading');
+  try {
+    if (editingId) {
+      await updateDoc(doc(db, 'memos', editingId), data);
+    } else {
+      await addDoc(collection(db, 'memos'), data);
+    }
+    showToast('저장 완료!', 'ok');
+    closeModal();
+  } catch(e) {
+    showToast('저장 실패: ' + e.message, 'err');
+  }
 }
+window.saveMemo = saveMemo;
 
-function deleteMemo(){
-  if(!editingId||!confirm('이 메모를 삭제할까요?'))return;
-  memos=memos.filter(m=>m.id!==editingId);
-  saveMemos(); closeModal(); renderList(); updateCounts();
+async function deleteMemo() {
+  if (!editingId || !confirm('이 메모를 삭제할까요?')) return;
+  showToast('삭제 중...', 'loading');
+  try {
+    await deleteDoc(doc(db, 'memos', editingId));
+    showToast('삭제 완료', 'ok');
+    closeModal();
+  } catch(e) {
+    showToast('저장 실패: ' + e.message, 'err');
+  }
 }
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+window.deleteMemo = deleteMemo;
+
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 </script>
 </body>
 </html>

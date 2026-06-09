@@ -16,7 +16,6 @@
   --success:#3ecf8e;--warn:#f4a832;--danger:#f45c5c;
   --mono:'JetBrains Mono',monospace;--sans:'Pretendard',-apple-system,sans-serif;
   --r:8px;--r2:14px;
-  --c-meeting:#3b82f6;--c-deadline:#f45c5c;--c-present:#a78bfa;--c-lab:#3ecf8e;--c-other:#f4a832;
 }
 html{scroll-behavior:smooth}
 body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh}
@@ -45,11 +44,32 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,14,26,0.92);backdrop-
   cursor:pointer;text-decoration:none;transition:all .18s}
 .back-btn:hover{border-color:var(--accent2);color:var(--accent2);background:rgba(102,204,255,0.06)}
 
+/* DB 상태 토스트 */
+.toast{position:fixed;bottom:24px;right:24px;z-index:9999;
+  background:var(--surface2);border:1px solid var(--border2);border-radius:10px;
+  padding:10px 18px;font-size:13px;color:var(--text);
+  display:flex;align-items:center;gap:10px;
+  box-shadow:0 8px 30px rgba(0,0,0,0.4);
+  opacity:0;transform:translateY(10px);transition:all .25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.ok  i{color:var(--success)}
+.toast.err i{color:var(--danger)}
+.toast.loading i{color:var(--warn)}
+
+/* 로딩 오버레이 */
+.loading-overlay{position:fixed;inset:0;z-index:500;background:rgba(8,14,26,0.7);
+  backdrop-filter:blur(4px);display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:14px;opacity:0;pointer-events:none;transition:opacity .2s}
+.loading-overlay.show{opacity:1;pointer-events:all}
+.spinner{width:36px;height:36px;border:3px solid var(--border2);border-top-color:var(--accent2);
+  border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-family:var(--mono);font-size:12px;color:var(--text2);letter-spacing:1px}
+
 .main-layout{position:relative;z-index:1;display:grid;grid-template-columns:1fr 320px;
   gap:20px;max-width:1200px;margin:0 auto;padding:2rem 2rem 5rem}
 @media(max-width:900px){.main-layout{grid-template-columns:1fr}}
 
-/* CALENDAR */
 .cal-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden}
 .cal-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
 .cal-nav{display:flex;align-items:center;gap:8px;margin-right:auto}
@@ -66,8 +86,7 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,14,26,0.92);backdrop-
 .add-event-btn:hover{opacity:.85;transform:translateY(-1px)}
 
 .cal-grid-header{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid var(--border)}
-.cal-dow{padding:8px;text-align:center;font-size:11px;font-family:var(--mono);color:var(--text3);
-  letter-spacing:.5px;text-transform:uppercase}
+.cal-dow{padding:8px;text-align:center;font-size:11px;font-family:var(--mono);color:var(--text3);letter-spacing:.5px;text-transform:uppercase}
 .cal-dow:first-child{color:#f45c5c}
 .cal-dow:last-child{color:#3b82f6}
 
@@ -93,7 +112,6 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,14,26,0.92);backdrop-
 .type-lab{background:rgba(62,207,142,0.2);color:#6ee7b7}
 .type-other{background:rgba(244,168,50,0.2);color:#fcd34d}
 
-/* SIDEBAR */
 .sidebar{display:flex;flex-direction:column;gap:16px}
 .side-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden}
 .side-header{padding:13px 16px;border-bottom:1px solid var(--border);font-size:12px;font-weight:500;
@@ -110,11 +128,10 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,14,26,0.92);backdrop-
 .upcoming-content{flex:1;min-width:0}
 .upcoming-title{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .upcoming-meta{font-size:11px;font-family:var(--mono);color:var(--text3);margin-top:2px}
-.upcoming-author{font-size:10px;font-family:var(--mono);color:var(--text3);margin-top:3px;display:flex;align-items:center;gap:4px}
+.upcoming-author{font-size:10px;font-family:var(--mono);color:var(--text3);margin-top:3px}
 .upcoming-type{font-size:10px;font-family:var(--mono);padding:1px 6px;border-radius:3px;display:inline-block;margin-top:3px}
 .no-events{font-size:13px;color:var(--text3);text-align:center;padding:16px 0}
 
-/* MODAL */
 .modal-bg{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.72);
   backdrop-filter:blur(6px);align-items:center;justify-content:center}
 .modal-bg.open{display:flex}
@@ -124,6 +141,11 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,14,26,0.92);backdrop-
   color:rgba(255,255,255,0.35);font-size:1.3em;cursor:pointer;transition:color .15s}
 .modal-close:hover{color:white}
 .modal h3{font-size:15px;font-weight:600;margin-bottom:16px;color:var(--text)}
+.modal-author-info{display:flex;align-items:center;gap:8px;background:rgba(62,207,142,0.07);
+  border:1px solid rgba(62,207,142,0.18);border-radius:var(--r);padding:7px 12px;margin-bottom:14px;
+  font-size:12px;color:var(--text2)}
+.modal-author-info i{color:var(--success)}
+.modal-author-info strong{color:var(--success)}
 .form-row{margin-bottom:14px}
 .form-label{font-size:11px;font-family:var(--mono);color:var(--text2);letter-spacing:.5px;
   text-transform:uppercase;display:block;margin-bottom:6px}
@@ -135,17 +157,7 @@ header{position:sticky;top:0;z-index:200;background:rgba(8,14,26,0.92);backdrop-
 .form-select option{background:var(--surface)}
 .form-textarea{resize:vertical;min-height:70px}
 .form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
-
-/* 작성자 표시 */
-.modal-author-info{
-  display:flex;align-items:center;gap:8px;
-  background:rgba(62,207,142,0.07);border:1px solid rgba(62,207,142,0.18);
-  border-radius:var(--r);padding:7px 12px;margin-bottom:14px;
-  font-size:12px;color:var(--text2);
-}
-.modal-author-info i{color:var(--success)}
-.modal-author-info strong{color:var(--success)}
-
+.edit-author-row{font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:10px}
 .modal-actions{display:flex;gap:10px;margin-top:18px}
 .btn-save{flex:1;padding:10px;background:linear-gradient(135deg,#c17e2e,#f4a832);border:none;
   border-radius:var(--r);color:#080e1a;font-size:13px;font-weight:700;font-family:var(--sans);cursor:pointer;transition:opacity .18s}
@@ -166,12 +178,19 @@ footer a:hover{color:var(--accent2)}
 </head>
 <body>
 
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-text">Firestore 연결 중...</div>
+</div>
+
+<div class="toast" id="toast"><i class="fa fa-circle-check"></i><span id="toastMsg"></span></div>
+
 <header>
   <a href="admin.html" class="logo">
     <div class="logo-badge">BSL</div>
     <div>
       <div class="logo-title">일정 관리</div>
-      <div class="logo-sub">Calendar · localStorage</div>
+      <div class="logo-sub">Calendar · Firestore</div>
     </div>
   </a>
   <div class="header-right">
@@ -184,7 +203,6 @@ footer a:hover{color:var(--accent2)}
 </header>
 
 <div class="main-layout">
-  <!-- CALENDAR -->
   <div class="cal-panel">
     <div class="cal-header">
       <div class="cal-nav">
@@ -205,7 +223,6 @@ footer a:hover{color:var(--accent2)}
     <div class="cal-grid" id="calGrid"></div>
   </div>
 
-  <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="side-panel">
       <div class="side-header"><i class="fa fa-palette" style="color:var(--accent2)"></i> 유형별 색상</div>
@@ -230,31 +247,21 @@ footer a:hover{color:var(--accent2)}
   </div>
 </div>
 
-<!-- MODAL -->
 <div class="modal-bg" id="eventModal">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">&times;</button>
     <h3 id="modalTitle">일정 추가</h3>
-
-    <!-- 작성자 표시 -->
     <div class="modal-author-info" id="modalAuthorInfo">
       <i class="fa fa-user-circle"></i>
-      <span><strong id="modalAuthorName">unknown</strong>으로 등록됩니다</span>
+      <span><strong id="modalAuthorName"></strong>으로 등록됩니다</span>
     </div>
-
     <div class="form-row">
       <label class="form-label">제목 *</label>
       <input type="text" class="form-input" id="evTitle" placeholder="일정 제목">
     </div>
     <div class="form-row-2">
-      <div>
-        <label class="form-label">날짜 *</label>
-        <input type="date" class="form-input" id="evDate">
-      </div>
-      <div>
-        <label class="form-label">시간</label>
-        <input type="time" class="form-input" id="evTime">
-      </div>
+      <div><label class="form-label">날짜 *</label><input type="date" class="form-input" id="evDate"></div>
+      <div><label class="form-label">시간</label><input type="time" class="form-input" id="evTime"></div>
     </div>
     <div class="form-row">
       <label class="form-label">유형 *</label>
@@ -270,12 +277,9 @@ footer a:hover{color:var(--accent2)}
       <label class="form-label">메모</label>
       <textarea class="form-textarea" id="evNote" placeholder="추가 메모 (선택)"></textarea>
     </div>
-
-    <!-- 수정 모드: 기존 작성자 표시 -->
-    <div id="editAuthorRow" style="display:none;font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:4px">
+    <div class="edit-author-row" id="editAuthorRow" style="display:none">
       <i class="fa fa-user"></i> 등록: <span id="editAuthorText"></span>
     </div>
-
     <div class="modal-actions">
       <button class="btn-save" onclick="saveEvent()">저장</button>
       <button class="btn-delete" id="modalDeleteBtn" onclick="deleteEvent()" style="display:none">삭제</button>
@@ -285,13 +289,31 @@ footer a:hover{color:var(--accent2)}
 </div>
 
 <footer>
-  <span>© 2025 Battery System Laboratory — 일정은 브라우저에 자동 저장됩니다</span>
+  <span>© 2025 Battery System Laboratory — Firestore 실시간 동기화</span>
   <a href="admin.html" id="footerBack"><i class="fa fa-th-large"></i> 대시보드로</a>
 </footer>
 
-<script>
-// ── 접속자 ID
-const urlParams = new URLSearchParams(location.search);
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp }                          from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, doc,
+         onSnapshot, addDoc, updateDoc,
+         deleteDoc, serverTimestamp }             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+// ── Firebase 초기화
+const firebaseConfig = {
+  apiKey:            "AIzaSyCyTqv6CIDSLqt4bFGXXQF12UtxmCI-teE",
+  authDomain:        "bsladmin.firebaseapp.com",
+  projectId:         "bsladmin",
+  storageBucket:     "bsladmin.firebasestorage.app",
+  messagingSenderId: "790486750368",
+  appId:             "1:790486750368:web:b442d205314b67bd0165c5"
+};
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+// ── 접속자
+const urlParams  = new URLSearchParams(location.search);
 const currentUser = urlParams.get('user') || sessionStorage.getItem('bsl_admin_user') || '(미확인)';
 
 (function initUser() {
@@ -300,14 +322,12 @@ const currentUser = urlParams.get('user') || sessionStorage.getItem('bsl_admin_u
     document.getElementById('userBadgeName').textContent = currentUser;
   }
   document.getElementById('modalAuthorName').textContent = currentUser;
-  // 대시보드 링크에 user 파라미터 유지
   const adminHref = 'admin.html?user=' + encodeURIComponent(currentUser);
-  document.getElementById('backBtn').href = adminHref;
+  document.getElementById('backBtn').href   = adminHref;
   document.getElementById('footerBack').href = adminHref;
 })();
 
-// ── STATE
-let currentYear, currentMonth, events = [], editingId = null;
+// ── 상수
 const TYPE_INFO = {
   meeting:  {label:'미팅',  color:'#3b82f6', cls:'type-meeting'},
   deadline: {label:'마감',  color:'#f45c5c', cls:'type-deadline'},
@@ -316,28 +336,52 @@ const TYPE_INFO = {
   other:    {label:'기타',  color:'#f4a832', cls:'type-other'},
 };
 
+// ── 상태
+let currentYear, currentMonth, events = [], editingId = null;
+
+// ── 토스트
+function showToast(msg, type='ok') {
+  const t = document.getElementById('toast');
+  const icon = t.querySelector('i');
+  icon.className = type==='ok' ? 'fa fa-circle-check' : type==='err' ? 'fa fa-circle-xmark' : 'fa fa-spinner fa-spin';
+  t.className = `toast ${type}`;
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  if (type !== 'loading') setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ── Firestore 실시간 구독 (onSnapshot → 모든 접속자 즉시 반영)
+const overlay = document.getElementById('loadingOverlay');
+overlay.classList.add('show');
+
+onSnapshot(collection(db, 'events'), snapshot => {
+  events = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+  overlay.classList.remove('show');
+  render();
+}, err => {
+  overlay.classList.remove('show');
+  showToast('Firestore 연결 오류: ' + err.message, 'err');
+});
+
+// ── 캘린더 초기화
 (function init() {
   const now = new Date();
-  currentYear = now.getFullYear();
+  currentYear  = now.getFullYear();
   currentMonth = now.getMonth();
-  loadEvents(); render();
 })();
-
-function loadEvents() {
-  try { events = JSON.parse(localStorage.getItem('bsl_events')||'[]'); } catch { events=[]; }
-}
-function saveEvents() { localStorage.setItem('bsl_events', JSON.stringify(events)); }
 
 function changeMonth(d) {
   currentMonth += d;
-  if (currentMonth>11){currentMonth=0;currentYear++;}
-  else if (currentMonth<0){currentMonth=11;currentYear--;}
+  if (currentMonth > 11){currentMonth = 0; currentYear++;}
+  else if (currentMonth < 0){currentMonth = 11; currentYear--;}
   render();
 }
-function goToday() { const n=new Date(); currentYear=n.getFullYear(); currentMonth=n.getMonth(); render(); }
+function goToday() {
+  const n = new Date(); currentYear = n.getFullYear(); currentMonth = n.getMonth(); render();
+}
 
 function render() {
-  const MONTHS=['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+  const MONTHS = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
   document.getElementById('calMonth').textContent = currentYear+'년 '+MONTHS[currentMonth];
   renderGrid(); renderUpcoming(); renderStats();
 }
@@ -345,46 +389,49 @@ function render() {
 function renderGrid() {
   const grid = document.getElementById('calGrid');
   grid.innerHTML = '';
-  const first = new Date(currentYear, currentMonth, 1).getDay();
-  const days  = new Date(currentYear, currentMonth+1, 0).getDate();
+  const first    = new Date(currentYear, currentMonth, 1).getDay();
+  const days     = new Date(currentYear, currentMonth+1, 0).getDate();
   const todayStr = fmt(new Date());
-  for (let i=0; i<first; i++) {
+  for (let i = 0; i < first; i++)
     grid.appendChild(makeCell(new Date(currentYear, currentMonth, -first+i+1), true));
-  }
-  for (let d=1; d<=days; d++) {
+  for (let d = 1; d <= days; d++) {
     const date = new Date(currentYear, currentMonth, d);
     const cell = makeCell(date, false);
-    if (fmt(date)===todayStr) cell.classList.add('today');
+    if (fmt(date) === todayStr) cell.classList.add('today');
     grid.appendChild(cell);
   }
-  const total = first+days;
-  const rem = total%7===0?0:7-(total%7);
-  for (let i=1; i<=rem; i++) grid.appendChild(makeCell(new Date(currentYear, currentMonth+1, i), true));
+  const total = first + days;
+  const rem   = total % 7 === 0 ? 0 : 7 - (total % 7);
+  for (let i = 1; i <= rem; i++)
+    grid.appendChild(makeCell(new Date(currentYear, currentMonth+1, i), true));
 }
 
 function makeCell(date, otherMonth) {
   const cell = document.createElement('div');
-  cell.className = 'cal-cell'+(otherMonth?' other-month':'');
+  cell.className = 'cal-cell' + (otherMonth ? ' other-month' : '');
   const dow = date.getDay();
-  if (dow===0) cell.classList.add('sunday');
-  if (dow===6) cell.classList.add('saturday');
+  if (dow === 0) cell.classList.add('sunday');
+  if (dow === 6) cell.classList.add('saturday');
   const dateStr = fmt(date);
   cell.onclick = () => openAddModal(dateStr);
   const dn = document.createElement('div');
   dn.className = 'day-num'; dn.textContent = date.getDate();
   cell.appendChild(dn);
-  const dayEvts = events.filter(e=>e.date===dateStr).sort((a,b)=>(a.time||'').localeCompare(b.time||''));
+  const dayEvts = events
+    .filter(e => e.date === dateStr)
+    .sort((a,b) => (a.time||'').localeCompare(b.time||''));
   dayEvts.slice(0,3).forEach(ev => {
-    const info = TYPE_INFO[ev.type]||TYPE_INFO.other;
-    const dot = document.createElement('div');
-    dot.className = 'event-dot '+info.cls;
-    dot.textContent = (ev.time?ev.time.slice(0,5)+' ':'')+ev.title;
+    const info = TYPE_INFO[ev.type] || TYPE_INFO.other;
+    const dot  = document.createElement('div');
+    dot.className = 'event-dot ' + info.cls;
+    dot.textContent = (ev.time ? ev.time.slice(0,5)+' ' : '') + ev.title;
     dot.onclick = e => { e.stopPropagation(); openEditModal(ev.id); };
     cell.appendChild(dot);
   });
-  if (dayEvts.length>3) {
+  if (dayEvts.length > 3) {
     const more = document.createElement('div');
-    more.className='more-events'; more.textContent=`+${dayEvts.length-3}개`;
+    more.className = 'more-events';
+    more.textContent = `+${dayEvts.length-3}개`;
     cell.appendChild(more);
   }
   return cell;
@@ -392,48 +439,46 @@ function makeCell(date, otherMonth) {
 
 function renderUpcoming() {
   const list = document.getElementById('upcomingList');
-  const now = new Date(); now.setHours(0,0,0,0);
+  const now  = new Date(); now.setHours(0,0,0,0);
   const upcoming = events
-    .filter(e=>new Date(e.date)>=now)
-    .sort((a,b)=>a.date.localeCompare(b.date)||(a.time||'').localeCompare(b.time||''))
-    .slice(0,8);
+    .filter(e => new Date(e.date) >= now)
+    .sort((a,b) => a.date.localeCompare(b.date) || (a.time||'').localeCompare(b.time||''))
+    .slice(0, 8);
   if (!upcoming.length) {
-    list.innerHTML='<div class="no-events">다가오는 일정이 없습니다</div>'; return;
+    list.innerHTML = '<div class="no-events">다가오는 일정이 없습니다</div>'; return;
   }
-  list.innerHTML = upcoming.map(ev=>{
-    const info=TYPE_INFO[ev.type]||TYPE_INFO.other;
-    const d=new Date(ev.date);
-    const diff=Math.round((d-now)/(1000*60*60*24));
-    const diffStr=diff===0?'오늘':diff===1?'내일':`${diff}일 후`;
-    const authorHtml = ev.author
-      ? `<div class="upcoming-author"><i class="fa fa-user" style="font-size:9px"></i>${esc(ev.author)}</div>`
-      : '';
-    return `<div class="upcoming-item" onclick="openEditModal('${ev.id}')">
+  list.innerHTML = upcoming.map(ev => {
+    const info = TYPE_INFO[ev.type] || TYPE_INFO.other;
+    const d    = new Date(ev.date);
+    const diff = Math.round((d - now) / (1000*60*60*24));
+    const diffStr = diff===0?'오늘':diff===1?'내일':`${diff}일 후`;
+    return `<div class="upcoming-item" onclick="window._openEdit('${ev.id}')">
       <div class="upcoming-stripe" style="background:${info.color}"></div>
       <div class="upcoming-content">
         <div class="upcoming-title">${esc(ev.title)}</div>
         <div class="upcoming-meta">${ev.date}${ev.time?' '+ev.time:''} · ${diffStr}</div>
         <span class="upcoming-type ${info.cls}">${info.label}</span>
-        ${authorHtml}
+        ${ev.author?`<div class="upcoming-author"><i class="fa fa-user" style="font-size:9px"></i> ${esc(ev.author)}</div>`:''}
       </div>
     </div>`;
   }).join('');
 }
+window._openEdit = id => openEditModal(id);
 
 function renderStats() {
-  const monthEvts = events.filter(e=>{
-    const d=new Date(e.date);
-    return d.getFullYear()===currentYear&&d.getMonth()===currentMonth;
+  const monthEvts = events.filter(e => {
+    const d = new Date(e.date);
+    return d.getFullYear()===currentYear && d.getMonth()===currentMonth;
   });
-  const stats = document.getElementById('monthStats');
+  const stats  = document.getElementById('monthStats');
   const counts = {};
-  monthEvts.forEach(e=>counts[e.type]=(counts[e.type]||0)+1);
+  monthEvts.forEach(e => counts[e.type] = (counts[e.type]||0)+1);
   if (!monthEvts.length) {
-    stats.innerHTML='<div style="color:var(--text3);text-align:center;padding:8px 0">이달 일정 없음</div>'; return;
+    stats.innerHTML = '<div style="color:var(--text3);text-align:center;padding:8px 0">이달 일정 없음</div>'; return;
   }
-  stats.innerHTML = `<div style="color:var(--text);font-weight:600;margin-bottom:4px">총 ${monthEvts.length}건</div>`+
-    Object.entries(counts).map(([type,cnt])=>{
-      const info=TYPE_INFO[type]||TYPE_INFO.other;
+  stats.innerHTML = `<div style="color:var(--text);font-weight:600;margin-bottom:4px">총 ${monthEvts.length}건</div>` +
+    Object.entries(counts).map(([type,cnt]) => {
+      const info = TYPE_INFO[type] || TYPE_INFO.other;
       return `<div style="display:flex;align-items:center;gap:8px">
         <div style="width:8px;height:8px;border-radius:2px;background:${info.color};flex-shrink:0"></div>
         <span>${info.label}</span>
@@ -442,80 +487,103 @@ function renderStats() {
     }).join('');
 }
 
+// ── 모달
 function openAddModal(dateStr) {
   editingId = null;
   document.getElementById('modalTitle').textContent = '일정 추가';
-  document.getElementById('evTitle').value = '';
-  document.getElementById('evDate').value = dateStr||fmt(new Date());
-  document.getElementById('evTime').value = '';
-  document.getElementById('evType').value = 'meeting';
-  document.getElementById('evNote').value = '';
+  document.getElementById('evTitle').value  = '';
+  document.getElementById('evDate').value   = dateStr || fmt(new Date());
+  document.getElementById('evTime').value   = '';
+  document.getElementById('evType').value   = 'meeting';
+  document.getElementById('evNote').value   = '';
   document.getElementById('modalDeleteBtn').style.display = 'none';
-  document.getElementById('modalAuthorInfo').style.display = 'flex';
-  document.getElementById('editAuthorRow').style.display = 'none';
-  document.getElementById('modalAuthorName').textContent = currentUser;
+  document.getElementById('editAuthorRow').style.display  = 'none';
+  document.getElementById('modalAuthorName').textContent  = currentUser;
   document.getElementById('eventModal').classList.add('open');
-  setTimeout(()=>document.getElementById('evTitle').focus(), 100);
+  setTimeout(() => document.getElementById('evTitle').focus(), 100);
 }
+window.openAddModal = openAddModal;
 
 function openEditModal(id) {
-  const ev = events.find(e=>e.id===id); if (!ev) return;
+  const ev = events.find(e => e.id === id); if (!ev) return;
   editingId = id;
   document.getElementById('modalTitle').textContent = '일정 수정';
   document.getElementById('evTitle').value = ev.title;
-  document.getElementById('evDate').value = ev.date;
-  document.getElementById('evTime').value = ev.time||'';
-  document.getElementById('evType').value = ev.type;
-  document.getElementById('evNote').value = ev.note||'';
+  document.getElementById('evDate').value  = ev.date;
+  document.getElementById('evTime').value  = ev.time  || '';
+  document.getElementById('evType').value  = ev.type;
+  document.getElementById('evNote').value  = ev.note  || '';
   document.getElementById('modalDeleteBtn').style.display = '';
-  // 작성자 표시
-  document.getElementById('modalAuthorInfo').style.display = 'flex';
-  document.getElementById('modalAuthorName').textContent = currentUser + ' (수정)';
+  document.getElementById('modalAuthorName').textContent  = currentUser + ' (수정)';
   if (ev.author) {
     document.getElementById('editAuthorRow').style.display = 'block';
-    document.getElementById('editAuthorText').textContent = ev.author + ' · ' + (ev.createdAt||'');
+    document.getElementById('editAuthorText').textContent  = ev.author + (ev.createdAt ? ' · '+ev.createdAt : '');
   } else {
     document.getElementById('editAuthorRow').style.display = 'none';
   }
   document.getElementById('eventModal').classList.add('open');
 }
+function openEditModal_global(id){ openEditModal(id); }
 
 function closeModal() { document.getElementById('eventModal').classList.remove('open'); }
-document.getElementById('eventModal').addEventListener('click', e=>{
-  if (e.target===document.getElementById('eventModal')) closeModal();
+window.closeModal = closeModal;
+document.getElementById('eventModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('eventModal')) closeModal();
 });
 
-function saveEvent() {
+async function saveEvent() {
   const title = document.getElementById('evTitle').value.trim();
   const date  = document.getElementById('evDate').value;
-  if (!title||!date) { alert('제목과 날짜를 입력해 주세요.'); return; }
-  const existing = editingId ? events.find(e=>e.id===editingId) : null;
-  const ev = {
-    id: editingId||Date.now().toString(36)+Math.random().toString(36).slice(2,6),
+  if (!title || !date) { alert('제목과 날짜를 입력해 주세요.'); return; }
+  const existing = editingId ? events.find(e => e.id === editingId) : null;
+  const data = {
     title, date,
-    time: document.getElementById('evTime').value||'',
-    type: document.getElementById('evType').value,
-    note: document.getElementById('evNote').value.trim(),
-    author: existing?.author || currentUser,
+    time:      document.getElementById('evTime').value || '',
+    type:      document.getElementById('evType').value,
+    note:      document.getElementById('evNote').value.trim(),
+    author:    existing?.author || currentUser,
     createdAt: existing?.createdAt || new Date().toLocaleDateString('ko-KR'),
-    updatedBy: editingId ? currentUser : undefined,
+    updatedBy: currentUser,
+    updatedAt: serverTimestamp(),
   };
-  if (editingId) { const idx=events.findIndex(e=>e.id===editingId); if(idx>=0)events[idx]=ev; }
-  else events.push(ev);
-  saveEvents(); closeModal(); render();
+  showToast('저장 중...', 'loading');
+  try {
+    if (editingId) {
+      await updateDoc(doc(db, 'events', editingId), data);
+    } else {
+      await addDoc(collection(db, 'events'), data);
+    }
+    showToast('저장 완료!', 'ok');
+    closeModal();
+  } catch(e) {
+    showToast('저장 실패: ' + e.message, 'err');
+  }
 }
+window.saveEvent = saveEvent;
 
-function deleteEvent() {
-  if (!editingId||!confirm('이 일정을 삭제할까요?')) return;
-  events = events.filter(e=>e.id!==editingId);
-  saveEvents(); closeModal(); render();
+async function deleteEvent() {
+  if (!editingId || !confirm('이 일정을 삭제할까요?')) return;
+  showToast('삭제 중...', 'loading');
+  try {
+    await deleteDoc(doc(db, 'events', editingId));
+    showToast('삭제 완료', 'ok');
+    closeModal();
+  } catch(e) {
+    showToast('삭제 실패: ' + e.message, 'err');
+  }
 }
+window.deleteEvent = deleteEvent;
 
 function fmt(d) {
   const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), dd=String(d.getDate()).padStart(2,'0');
   return `${y}-${m}-${dd}`;
 }
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function changeMonth_global(d){ changeMonth(d); }
+function goToday_global(){ goToday(); }
+window.changeMonth = changeMonth;
+window.goToday = goToday;
 </script>
 </body>
 </html>
