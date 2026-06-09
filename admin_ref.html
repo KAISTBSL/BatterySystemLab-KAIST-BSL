@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>참고문헌 변환기 · BSL Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=JetBrains+Mono:wght@400;500&family=Pretendard:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080e1a;--surface:#0d1b2e;--surface2:#112240;--surface3:#162a4a;
+  --border:rgba(102,204,255,0.12);--border2:rgba(102,204,255,0.25);--border3:rgba(102,204,255,0.38);
+  --accent:#007acc;--accent2:#66ccff;--accent3:#3399ff;
+  --accent-dim:rgba(0,122,204,0.12);--accent-glow:rgba(102,204,255,0.06);
+  --amber:#f4a832;--amber-dim:rgba(244,168,50,0.10);
+  --blue:#4f8ef7;--blue2:#7eb8ff;--blue-dim:rgba(79,142,247,0.12);
+  --purple:#a78bfa;--purple-dim:rgba(167,139,250,0.12);
+  --text:#dde2ef;--text2:#7a90b0;--text3:#3a5070;--text4:#1e304a;
+  --danger:#f45c5c;--danger-dim:rgba(244,92,92,0.12);
+  --success:#3ecf8e;--success-dim:rgba(62,207,142,0.12);
+  --warn:#f4a832;--warn-dim:rgba(244,168,50,0.12);
+  --mono:'JetBrains Mono',monospace;--serif:'Noto Serif KR',serif;--sans:'Pretendard',-apple-system,sans-serif;
+  --r:8px;--r2:14px;
+}
+
+/* ── ADMIN HEADER ELEMENTS ── */
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-badge{background:linear-gradient(135deg,#007acc,#66ccff);color:#080e1a;
+  font-family:var(--mono);font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;letter-spacing:1px}
+.logo-title{font-size:14px;font-weight:600;color:var(--text)}
+.logo-sub{font-size:11px;color:var(--text3);font-family:var(--mono)}
+.header-right{display:flex;align-items:center;gap:8px}
+.admin-tag{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--accent2);
+  background:rgba(102,204,255,0.1);border:1px solid rgba(102,204,255,0.2);
+  padding:3px 10px;border-radius:20px;text-transform:uppercase}
+.back-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--border2);
+  color:var(--text2);padding:6px 14px;border-radius:7px;font-size:13px;font-family:var(--sans);
+  cursor:pointer;text-decoration:none;transition:all .18s}
+.back-btn:hover{border-color:var(--accent2);color:var(--accent2);background:rgba(102,204,255,0.06)}
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text3)}
+.breadcrumb a{color:var(--text2);text-decoration:none;transition:color 0.15s}
+.breadcrumb a:hover{color:var(--accent2)}
+.breadcrumb span{color:var(--text);font-weight:500}
+.bc-sep{color:var(--text3)}
+
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(102,204,255,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(102,204,255,0.022) 1px,transparent 1px);
+  background-size:48px 48px}
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 60% 40% at 50% -5%,rgba(0,122,204,0.09) 0%,transparent 60%)}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:200;background:rgba(8,14,26,0.92);backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);height:64px;
+  display:flex;align-items:center;justify-content:space-between;padding:0 2rem}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.logo-mark{width:34px;height:34px;border-radius:9px;background:var(--accent-dim);
+  border:1px solid rgba(0,212,170,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-mark svg{width:17px;height:17px}
+.logo-text{display:flex;flex-direction:column;gap:1px}
+.logo-abbr{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--accent2);letter-spacing:1px;line-height:1}
+.logo-full{font-size:10px;color:var(--text3);font-weight:400;line-height:1}
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text3)}
+.breadcrumb a{color:var(--text2);text-decoration:none;transition:color 0.15s}
+.breadcrumb a:hover{color:var(--accent2)}
+.breadcrumb span{color:var(--text);font-weight:500}
+.bc-sep{color:var(--text4)}
+
+/* MAIN */
+main{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:3rem 2rem 6rem}
+
+/* PAGE HEADER */
+.page-eyebrow{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;
+  letter-spacing:2px;text-transform:uppercase;color:var(--amber);background:var(--amber-dim);
+  border:1px solid rgba(244,168,50,0.2);padding:4px 12px;border-radius:30px;margin-bottom:1.2rem}
+.page-header h1{font-family:var(--serif);font-size:36px;font-weight:600;line-height:1.2;
+  margin-bottom:0.6rem;color:var(--text)}
+.page-header h1 em{font-style:normal;
+  background:linear-gradient(120deg,var(--amber) 0%,#fcd34d 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.page-header p{font-size:14px;font-weight:300;color:var(--text2);line-height:1.75;max-width:520px;margin-bottom:0}
+
+/* PANELS */
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;margin-bottom:14px}
+.panel-header{padding:14px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between}
+.panel-title{font-size:12px;font-weight:500;color:var(--text2);
+  display:flex;align-items:center;gap:8px;letter-spacing:0.3px}
+.step-num{width:20px;height:20px;border-radius:50%;background:var(--surface3);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;font-size:10px;font-family:var(--mono);color:var(--amber)}
+.panel-body{padding:20px}
+
+/* INPUT */
+.input-row{display:flex;gap:10px;align-items:flex-start}
+.input-main{flex:1}
+.big-input{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r);
+  color:var(--text);font-family:var(--mono);font-size:13px;padding:12px 14px;
+  outline:none;transition:border-color 0.2s,box-shadow 0.2s;line-height:1.6}
+.big-input::placeholder{color:var(--text3)}
+.big-input:focus{border-color:rgba(244,168,50,0.4);box-shadow:0 0 0 3px rgba(244,168,50,0.07)}
+textarea.big-input{resize:vertical;min-height:90px}
+
+/* FORMAT SELECTOR */
+.fmt-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.fmt-btn{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);
+  padding:10px 8px;text-align:center;cursor:pointer;transition:all 0.18s;user-select:none}
+.fmt-btn:hover{border-color:var(--border2)}
+.fmt-btn.sel{border-color:rgba(244,168,50,0.4);background:rgba(244,168,50,0.07)}
+.fmt-name{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--text);margin-bottom:3px}
+.fmt-sub{font-size:10px;color:var(--text3)}
+.fmt-btn.sel .fmt-name{color:var(--amber)}
+
+/* BTN */
+.btn-run{width:100%;padding:13px;background:linear-gradient(135deg,#c47a0a,var(--amber));
+  border:none;border-radius:var(--r);color:var(--bg);font-size:14px;font-weight:600;
+  font-family:var(--sans);cursor:pointer;transition:all 0.2s;
+  display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-run:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 24px rgba(244,168,50,0.25)}
+.btn-run:disabled{opacity:0.35;cursor:not-allowed}
+.btn-run.loading .btn-text{display:none}
+.btn-run .spinner{display:none}
+.btn-run.loading .spinner{display:block}
+.spinner{width:14px;height:14px;border-radius:50%;border:2px solid rgba(9,9,15,0.3);
+  border-top-color:var(--bg);animation:spin 0.75s linear infinite}
+
+/* BATCH INPUT */
+.batch-area{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r);
+  color:var(--text);font-family:var(--mono);font-size:12px;padding:12px 14px;resize:vertical;
+  min-height:100px;outline:none;transition:border-color 0.2s;line-height:1.7}
+.batch-area::placeholder{color:var(--text3)}
+.batch-area:focus{border-color:rgba(244,168,50,0.4);box-shadow:0 0 0 3px rgba(244,168,50,0.07)}
+
+/* TAB BAR */
+.tab-bar{display:flex;gap:2px;margin-bottom:14px}
+.tab{padding:7px 16px;border-radius:var(--r);font-size:12px;font-family:var(--mono);
+  color:var(--text2);cursor:pointer;transition:all 0.18s;border:1px solid transparent;user-select:none}
+.tab:hover{color:var(--text);background:var(--surface2)}
+.tab.active{color:var(--amber);background:var(--amber-dim);border-color:rgba(244,168,50,0.2)}
+
+/* RESULT AREA */
+.result-box{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);
+  padding:16px;font-size:13px;line-height:1.8;color:var(--text);font-family:var(--sans);
+  min-height:60px;display:none;position:relative}
+.result-box.show{display:block}
+.result-label{font-family:var(--mono);font-size:10px;color:var(--text3);
+  letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.result-text{word-break:break-word}
+.result-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.btn-copy{background:none;border:1px solid var(--border2);border-radius:6px;
+  color:var(--text2);font-size:12px;font-family:var(--mono);padding:5px 12px;
+  cursor:pointer;transition:all 0.18s;display:flex;align-items:center;gap:5px}
+.btn-copy:hover{border-color:var(--accent3);color:var(--accent2);background:var(--accent-glow)}
+.btn-copy.copied{border-color:var(--success);color:var(--success);background:var(--success-dim)}
+
+/* META CARD */
+.meta-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);
+  overflow:hidden;margin-bottom:14px;display:none}
+.meta-card.show{display:block}
+.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.meta-item{padding:12px 16px;border-bottom:1px solid var(--border);border-right:1px solid var(--border)}
+.meta-item:nth-child(2n){border-right:none}
+.meta-item:nth-last-child(-n+2){border-bottom:none}
+.meta-key{font-size:10px;font-family:var(--mono);color:var(--text3);letter-spacing:0.8px;
+  text-transform:uppercase;margin-bottom:4px}
+.meta-val{font-size:13px;color:var(--text);line-height:1.4}
+.meta-val.long{font-size:12px;line-height:1.6;color:var(--text2)}
+
+/* BATCH RESULTS */
+.batch-results{display:none}
+.batch-results.show{display:block}
+.batch-item{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);
+  padding:14px 16px;margin-bottom:8px;animation:fadeUp 0.3s ease backwards}
+.batch-num{font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:6px}
+.batch-text{font-size:13px;line-height:1.8;color:var(--text);word-break:break-word}
+
+/* STATUS BANNERS */
+.banner{border-radius:var(--r);padding:11px 15px;font-size:13px;line-height:1.6;margin-top:14px;display:none}
+.banner.show{display:block}
+.banner-err{background:var(--danger-dim);border:1px solid rgba(244,92,92,0.25);color:var(--danger)}
+.banner-info{background:var(--accent-glow);border:1px solid rgba(0,212,170,0.2);color:var(--accent2)}
+
+/* PROGRESS */
+.prog-wrap{margin-top:12px;display:none}
+.prog-wrap.show{display:block}
+.prog-track{height:2px;background:var(--surface3);border-radius:2px;overflow:hidden;margin-bottom:8px}
+.prog-fill{height:100%;width:0%;background:linear-gradient(90deg,#c47a0a,var(--amber));
+  border-radius:2px;transition:width 0.4s ease}
+.prog-log{font-family:var(--mono);font-size:11px;color:var(--text3)}
+
+/* BIBTEX OUTPUT */
+.bibtex-box{background:var(--bg);border:1px solid var(--border2);border-radius:var(--r);
+  padding:14px;font-family:var(--mono);font-size:11px;color:var(--accent2);
+  line-height:1.8;white-space:pre-wrap;word-break:break-all;display:none;margin-top:8px}
+.bibtex-box.show{display:block}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){main{padding:2rem 1rem 4rem}header{padding:0 1rem}.breadcrumb{display:none}.fmt-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="admin.html" class="logo">
+    <div class="logo-badge">BSL</div>
+    <div><div class="logo-title">Battery System Laboratory</div><div class="logo-sub">Admin Dashboard</div></div>
+  </a>
+  <div class="header-right">
+    <div class="breadcrumb">
+      <a href="admin.html">Admin</a><span class="bc-sep"> / </span><span>참고문헌 변환기</span>
+    </div>
+    <span class="admin-tag">Tool</span>
+    <a href="admin.html" class="back-btn"><i class="fa fa-arrow-left"></i> 대시보드</a>
+  </div>
+</header>
+
+<main>
+  <div class="page-header" style="margin-bottom:2.5rem">
+    <div class="page-eyebrow">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      Reference Formatter
+    </div>
+    <h1>DOI 하나로<br><em>참고문헌 완성</em></h1>
+    <p>DOI 또는 제목을 입력하면 CrossRef API로 메타데이터를 자동 수집해 APA·IEEE·ACS·BibTeX 형식으로 즉시 변환합니다. 여러 논문을 한 번에 처리할 수도 있습니다.</p>
+  </div>
+
+  <!-- TAB -->
+  <div class="tab-bar">
+    <div class="tab active" id="tab-single" onclick="switchTab('single')">단일 변환</div>
+    <div class="tab" id="tab-batch" onclick="switchTab('batch')">일괄 변환</div>
+  </div>
+
+  <!-- SINGLE MODE -->
+  <div id="mode-single">
+    <!-- STEP 1 -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title"><div class="step-num">1</div>DOI 또는 논문 제목 입력</div>
+      </div>
+      <div class="panel-body">
+        <input type="text" class="big-input" id="doiInput"
+          placeholder="10.1016/j.jpowsour.2023.234567  또는  Lithium-ion battery aging mechanisms..."
+          oninput="onDoiInput()" onkeydown="if(event.key==='Enter')doSingle()">
+        <div style="margin-top:8px;font-size:11px;color:var(--text3);font-family:var(--mono)">
+          DOI 입력 시 CrossRef API로 자동 조회 · 제목 입력 시 검색 후 선택
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title"><div class="step-num">2</div>출력 형식 선택</div>
+      </div>
+      <div class="panel-body">
+        <div class="fmt-grid">
+          <div class="fmt-btn sel" id="fmt-apa" onclick="setFmt('apa')">
+            <div class="fmt-name">APA 7th</div><div class="fmt-sub">심리학·사회과학</div>
+          </div>
+          <div class="fmt-btn" id="fmt-ieee" onclick="setFmt('ieee')">
+            <div class="fmt-name">IEEE</div><div class="fmt-sub">공학·전기전자</div>
+          </div>
+          <div class="fmt-btn" id="fmt-acs" onclick="setFmt('acs')">
+            <div class="fmt-name">ACS</div><div class="fmt-sub">화학·재료</div>
+          </div>
+          <div class="fmt-btn" id="fmt-bibtex" onclick="setFmt('bibtex')">
+            <div class="fmt-name">BibTeX</div><div class="fmt-sub">LaTeX·Overleaf</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-run" id="runBtn" onclick="doSingle()" disabled>
+      <span class="btn-text">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:3px"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        참고문헌 생성
+      </span>
+      <div class="spinner"></div>
+    </button>
+
+    <div class="prog-wrap" id="progWrap">
+      <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+      <div class="prog-log" id="progLog"></div>
+    </div>
+
+    <div class="banner banner-err" id="bannerErr"></div>
+    <div class="banner banner-info" id="bannerInfo"></div>
+
+    <!-- META CARD -->
+    <div class="meta-card" id="metaCard" style="margin-top:16px">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);font-size:11px;font-family:var(--mono);color:var(--text3);letter-spacing:1px;text-transform:uppercase">
+        수집된 메타데이터
+      </div>
+      <div class="meta-grid" id="metaGrid"></div>
+    </div>
+
+    <!-- RESULT -->
+    <div id="resultArea" style="margin-top:16px;display:none">
+      <div class="result-box show" id="resultBox">
+        <div class="result-label">변환 결과</div>
+        <div class="result-text" id="resultText"></div>
+        <div class="bibtex-box" id="bibtexBox"></div>
+        <div class="result-actions">
+          <button class="btn-copy" id="copyBtn" onclick="copyResult()">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            복사
+          </button>
+          <button class="btn-copy" onclick="switchFmtAndRegen()" style="gap:4px">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.45"/></svg>
+            다른 형식으로
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BATCH MODE -->
+  <div id="mode-batch" style="display:none">
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title"><div class="step-num">1</div>DOI 목록 입력 (한 줄에 하나씩)</div>
+      </div>
+      <div class="panel-body">
+        <textarea class="batch-area" id="batchInput" placeholder="10.1016/j.jpowsour.2023.001&#10;10.1039/D3EE01234A&#10;10.1021/acsenergylett.3c00567&#10;..."></textarea>
+        <div style="margin-top:8px;font-size:11px;color:var(--text3);font-family:var(--mono)">최대 20개 · DOI만 지원 (제목 검색 불가)</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title"><div class="step-num">2</div>출력 형식</div></div>
+      <div class="panel-body">
+        <div class="fmt-grid">
+          <div class="fmt-btn sel" id="bfmt-apa" onclick="setBatchFmt('apa')"><div class="fmt-name">APA 7th</div><div class="fmt-sub">심리학·사회과학</div></div>
+          <div class="fmt-btn" id="bfmt-ieee" onclick="setBatchFmt('ieee')"><div class="fmt-name">IEEE</div><div class="fmt-sub">공학·전기전자</div></div>
+          <div class="fmt-btn" id="bfmt-acs" onclick="setBatchFmt('acs')"><div class="fmt-name">ACS</div><div class="fmt-sub">화학·재료</div></div>
+          <div class="fmt-btn" id="bfmt-bibtex" onclick="setBatchFmt('bibtex')"><div class="fmt-name">BibTeX</div><div class="fmt-sub">LaTeX·Overleaf</div></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-run" id="batchRunBtn" onclick="doBatch()">
+      <span class="btn-text">일괄 변환 시작</span><div class="spinner"></div>
+    </button>
+
+    <div class="prog-wrap" id="bProgWrap">
+      <div class="prog-track"><div class="prog-fill" id="bProgFill"></div></div>
+      <div class="prog-log" id="bProgLog"></div>
+    </div>
+
+    <div class="banner banner-err" id="bBannerErr" style="margin-top:12px"></div>
+
+    <div id="batchResultArea" style="margin-top:16px">
+      <div class="batch-results" id="batchResults"></div>
+      <div style="display:none;margin-top:10px" id="batchCopyAll">
+        <button class="btn-copy" onclick="copyAllBatch()">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          전체 복사
+        </button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+// ═══════ STATE ═══════
+let fmt = 'apa', bfmt = 'apa';
+let lastMeta = null, lastFormatted = '';
+let batchFormatted = [];
+
+// ═══════ TABS ═══════
+function switchTab(t) {
+  document.getElementById('mode-single').style.display = t==='single'?'block':'none';
+  document.getElementById('mode-batch').style.display  = t==='batch'?'block':'none';
+  document.getElementById('tab-single').classList.toggle('active', t==='single');
+  document.getElementById('tab-batch').classList.toggle('active', t==='batch');
+}
+
+// ═══════ FORMAT SELECT ═══════
+function setFmt(f) {
+  fmt = f;
+  ['apa','ieee','acs','bibtex'].forEach(x => document.getElementById('fmt-'+x).classList.toggle('sel', x===f));
+}
+function setBatchFmt(f) {
+  bfmt = f;
+  ['apa','ieee','acs','bibtex'].forEach(x => document.getElementById('bfmt-'+x).classList.toggle('sel', x===f));
+}
+
+function onDoiInput() {
+  const v = document.getElementById('doiInput').value.trim();
+  document.getElementById('runBtn').disabled = v.length < 3;
+}
+
+// ═══════ CROSSREF FETCH ═══════
+async function fetchCrossRef(doi) {
+  const clean = doi.replace(/^https?:\/\/(dx\.)?doi\.org\//i,'').trim();
+  const r = await fetch(`https://api.crossref.org/works/${encodeURIComponent(clean)}`, {
+    headers:{'User-Agent':'BSL-RefFormatter/1.0 (mailto:bsl@lab.ac.kr)'}
+  });
+  if (!r.ok) throw new Error(`CrossRef 조회 실패 (HTTP ${r.status}). DOI를 확인해주세요.`);
+  const j = await r.json();
+  return parseCrossRef(j.message);
+}
+
+async function searchCrossRef(query) {
+  const r = await fetch(`https://api.crossref.org/works?query=${encodeURIComponent(query)}&rows=5&select=DOI,title,author,published,container-title,volume,issue,page,publisher,ISSN`);
+  if (!r.ok) throw new Error('검색 실패');
+  const j = await r.json();
+  return j.message.items.map(parseCrossRef);
+}
+
+function parseCrossRef(m) {
+  const authors = (m.author || []).map(a => ({
+    last: a.family || a.name || '',
+    first: a.given || '',
+    orcid: a.ORCID || ''
+  }));
+  const year = m.published?.['date-parts']?.[0]?.[0]
+    || m['published-print']?.['date-parts']?.[0]?.[0]
+    || m['published-online']?.['date-parts']?.[0]?.[0] || '';
+  return {
+    doi: m.DOI || '',
+    title: (m.title || [''])[0],
+    authors,
+    year: String(year),
+    journal: (m['container-title'] || [''])[0],
+    volume: m.volume || '',
+    issue: m.issue || '',
+    pages: m.page || '',
+    publisher: m.publisher || '',
+    issn: (m.ISSN || [''])[0],
+    type: m.type || 'journal-article',
+  };
+}
+
+// ═══════ FORMAT ═══════
+function formatAuthors(authors, style) {
+  if (!authors.length) return '';
+  if (style === 'apa') {
+    const parts = authors.slice(0,20).map((a,i) => {
+      const initials = a.first ? a.first.split(' ').map(w=>w[0]+'.').join(' ') : '';
+      return a.last + (initials ? ', '+initials : '');
+    });
+    if (authors.length > 20) parts.push('... '+formatAuthorSingle(authors[authors.length-1],'apa'));
+    return parts.join(', ') + (authors.length>1 ? '' : '');
+  }
+  if (style === 'ieee') {
+    return authors.slice(0,6).map(a => {
+      const initials = a.first ? a.first.split(' ').map(w=>w[0]+'.').join('. ') : '';
+      return (initials ? initials+' ' : '') + a.last;
+    }).join(', ') + (authors.length>6 ? ' et al.' : '');
+  }
+  if (style === 'acs') {
+    return authors.slice(0,10).map(a => {
+      const initials = a.first ? a.first.split(' ').map(w=>w[0]+'.').join('') : '';
+      return a.last + (initials ? ', '+initials : '');
+    }).join('; ') + (authors.length>10 ? '; et al.' : '');
+  }
+  return authors.map(a=>a.last+' '+a.first).join(', ');
+}
+function formatAuthorSingle(a,style){ return a.last; }
+
+function formatRef(meta, style) {
+  const {title,authors,year,journal,volume,issue,pages,doi,publisher} = meta;
+  const doiUrl = doi ? `https://doi.org/${doi}` : '';
+  const yr = year || 'n.d.';
+
+  if (style === 'apa') {
+    const au = formatAuthors(authors,'apa');
+    let ref = `${au} (${yr}). ${title}. `;
+    if (journal) {
+      ref += `*${journal}*`;
+      if (volume) ref += `, *${volume}*`;
+      if (issue) ref += `(${issue})`;
+      if (pages) ref += `, ${pages}`;
+      ref += '.';
+    } else if (publisher) { ref += `${publisher}.`; }
+    if (doiUrl) ref += ` ${doiUrl}`;
+    return ref;
+  }
+
+  if (style === 'ieee') {
+    const au = formatAuthors(authors,'ieee');
+    let ref = `${au}, "${title},"`;
+    if (journal) {
+      ref += ` *${journal}*`;
+      if (volume) ref += `, vol. ${volume}`;
+      if (issue) ref += `, no. ${issue}`;
+      if (pages) ref += `, pp. ${pages}`;
+      if (yr) ref += `, ${yr}`;
+      ref += '.';
+    }
+    if (doi) ref += ` doi: ${doi}.`;
+    return ref;
+  }
+
+  if (style === 'acs') {
+    const au = formatAuthors(authors,'acs');
+    let ref = `${au} ${title}. `;
+    if (journal) {
+      ref += `*${journal}* **${yr}**`;
+      if (volume) ref += `, *${volume}*`;
+      if (issue) ref += ` (${issue})`;
+      if (pages) ref += `, ${pages}`;
+      ref += '.';
+    }
+    if (doi) ref += ` DOI: ${doi}.`;
+    return ref;
+  }
+
+  if (style === 'bibtex') {
+    const key = (authors[0]?.last||'Unknown').toLowerCase().replace(/\s/g,'') + yr;
+    const auBib = authors.map(a => (a.last||'') + (a.first ? ', '+a.first : '')).join(' and ');
+    let b = `@article{${key},\n`;
+    b += `  author  = {${auBib}},\n`;
+    b += `  title   = {{${title}}},\n`;
+    if (journal) b += `  journal = {${journal}},\n`;
+    if (yr) b += `  year    = {${yr}},\n`;
+    if (volume) b += `  volume  = {${volume}},\n`;
+    if (issue) b += `  number  = {${issue}},\n`;
+    if (pages) b += `  pages   = {${pages}},\n`;
+    if (doi) b += `  doi     = {${doi}},\n`;
+    b += `}`;
+    return b;
+  }
+  return '';
+}
+
+// ═══════ RENDER META ═══════
+function renderMeta(meta) {
+  const items = [
+    ['제목', meta.title || '—'],
+    ['저자', meta.authors.map(a=>a.last+(a.first?' '+a.first:'')).join(', ')||'—'],
+    ['연도', meta.year||'—'],
+    ['저널', meta.journal||'—'],
+    ['권(호)', meta.volume?(meta.volume+(meta.issue?`(${meta.issue})`:'')):'—'],
+    ['페이지', meta.pages||'—'],
+    ['DOI', meta.doi||'—'],
+    ['출판사', meta.publisher||'—'],
+  ];
+  document.getElementById('metaGrid').innerHTML = items.map(([k,v])=>`
+    <div class="meta-item">
+      <div class="meta-key">${k}</div>
+      <div class="meta-val ${v.length>40?'long':''}">${esc(v)}</div>
+    </div>`).join('');
+  document.getElementById('metaCard').classList.add('show');
+}
+
+// ═══════ SINGLE ═══════
+async function doSingle() {
+  const raw = document.getElementById('doiInput').value.trim();
+  if (!raw) return;
+  const btn = document.getElementById('runBtn');
+  btn.disabled = true; btn.classList.add('loading');
+  document.getElementById('bannerErr').classList.remove('show');
+  document.getElementById('bannerInfo').classList.remove('show');
+  document.getElementById('resultArea').style.display = 'none';
+  document.getElementById('metaCard').classList.remove('show');
+  setProg(10,'CrossRef API 조회 중...');
+
+  try {
+    const isDoi = /^10\.\d{4}/.test(raw) || raw.includes('doi.org');
+    let meta;
+    if (isDoi) {
+      setProg(40,'메타데이터 파싱 중...');
+      meta = await fetchCrossRef(raw);
+    } else {
+      setProg(30,'제목으로 검색 중...');
+      const results = await searchCrossRef(raw);
+      if (!results.length) throw new Error('검색 결과가 없습니다. DOI를 직접 입력해보세요.');
+      meta = results[0];
+      const infoEl = document.getElementById('bannerInfo');
+      infoEl.textContent = `ℹ 제목 검색으로 가장 유사한 논문을 찾았습니다: "${meta.title.slice(0,60)}..."`;
+      infoEl.classList.add('show');
+    }
+    setProg(80,'참고문헌 형식 변환 중...');
+    await sleep(200);
+    lastMeta = meta;
+    renderMeta(meta);
+    const formatted = formatRef(meta, fmt);
+    lastFormatted = formatted;
+    displayResult(formatted);
+    setProg(100,'완료!');
+    await sleep(300);
+  } catch(e) {
+    const el = document.getElementById('bannerErr');
+    el.textContent = '❌ '+e.message;
+    el.classList.add('show');
+    setProgClear();
+  } finally {
+    btn.disabled = false; btn.classList.remove('loading');
+    document.getElementById('progWrap').classList.remove('show');
+  }
+}
+
+function displayResult(text) {
+  const isBib = fmt === 'bibtex';
+  document.getElementById('resultText').innerHTML = isBib ? '' : renderMarkdown(text);
+  const bib = document.getElementById('bibtexBox');
+  bib.textContent = isBib ? text : '';
+  bib.classList.toggle('show', isBib);
+  document.getElementById('resultArea').style.display = 'block';
+}
+
+function renderMarkdown(t) {
+  return esc(t).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>');
+}
+
+function switchFmtAndRegen() {
+  if (!lastMeta) return;
+  const fmts = ['apa','ieee','acs','bibtex'];
+  const idx = fmts.indexOf(fmt);
+  const next = fmts[(idx+1)%4];
+  setFmt(next);
+  lastFormatted = formatRef(lastMeta, fmt);
+  displayResult(lastFormatted);
+}
+
+// ═══════ BATCH ═══════
+async function doBatch() {
+  const lines = document.getElementById('batchInput').value.trim().split('\n')
+    .map(l=>l.trim()).filter(l=>l.length>5).slice(0,20);
+  if (!lines.length) return;
+  const btn = document.getElementById('batchRunBtn');
+  btn.disabled = true; btn.classList.add('loading');
+  document.getElementById('bBannerErr').classList.remove('show');
+  document.getElementById('batchResults').innerHTML = '';
+  document.getElementById('batchResults').classList.remove('show');
+  document.getElementById('batchCopyAll').style.display = 'none';
+  setBProg(5,'시작...');
+  document.getElementById('bProgWrap').classList.add('show');
+  batchFormatted = [];
+
+  for (let i=0;i<lines.length;i++) {
+    setBProg(Math.round((i/lines.length)*90)+5, `(${i+1}/${lines.length}) ${lines[i].slice(0,30)}... 조회 중`);
+    try {
+      const meta = await fetchCrossRef(lines[i]);
+      const text = formatRef(meta, bfmt);
+      batchFormatted.push(text);
+      appendBatchItem(i+1, text);
+      await sleep(350); // CrossRef rate limit 배려
+    } catch(e) {
+      batchFormatted.push(`[오류] ${lines[i]}: ${e.message}`);
+      appendBatchItem(i+1, `[조회 실패] ${lines[i]}`);
+    }
+  }
+
+  setBProg(100,'완료!');
+  await sleep(300);
+  document.getElementById('bProgWrap').classList.remove('show');
+  document.getElementById('batchCopyAll').style.display = 'block';
+  btn.disabled = false; btn.classList.remove('loading');
+}
+
+function appendBatchItem(n, text) {
+  const el = document.createElement('div');
+  el.className = 'batch-item';
+  el.style.animationDelay = '0s';
+  el.innerHTML = `<div class="batch-num">[${n}]</div><div class="batch-text">${renderMarkdown(text)}</div>`;
+  document.getElementById('batchResults').appendChild(el);
+  document.getElementById('batchResults').classList.add('show');
+}
+
+// ═══════ COPY ═══════
+async function copyResult() {
+  const text = fmt==='bibtex'
+    ? document.getElementById('bibtexBox').textContent
+    : document.getElementById('resultText').innerText;
+  await navigator.clipboard.writeText(text);
+  const btn = document.getElementById('copyBtn');
+  btn.classList.add('copied'); btn.textContent = '✓ 복사됨';
+  setTimeout(()=>{ btn.classList.remove('copied'); btn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> 복사'; }, 1800);
+}
+
+async function copyAllBatch() {
+  await navigator.clipboard.writeText(batchFormatted.join('\n\n'));
+  alert('전체 참고문헌이 클립보드에 복사되었습니다.');
+}
+
+// ═══════ PROGRESS ═══════
+function setProg(p,m){
+  document.getElementById('progWrap').classList.add('show');
+  document.getElementById('progFill').style.width=p+'%';
+  document.getElementById('progLog').textContent=m;
+}
+function setProgClear(){ document.getElementById('progFill').style.width='0%'; document.getElementById('progLog').textContent=''; }
+function setBProg(p,m){
+  document.getElementById('bProgFill').style.width=p+'%';
+  document.getElementById('bProgLog').textContent=m;
+}
+
+// ═══════ UTILS ═══════
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+</script>
+</body>
+</html>

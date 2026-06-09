@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>논문 검색 · BSL Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080e1a;--surface:#0d1b2e;--surface2:#112240;--surface3:#162a4a;
+  --border:rgba(102,204,255,0.12);--border2:rgba(102,204,255,0.25);
+  --accent:#007acc;--accent2:#66ccff;
+  --text:#dde2ef;--text2:#7a90b0;--text3:#3a5070;
+  --success:#3ecf8e;--warn:#f4a832;--danger:#f45c5c;
+  --blue:#3b82f6;--blue2:#93c5fd;--blue-dim:rgba(59,130,246,0.12);
+  --green:#3ecf8e;--green-dim:rgba(62,207,142,0.12);
+  --mono:'JetBrains Mono',monospace;--sans:'Pretendard',-apple-system,sans-serif;
+  --r:8px;--r2:14px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(102,204,255,0.018) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(102,204,255,0.018) 1px,transparent 1px);background-size:52px 52px}
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 35% at 50% -5%,rgba(62,207,142,0.04) 0%,transparent 60%)}
+header{position:sticky;top:0;z-index:200;background:rgba(8,14,26,0.92);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);height:64px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 2rem}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-badge{background:linear-gradient(135deg,#3ecf8e,#6ee7b7);color:#080e1a;
+  font-family:var(--mono);font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;letter-spacing:1px}
+.logo-title{font-size:14px;font-weight:600;color:var(--text)}
+.logo-sub{font-size:11px;color:var(--text3);font-family:var(--mono)}
+.header-right{display:flex;align-items:center;gap:8px}
+.user-badge{display:flex;align-items:center;gap:7px;background:rgba(62,207,142,0.1);
+  border:1px solid rgba(62,207,142,0.25);padding:5px 13px;border-radius:30px}
+.user-badge-dot{width:7px;height:7px;border-radius:50%;background:var(--success);flex-shrink:0;box-shadow:0 0 6px rgba(62,207,142,0.6)}
+.user-badge-name{font-family:var(--mono);font-size:12px;color:var(--success);letter-spacing:.5px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--border2);
+  color:var(--text2);padding:6px 14px;border-radius:7px;font-size:13px;cursor:pointer;text-decoration:none;transition:all .18s}
+.back-btn:hover{border-color:var(--accent2);color:var(--accent2);background:rgba(102,204,255,0.06)}
+/* MAIN */
+main{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:2.5rem 2rem 6rem}
+.page-header{margin-bottom:2rem}
+.page-eyebrow{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;
+  letter-spacing:2px;text-transform:uppercase;color:var(--green);background:var(--green-dim);
+  border:1px solid rgba(62,207,142,0.2);padding:4px 12px;border-radius:30px;margin-bottom:1rem}
+.page-title{font-size:26px;font-weight:700;color:var(--text);margin-bottom:.5rem;line-height:1.2}
+.page-title em{font-style:normal;background:linear-gradient(120deg,var(--green) 0%,var(--blue2) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.page-desc{font-size:13px;color:var(--text2);line-height:1.7;max-width:560px}
+/* SEARCH */
+.search-wrap{position:relative;margin-bottom:12px}
+.search-input{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r2);
+  color:var(--text);font-size:15px;font-family:var(--sans);padding:15px 110px 15px 20px;
+  outline:none;transition:border-color .2s,box-shadow .2s}
+.search-input::placeholder{color:var(--text3)}
+.search-input:focus{border-color:rgba(62,207,142,0.4);box-shadow:0 0 0 3px rgba(62,207,142,0.07)}
+.search-btn{position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  background:linear-gradient(135deg,#2a8a6a,#3ecf8e);border:none;border-radius:var(--r);
+  padding:8px 18px;color:#080e1a;font-size:13px;font-weight:700;font-family:var(--sans);
+  cursor:pointer;transition:opacity .18s;display:flex;align-items:center;gap:7px}
+.search-btn:hover{opacity:.85}
+.search-btn:disabled{opacity:.4;cursor:not-allowed}
+.mini-spinner{width:12px;height:12px;border:2px solid rgba(8,14,26,0.3);border-top-color:#080e1a;
+  border-radius:50%;animation:spin .7s linear infinite;display:none}
+/* JOURNAL FILTER */
+.journal-section{margin-bottom:1.2rem}
+.journal-label{font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:1px;
+  text-transform:uppercase;margin-bottom:8px;display:block}
+.journal-grid{display:flex;flex-wrap:wrap;gap:6px}
+.j-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text2);
+  padding:5px 13px;border-radius:20px;font-size:12px;font-family:var(--mono);
+  cursor:pointer;transition:all .18s;white-space:nowrap}
+.j-btn:hover{border-color:var(--border2);color:var(--text)}
+.j-btn.active{border-color:rgba(62,207,142,0.5);color:var(--green);background:var(--green-dim)}
+.j-btn.publisher-nature{--jc:#f59e0b}
+.j-btn.publisher-elsevier{--jc:#ff6b35}
+.j-btn.publisher-ieee{--jc:#3b82f6}
+.j-btn.publisher-acs{--jc:#a78bfa}
+.j-btn.publisher-rsc{--jc:#ec4899}
+.j-btn.publisher-wiley{--jc:#06b6d4}
+.j-btn.active{border-color:var(--jc,rgba(62,207,142,0.5));color:var(--jc,var(--green));background:rgba(62,207,142,0.07)}
+/* FILTERS ROW */
+.filters-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:1.5rem}
+.filter-label{font-size:11px;font-family:var(--mono);color:var(--text3);letter-spacing:.5px}
+.filter-select{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r);
+  color:var(--text2);font-size:12px;font-family:var(--mono);padding:6px 10px;outline:none;cursor:pointer}
+.filter-select option{background:var(--surface2)}
+.sort-group{display:flex;gap:2px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:3px;margin-left:auto}
+.sort-btn{font-size:11px;font-family:var(--mono);color:var(--text3);padding:4px 10px;
+  border-radius:5px;cursor:pointer;border:none;background:none;transition:all .15s}
+.sort-btn.active{background:var(--surface3);color:var(--green)}
+/* PROGRESS */
+.prog-wrap{display:none;margin-bottom:1rem}
+.prog-wrap.show{display:block}
+.prog-track{height:2px;background:var(--surface3);border-radius:2px;overflow:hidden;margin-bottom:7px}
+.prog-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--green),var(--blue2));border-radius:2px;transition:width .35s ease}
+.prog-log{font-family:var(--mono);font-size:11px;color:var(--text3)}
+/* BANNER */
+.banner{border-radius:var(--r);padding:11px 15px;font-size:13px;margin-bottom:12px;display:none}
+.banner.show{display:block}
+.banner-err{background:rgba(244,92,92,0.12);border:1px solid rgba(244,92,92,0.25);color:var(--danger)}
+.banner-info{background:var(--green-dim);border:1px solid rgba(62,207,142,0.2);color:var(--green)}
+/* RESULTS META */
+.results-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;min-height:24px}
+.results-info{font-size:12px;font-family:var(--mono);color:var(--text3)}
+.results-info strong{color:var(--green)}
+.page-nav{display:flex;gap:6px;align-items:center}
+.pnav-btn{background:none;border:1px solid var(--border2);border-radius:6px;color:var(--text2);
+  font-size:11px;font-family:var(--mono);padding:5px 12px;cursor:pointer;transition:all .15s}
+.pnav-btn:hover:not(:disabled){border-color:var(--green);color:var(--green)}
+.pnav-btn:disabled{opacity:.3;cursor:not-allowed}
+.pnav-info{font-size:11px;font-family:var(--mono);color:var(--text3)}
+/* PAPER CARD */
+.paper-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);
+  padding:18px 22px;margin-bottom:10px;transition:border-color .18s;animation:fadeUp .3s ease backwards}
+.paper-card:hover{border-color:var(--border2)}
+.paper-card:nth-child(1){animation-delay:.03s}.paper-card:nth-child(2){animation-delay:.07s}
+.paper-card:nth-child(3){animation-delay:.11s}.paper-card:nth-child(4){animation-delay:.15s}
+.paper-card:nth-child(5){animation-delay:.19s}.paper-card:nth-child(6){animation-delay:.23s}
+.paper-card:nth-child(7){animation-delay:.27s}.paper-card:nth-child(8){animation-delay:.31s}
+.paper-num{font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:6px}
+.paper-title{font-size:15px;font-weight:500;color:var(--text);line-height:1.45;
+  text-decoration:none;display:block;transition:color .15s;margin-bottom:5px}
+.paper-title:hover{color:var(--green)}
+.paper-authors{font-size:12px;color:var(--text3);margin-bottom:8px;line-height:1.4}
+.paper-meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.pmeta{font-size:12px;color:var(--text3);display:flex;align-items:center;gap:5px}
+.pmeta span{color:var(--text2)}
+.paper-abstract{font-size:12px;color:var(--text2);line-height:1.75;
+  border-top:1px solid var(--border);padding-top:10px;margin-top:4px;display:none}
+.paper-abstract.open{display:block}
+.paper-footer{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.tag-journal{font-size:10px;font-family:var(--mono);padding:2px 9px;border-radius:4px}
+.tag-j-nature{background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.25)}
+.tag-j-elsevier{background:rgba(255,107,53,0.15);color:#fb923c;border:1px solid rgba(255,107,53,0.25)}
+.tag-j-ieee{background:var(--blue-dim);color:var(--blue2);border:1px solid rgba(59,130,246,0.25)}
+.tag-j-acs{background:rgba(167,139,250,0.15);color:#c4b5fd;border:1px solid rgba(167,139,250,0.25)}
+.tag-j-rsc{background:rgba(236,72,153,0.12);color:#f9a8d4;border:1px solid rgba(236,72,153,0.2)}
+.tag-j-wiley{background:rgba(6,182,212,0.12);color:#67e8f9;border:1px solid rgba(6,182,212,0.2)}
+.tag-j-other{background:var(--surface2);color:var(--text2);border:1px solid var(--border)}
+.tag-year{font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:4px;background:var(--surface2);color:var(--text3);border:1px solid var(--border)}
+.tag-oa{font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:4px;background:var(--green-dim);color:var(--green);border:1px solid rgba(62,207,142,0.2)}
+.tag-cited{font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:4px;background:rgba(244,168,50,0.1);color:#fcd34d;border:1px solid rgba(244,168,50,0.2)}
+.paper-actions{display:flex;gap:6px;margin-left:auto}
+.act-btn{background:none;border:1px solid var(--border2);border-radius:6px;color:var(--text3);
+  font-size:11px;font-family:var(--mono);padding:4px 10px;cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;gap:4px;white-space:nowrap}
+.act-btn:hover{border-color:var(--green);color:var(--green);background:var(--green-dim)}
+.act-btn.saved{border-color:var(--warn);color:var(--warn);background:rgba(244,168,50,0.08)}
+.toggle-abs{background:none;border:none;color:var(--text3);font-size:11px;font-family:var(--mono);cursor:pointer;transition:color .15s}
+.toggle-abs:hover{color:var(--green)}
+/* SAVED */
+.saved-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:16px 20px;margin-bottom:1.5rem;display:none}
+.saved-panel.show{display:block}
+.saved-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.saved-title-row{font-size:12px;font-family:var(--mono);color:var(--text2);letter-spacing:.5px;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.saved-cnt{background:var(--green-dim);color:var(--green);border:1px solid rgba(62,207,142,0.2);padding:1px 8px;border-radius:20px;font-size:10px}
+.export-btn{background:none;border:1px solid rgba(62,207,142,0.25);border-radius:6px;color:var(--green);font-size:11px;font-family:var(--mono);padding:5px 12px;cursor:pointer;transition:all .15s}
+.export-btn:hover{background:var(--green-dim)}
+.saved-list{display:flex;flex-direction:column;gap:6px}
+.saved-item{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;display:flex;align-items:flex-start;gap:10px}
+.saved-item-info{flex:1}
+.saved-item-title{font-size:13px;color:var(--text);line-height:1.4}
+.saved-item-sub{font-size:11px;font-family:var(--mono);color:var(--text3);margin-top:3px}
+.saved-item-actions{display:flex;gap:5px;flex-shrink:0;margin-top:2px}
+.btn-cite{background:none;border:1px solid rgba(62,207,142,0.2);border-radius:5px;color:var(--green);font-size:10px;font-family:var(--mono);padding:3px 9px;cursor:pointer;transition:all .15s}
+.btn-cite:hover{background:var(--green-dim)}
+.btn-unsave{background:none;border:1px solid var(--border2);border-radius:5px;color:var(--text3);font-size:10px;font-family:var(--mono);padding:3px 7px;cursor:pointer;transition:all .15s}
+.btn-unsave:hover{border-color:var(--danger);color:var(--danger)}
+/* REF MODAL */
+.ref-modal-bg{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,0.72);
+  display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);
+  opacity:0;pointer-events:none;transition:opacity .2s}
+.ref-modal-bg.open{opacity:1;pointer-events:all}
+.ref-modal{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r2);
+  padding:24px;width:580px;max-width:92vw;transform:translateY(10px);transition:transform .2s}
+.ref-modal-bg.open .ref-modal{transform:translateY(0)}
+.ref-modal-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px}
+.ref-modal-doi{font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:16px}
+.fmt-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:16px}
+.fmt-btn{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:9px 6px;text-align:center;cursor:pointer;transition:all .15s}
+.fmt-btn.sel{border-color:rgba(62,207,142,0.4);background:var(--green-dim)}
+.fmt-name{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--text)}
+.fmt-btn.sel .fmt-name{color:var(--green)}
+.fmt-sub{font-size:10px;color:var(--text3);margin-top:2px}
+.ref-output{background:var(--bg);border:1px solid var(--border2);border-radius:var(--r);
+  padding:14px;font-size:12px;line-height:1.8;color:var(--text);font-family:var(--mono);
+  white-space:pre-wrap;word-break:break-all;min-height:70px}
+.ref-actions{display:flex;gap:8px;margin-top:14px}
+.btn-copy{flex:1;padding:9px;background:linear-gradient(135deg,#2a8a6a,#3ecf8e);border:none;
+  border-radius:var(--r);color:#080e1a;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .18s}
+.btn-copy:hover{opacity:.85}
+.btn-close-ref{padding:9px 18px;background:none;border:1px solid var(--border2);border-radius:var(--r);
+  color:var(--text2);font-size:13px;cursor:pointer;transition:all .18s}
+.btn-close-ref:hover{border-color:var(--danger);color:var(--danger)}
+/* EMPTY */
+.empty-state{text-align:center;padding:60px 24px;color:var(--text3);font-size:13px;line-height:1.7}
+.empty-icon{font-size:36px;margin-bottom:12px;opacity:.3}
+footer{position:relative;z-index:1;background:rgba(8,14,26,0.95);border-top:1px solid var(--border);
+  padding:1.2rem 2rem;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--text3)}
+footer a{color:var(--text2);text-decoration:none}
+footer a:hover{color:var(--accent2)}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){main{padding:2rem 1rem 4rem}header{padding:0 1rem}.fmt-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="admin.html" class="logo">
+    <div class="logo-badge">BSL</div>
+    <div><div class="logo-title">논문 검색</div><div class="logo-sub">Paper Search · CrossRef</div></div>
+  </a>
+  <div class="header-right">
+    <div class="user-badge" id="userBadge" style="display:none">
+      <div class="user-badge-dot"></div>
+      <span class="user-badge-name" id="userBadgeName"></span>
+    </div>
+    <a href="admin.html" class="back-btn" id="backBtn"><i class="fa fa-arrow-left"></i> 대시보드</a>
+  </div>
+</header>
+
+<main>
+  <div class="page-header">
+    <div class="page-eyebrow"><i class="fa fa-search"></i> Paper Search</div>
+    <div class="page-title">주요 저널에서 <em>논문 검색</em></div>
+    <div class="page-desc">Nature, Elsevier, IEEE, ACS, RSC, Wiley 등 배터리·에너지 분야 주요 저널을 선택해 CrossRef API로 논문을 검색합니다.</div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <input type="text" class="search-input" id="searchBox"
+      placeholder="lithium ion battery thermal runaway solid electrolyte..."
+      onkeydown="if(event.key==='Enter')doSearch()">
+    <button class="search-btn" id="searchBtn" onclick="doSearch()">
+      <div class="mini-spinner" id="searchSpinner"></div>
+      <span id="searchBtnTxt"><i class="fa fa-search"></i> 검색</span>
+    </button>
+  </div>
+
+  <!-- JOURNAL FILTER -->
+  <div class="journal-section">
+    <span class="journal-label">저널 필터 (복수 선택 가능)</span>
+    <div class="journal-grid" id="journalGrid">
+      <!-- Nature Group -->
+      <button class="j-btn publisher-nature" data-issn="2041-1723" data-pub="Nature" onclick="toggleJournal(this)">Nature Communications</button>
+      <button class="j-btn publisher-nature" data-issn="1476-4660" data-pub="Nature" onclick="toggleJournal(this)">Nature Materials</button>
+      <button class="j-btn publisher-nature" data-issn="1748-3395" data-pub="Nature" onclick="toggleJournal(this)">Nature Nanotechnology</button>
+      <button class="j-btn publisher-nature" data-issn="2520-1158" data-pub="Nature" onclick="toggleJournal(this)">Nature Energy</button>
+      <button class="j-btn publisher-nature" data-issn="2397-3358" data-pub="Nature" onclick="toggleJournal(this)">Nature Sustainability</button>
+      <!-- Elsevier -->
+      <button class="j-btn publisher-elsevier" data-issn="0378-7753" data-pub="Elsevier" onclick="toggleJournal(this)">Journal of Power Sources</button>
+      <button class="j-btn publisher-elsevier" data-issn="2352-152X" data-pub="Elsevier" onclick="toggleJournal(this)">Journal of Energy Storage</button>
+      <button class="j-btn publisher-elsevier" data-issn="0013-4686" data-pub="Elsevier" onclick="toggleJournal(this)">Electrochimica Acta</button>
+      <button class="j-btn publisher-elsevier" data-issn="0013-4694" data-pub="Elsevier" onclick="toggleJournal(this)">Energy & Environmental Science</button>
+      <button class="j-btn publisher-elsevier" data-issn="0306-2619" data-pub="Elsevier" onclick="toggleJournal(this)">Applied Energy</button>
+      <button class="j-btn publisher-elsevier" data-issn="0378-3820" data-pub="Elsevier" onclick="toggleJournal(this)">Fuel Processing Technology</button>
+      <!-- IEEE -->
+      <button class="j-btn publisher-ieee" data-issn="1558-0016" data-pub="IEEE" onclick="toggleJournal(this)">IEEE Trans. Industrial Electronics</button>
+      <button class="j-btn publisher-ieee" data-issn="2168-6777" data-pub="IEEE" onclick="toggleJournal(this)">IEEE J. Emerging Selected Topics Power Elec.</button>
+      <button class="j-btn publisher-ieee" data-issn="2332-7782" data-pub="IEEE" onclick="toggleJournal(this)">IEEE Trans. Transportation Electrification</button>
+      <button class="j-btn publisher-ieee" data-issn="0885-8993" data-pub="IEEE" onclick="toggleJournal(this)">IEEE Trans. Power Electronics</button>
+      <!-- ACS -->
+      <button class="j-btn publisher-acs" data-issn="1936-0851" data-pub="ACS" onclick="toggleJournal(this)">ACS Nano</button>
+      <button class="j-btn publisher-acs" data-issn="1948-7185" data-pub="ACS" onclick="toggleJournal(this)">J. Physical Chemistry Letters</button>
+      <button class="j-btn publisher-acs" data-issn="2380-8195" data-pub="ACS" onclick="toggleJournal(this)">ACS Energy Letters</button>
+      <button class="j-btn publisher-acs" data-issn="2574-0962" data-pub="ACS" onclick="toggleJournal(this)">ACS Applied Energy Materials</button>
+      <!-- RSC -->
+      <button class="j-btn publisher-rsc" data-issn="2050-7488" data-pub="RSC" onclick="toggleJournal(this)">J. Materials Chemistry A</button>
+      <button class="j-btn publisher-rsc" data-issn="1754-5692" data-pub="RSC" onclick="toggleJournal(this)">Energy & Environmental Science (RSC)</button>
+      <!-- Wiley -->
+      <button class="j-btn publisher-wiley" data-issn="1614-6840" data-pub="Wiley" onclick="toggleJournal(this)">Advanced Energy Materials</button>
+      <button class="j-btn publisher-wiley" data-issn="0935-9648" data-pub="Wiley" onclick="toggleJournal(this)">Advanced Materials</button>
+      <button class="j-btn publisher-wiley" data-issn="1613-6829" data-pub="Wiley" onclick="toggleJournal(this)">Small</button>
+    </div>
+  </div>
+
+  <!-- FILTERS ROW -->
+  <div class="filters-row">
+    <span class="filter-label">연도</span>
+    <select class="filter-select" id="filterYear">
+      <option value="">전체</option>
+      <option value="2025">2025</option>
+      <option value="2024">2024</option>
+      <option value="2023">2023</option>
+      <option value="2022">2022</option>
+      <option value="2021">2021</option>
+      <option value="2020">2020 이전</option>
+    </select>
+    <span class="filter-label">최소 인용수</span>
+    <select class="filter-select" id="filterCited">
+      <option value="0">제한 없음</option>
+      <option value="5">5회 이상</option>
+      <option value="20">20회 이상</option>
+      <option value="50">50회 이상</option>
+      <option value="100">100회 이상</option>
+    </select>
+    <div class="sort-group">
+      <button class="sort-btn active" id="sort-relevance" onclick="setSort('relevance')">관련도</button>
+      <button class="sort-btn" id="sort-cited" onclick="setSort('cited')">인용수</button>
+      <button class="sort-btn" id="sort-recent" onclick="setSort('recent')">최신순</button>
+    </div>
+  </div>
+
+  <div class="prog-wrap" id="progWrap">
+    <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+    <div class="prog-log" id="progLog"></div>
+  </div>
+
+  <div class="banner banner-info" id="bannerInfo"></div>
+  <div class="banner banner-err" id="bannerErr"></div>
+
+  <!-- SAVED -->
+  <div class="saved-panel" id="savedPanel">
+    <div class="saved-head">
+      <div class="saved-title-row"><i class="fa fa-bookmark"></i> 저장된 논문 <span class="saved-cnt" id="savedCnt">0</span></div>
+      <button class="export-btn" onclick="exportRefs()"><i class="fa fa-download"></i> APA 일괄 복사</button>
+    </div>
+    <div class="saved-list" id="savedList"></div>
+  </div>
+
+  <!-- RESULTS META -->
+  <div class="results-meta" id="resultsMeta" style="display:none">
+    <div class="results-info" id="resultsInfo"></div>
+    <div class="page-nav">
+      <button class="pnav-btn" id="prevBtn" onclick="changePage(-1)" disabled>← 이전</button>
+      <span class="pnav-info" id="pageInfo"></span>
+      <button class="pnav-btn" id="nextBtn" onclick="changePage(1)">다음 →</button>
+    </div>
+  </div>
+
+  <div id="paperList">
+    <div class="empty-state">
+      <div class="empty-icon">🔬</div>
+      키워드를 입력하고 저널을 선택한 뒤 검색하세요.<br>
+      <span style="font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:6px;display:block">저널을 선택하지 않으면 전체 DB에서 검색됩니다</span>
+    </div>
+  </div>
+</main>
+
+<!-- REF MODAL -->
+<div class="ref-modal-bg" id="refModalBg" onclick="if(event.target===this)closeRefModal()">
+  <div class="ref-modal">
+    <div class="ref-modal-title" id="refTitle"></div>
+    <div class="ref-modal-doi" id="refDoi"></div>
+    <div class="fmt-grid">
+      <div class="fmt-btn sel" id="rfmt-apa" onclick="setRefFmt('apa')"><div class="fmt-name">APA 7th</div><div class="fmt-sub">심리학·일반</div></div>
+      <div class="fmt-btn" id="rfmt-ieee" onclick="setRefFmt('ieee')"><div class="fmt-name">IEEE</div><div class="fmt-sub">공학</div></div>
+      <div class="fmt-btn" id="rfmt-acs" onclick="setRefFmt('acs')"><div class="fmt-name">ACS</div><div class="fmt-sub">화학·재료</div></div>
+      <div class="fmt-btn" id="rfmt-bibtex" onclick="setRefFmt('bibtex')"><div class="fmt-name">BibTeX</div><div class="fmt-sub">LaTeX</div></div>
+    </div>
+    <div class="ref-output" id="refOutput"></div>
+    <div class="ref-actions">
+      <button class="btn-copy" onclick="copyRef()">복사</button>
+      <button class="btn-close-ref" onclick="closeRefModal()">닫기</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>© 2025 Battery System Laboratory — CrossRef API</span>
+  <a href="admin.html" id="footerBack"><i class="fa fa-th-large"></i> 대시보드로</a>
+</footer>
+
+<script>
+// ── 접속자
+const urlParams  = new URLSearchParams(location.search);
+const currentUser = urlParams.get('user') || sessionStorage.getItem('bsl_admin_user') || '';
+(function(){
+  if(currentUser){
+    document.getElementById('userBadge').style.display='flex';
+    document.getElementById('userBadgeName').textContent=currentUser;
+    const h='admin.html?user='+encodeURIComponent(currentUser);
+    document.getElementById('backBtn').href=h;
+    document.getElementById('footerBack').href=h;
+  }
+})();
+
+// ── 저널 분류
+const PUBLISHER_CLASS = {
+  'Nature':    'tag-j-nature',
+  'Elsevier':  'tag-j-elsevier',
+  'IEEE':      'tag-j-ieee',
+  'ACS':       'tag-j-acs',
+  'RSC':       'tag-j-rsc',
+  'Wiley':     'tag-j-wiley',
+};
+
+// ── 상태
+let allResults=[], currentPage=1, totalResults=0, currentQuery='', currentSort='relevance';
+let selectedJournals=new Set(); // ISSN set
+let savedPapers=JSON.parse(localStorage.getItem('bsl_saved_papers2')||'[]');
+let refFmt='apa', modalMeta=null;
+
+// ── 저널 토글
+window.toggleJournal = function(btn){
+  const issn=btn.dataset.issn;
+  if(selectedJournals.has(issn)){selectedJournals.delete(issn);btn.classList.remove('active');}
+  else{selectedJournals.add(issn);btn.classList.add('active');}
+};
+
+// ── 검색
+window.doSearch = async function(){
+  const q=document.getElementById('searchBox').value.trim();
+  if(!q)return;
+  currentQuery=q; currentPage=1; fetchPage();
+};
+
+async function fetchPage(){
+  const btn=document.getElementById('searchBtn');
+  const spinner=document.getElementById('searchSpinner');
+  const btnTxt=document.getElementById('searchBtnTxt');
+  btn.disabled=true; spinner.style.display='block'; btnTxt.style.display='none';
+  document.getElementById('bannerErr').classList.remove('show');
+  document.getElementById('bannerInfo').classList.remove('show');
+  showProg(20,'논문 검색 중...');
+  try{
+    const yearFilter=document.getElementById('filterYear').value;
+    let sortParam='relevance';
+    if(currentSort==='cited') sortParam='is-referenced-by-count';
+    if(currentSort==='recent') sortParam='published';
+
+    // ISSN 필터 구성
+    let filterParts=[];
+    if(yearFilter){
+      if(yearFilter==='2020') filterParts.push('until-pub-date:2020');
+      else filterParts.push(`from-pub-date:${yearFilter}-01,until-pub-date:${yearFilter}-12`);
+    }
+    // ISSN 필터는 OR로 병합할 수 없어 첫 번째 선택 issn만 적용 (CrossRef 제약)
+    // 대신 쿼리에 저널명 포함 방식 사용
+    const issnArr=[...selectedJournals];
+    if(issnArr.length===1) filterParts.push(`issn:${issnArr[0]}`);
+
+    let url=`https://api.crossref.org/works?query=${encodeURIComponent(currentQuery)}&rows=10&offset=${(currentPage-1)*10}&sort=${sortParam}&select=DOI,title,author,published,container-title,volume,issue,page,abstract,is-referenced-by-count,URL,license,ISSN`;
+    if(filterParts.length) url+=`&filter=${filterParts.join(',')}`;
+
+    showProg(55,'결과 파싱 중...');
+    const r=await fetch(url);
+    if(!r.ok) throw new Error(`API 오류 (HTTP ${r.status})`);
+    const j=await r.json();
+    totalResults=j.message['total-results']||0;
+    let items=(j.message.items||[]).map(parsePaper);
+
+    // 여러 ISSN 선택 시 클라이언트 사이드 필터
+    if(issnArr.length>1){
+      items=items.filter(p=>p.issns.some(i=>issnArr.includes(i)));
+    }
+    // 최소 인용수 필터
+    const minCited=parseInt(document.getElementById('filterCited').value)||0;
+    if(minCited>0) items=items.filter(p=>p.cited>=minCited);
+
+    allResults=items;
+    showProg(100,'완료!');
+    await new Promise(r=>setTimeout(r,200));
+    hideProg();
+
+    if(issnArr.length>1){
+      const info=document.getElementById('bannerInfo');
+      info.textContent=`ℹ️ 저널 복수 선택 시 상위 10건에서 로컬 필터링됩니다. 결과가 적으면 저널을 1개만 선택하거나 전체 검색을 이용하세요.`;
+      info.classList.add('show');
+    }
+    renderResults();
+  }catch(e){
+    const el=document.getElementById('bannerErr');
+    el.textContent='❌ '+e.message; el.classList.add('show'); hideProg();
+  }finally{
+    btn.disabled=false; spinner.style.display='none'; btnTxt.style.display='inline';
+  }
+}
+
+function parsePaper(m){
+  const authors=(m.author||[]).map(a=>({last:a.family||a.name||'',first:a.given||''}));
+  const year=m.published?.['date-parts']?.[0]?.[0]||'';
+  const issns=(m.ISSN||[]);
+  const isOA=(m.license||[]).some(l=>(l.URL||'').includes('creativecommons')||(l['content-version']||'')==='vor');
+  // 저널 publisher 감지
+  const jName=(m['container-title']||[''])[0]||'';
+  let pub='other';
+  if(issns.some(i=>selectedJournals.has(i))){
+    const matchedBtn=[...document.querySelectorAll('.j-btn')].find(b=>issns.includes(b.dataset.issn));
+    if(matchedBtn) pub=matchedBtn.dataset.pub;
+  } else {
+    if(/nature/i.test(jName)) pub='Nature';
+    else if(/elsevier|sciencedirect|power sources|energy storage|electrochim|applied energy/i.test(jName)) pub='Elsevier';
+    else if(/ieee/i.test(jName)) pub='IEEE';
+    else if(/\bacs\b|american chemical/i.test(jName)) pub='ACS';
+    else if(/royal society|rsc/i.test(jName)) pub='RSC';
+    else if(/wiley|advanced materials|small\b/i.test(jName)) pub='Wiley';
+  }
+  return {doi:m.DOI||'',title:(m.title||[''])[0]||'제목 없음',authors,year:String(year),
+    journal:jName,volume:m.volume||'',issue:m.issue||'',pages:m.page||'',
+    abstract:m.abstract?(m.abstract.replace(/<[^>]+>/g,'')):'',
+    cited:m['is-referenced-by-count']||0,url:m.URL||(m.DOI?`https://doi.org/${m.DOI}`:''),
+    isOA,issns,pub};
+}
+
+function renderResults(){
+  const list=document.getElementById('paperList');
+  const meta=document.getElementById('resultsMeta');
+  if(!allResults.length){
+    list.innerHTML='<div class="empty-state"><div class="empty-icon">📭</div>결과가 없습니다. 키워드나 저널 필터를 조정해보세요.</div>';
+    meta.style.display='none'; return;
+  }
+  const totalPages=Math.ceil(totalResults/10);
+  document.getElementById('resultsInfo').innerHTML=`<strong>${totalResults.toLocaleString()}</strong>건 중 ${(currentPage-1)*10+1}–${Math.min(currentPage*10,totalResults)}번`;
+  document.getElementById('pageInfo').textContent=`${currentPage} / ${Math.min(totalPages,100)}`;
+  document.getElementById('prevBtn').disabled=currentPage<=1;
+  document.getElementById('nextBtn').disabled=currentPage>=Math.min(totalPages,100);
+  meta.style.display='flex';
+
+  list.innerHTML=allResults.map((p,i)=>{
+    const authStr=p.authors.length
+      ? p.authors.slice(0,3).map(a=>a.last+(a.first?' '+a.first[0]+'.':'')).join(', ')+(p.authors.length>3?' et al.':'')
+      : '저자 미상';
+    const jTagCls=PUBLISHER_CLASS[p.pub]||'tag-j-other';
+    const isSaved=savedPapers.some(x=>x.doi===p.doi);
+    return `<div class="paper-card">
+      <div class="paper-num">${(currentPage-1)*10+i+1}</div>
+      <a class="paper-title" href="${p.url||'#'}" target="_blank" rel="noopener">${esc(p.title)}</a>
+      <div class="paper-authors">${esc(authStr)}</div>
+      <div class="paper-meta">
+        ${p.journal?`<div class="pmeta"><i class="fa fa-book" style="font-size:10px"></i><span>${esc(p.journal)}</span></div>`:''}
+        ${p.year?`<div class="pmeta"><i class="fa fa-calendar" style="font-size:10px"></i><span>${p.year}</span></div>`:''}
+        ${p.cited?`<div class="pmeta"><i class="fa fa-quote-right" style="font-size:10px"></i><span>인용 ${p.cited.toLocaleString()}</span></div>`:''}
+      </div>
+      ${p.abstract?`<button class="toggle-abs" onclick="toggleAbs(this)">요약 보기 ▾</button><div class="paper-abstract">${esc(p.abstract.slice(0,500))}${p.abstract.length>500?'...':''}</div>`:''}
+      <div class="paper-footer">
+        ${p.journal?`<span class="tag-journal ${jTagCls}">${esc(p.pub==='other'?p.journal.slice(0,28):p.pub)}</span>`:''}
+        ${p.year?`<span class="tag-year">${p.year}</span>`:''}
+        ${p.isOA?`<span class="tag-oa">Open Access</span>`:''}
+        ${p.cited>=50?`<span class="tag-cited">인용 ${p.cited.toLocaleString()}</span>`:''}
+        <div class="paper-actions">
+          <button class="act-btn" onclick="openRefModal(${i})"><i class="fa fa-file-alt"></i> 인용</button>
+          <button class="act-btn ${isSaved?'saved':''}" id="savebtn-${i}" onclick="toggleSave(${i},this)">
+            <i class="fa fa-bookmark"></i> ${isSaved?'저장됨':'저장'}
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  renderSaved();
+}
+
+window.toggleAbs=function(btn){
+  const abs=btn.nextElementSibling;
+  const open=abs.classList.toggle('open');
+  btn.textContent=open?'요약 닫기 ▴':'요약 보기 ▾';
+};
+
+// ── 정렬
+window.setSort=function(s){
+  currentSort=s;
+  ['relevance','cited','recent'].forEach(x=>document.getElementById('sort-'+x).classList.toggle('active',x===s));
+  if(currentQuery){currentPage=1;fetchPage();}
+};
+
+// ── 페이지네이션
+window.changePage=function(d){
+  currentPage+=d; fetchPage();
+  window.scrollTo({top:0,behavior:'smooth'});
+};
+
+// ── 저장
+window.toggleSave=function(i,btn){
+  const p=allResults[i];
+  const idx=savedPapers.findIndex(x=>x.doi===p.doi);
+  if(idx>=0){
+    savedPapers.splice(idx,1);
+    btn.classList.remove('saved');
+    btn.innerHTML='<i class="fa fa-bookmark"></i> 저장';
+  }else{
+    savedPapers.push(p);
+    btn.classList.add('saved');
+    btn.innerHTML='<i class="fa fa-bookmark"></i> 저장됨';
+  }
+  localStorage.setItem('bsl_saved_papers2',JSON.stringify(savedPapers));
+  renderSaved();
+};
+
+function renderSaved(){
+  const panel=document.getElementById('savedPanel');
+  document.getElementById('savedCnt').textContent=savedPapers.length;
+  if(!savedPapers.length){panel.classList.remove('show');return;}
+  panel.classList.add('show');
+  document.getElementById('savedList').innerHTML=savedPapers.map((p,i)=>{
+    const au=p.authors.length?p.authors[0].last+(p.authors.length>1?' et al.':''):'';
+    return `<div class="saved-item">
+      <div class="saved-item-info">
+        <div class="saved-item-title">${esc(p.title.slice(0,80))}${p.title.length>80?'...':''}</div>
+        <div class="saved-item-sub">${esc(au)}${p.year?' · '+p.year:''}${p.journal?' · '+p.journal.slice(0,30):''}</div>
+      </div>
+      <div class="saved-item-actions">
+        <button class="btn-cite" onclick="openRefModalSaved(${i})">인용</button>
+        <button class="btn-unsave" onclick="unsave(${i})">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+window.unsave=function(i){
+  savedPapers.splice(i,1);
+  localStorage.setItem('bsl_saved_papers2',JSON.stringify(savedPapers));
+  renderSaved();
+};
+window.exportRefs=async function(){
+  const text=savedPapers.map((p,i)=>`[${i+1}] ${formatRef(p,'apa')}`).join('\n\n');
+  await navigator.clipboard.writeText(text);
+  alert(`${savedPapers.length}건의 APA 참고문헌을 복사했습니다.`);
+};
+
+// ── REF MODAL
+window.openRefModal=function(i){modalMeta=allResults[i];showRefModal();};
+window.openRefModalSaved=function(i){modalMeta=savedPapers[i];showRefModal();};
+function showRefModal(){
+  document.getElementById('refTitle').textContent=modalMeta.title.slice(0,70)+(modalMeta.title.length>70?'...':'');
+  document.getElementById('refDoi').textContent=modalMeta.doi?'DOI: '+modalMeta.doi:'';
+  updateRefOutput();
+  document.getElementById('refModalBg').classList.add('open');
+}
+window.closeRefModal=function(){document.getElementById('refModalBg').classList.remove('open');};
+window.setRefFmt=function(f){
+  refFmt=f;
+  ['apa','ieee','acs','bibtex'].forEach(x=>document.getElementById('rfmt-'+x).classList.toggle('sel',x===f));
+  updateRefOutput();
+};
+function updateRefOutput(){document.getElementById('refOutput').textContent=formatRef(modalMeta,refFmt);}
+window.copyRef=async function(){
+  await navigator.clipboard.writeText(document.getElementById('refOutput').textContent);
+  const btn=document.querySelector('.btn-copy');
+  btn.textContent='✓ 복사됨'; btn.style.background='var(--success)';
+  setTimeout(()=>{btn.textContent='복사';btn.style.background='';},1800);
+};
+
+// ── 형식 변환
+function formatRef(meta,style){
+  const{title,authors,year,journal,volume,issue,pages,doi}=meta;
+  const yr=year||'n.d.';
+  const doiUrl=doi?`https://doi.org/${doi}`:'';
+  const auApa=authors.slice(0,20).map(a=>{const ini=a.first?a.first.split(' ').map(w=>w[0]+'.').join(' '):'';return a.last+(ini?', '+ini:'');}).join(', ');
+  const auIeee=authors.slice(0,6).map(a=>{const ini=a.first?a.first.split(' ').map(w=>w[0]+'.').join('. '):'';return(ini?ini+' ':'')+a.last;}).join(', ')+(authors.length>6?' et al.':'');
+  const auAcs=authors.slice(0,10).map(a=>{const ini=a.first?a.first.split(' ').map(w=>w[0]+'.').join(''):'';return a.last+(ini?', '+ini:'');}).join('; ')+(authors.length>10?'; et al.':'');
+  if(style==='apa'){
+    let r=`${auApa} (${yr}). ${title}. `;
+    if(journal){r+=journal;if(volume)r+=`, ${volume}`;if(issue)r+=`(${issue})`;if(pages)r+=`, ${pages}`;r+='.';}
+    if(doiUrl)r+=` ${doiUrl}`;
+    return r;
+  }
+  if(style==='ieee'){
+    let r=`${auIeee}, "${title},"`;
+    if(journal){r+=` ${journal}`;if(volume)r+=`, vol. ${volume}`;if(issue)r+=`, no. ${issue}`;if(pages)r+=`, pp. ${pages}`;r+=`, ${yr}.`;}
+    if(doi)r+=` doi: ${doi}.`;
+    return r;
+  }
+  if(style==='acs'){
+    let r=`${auAcs} ${title}. `;
+    if(journal){r+=`${journal} ${yr}`;if(volume)r+=`, ${volume}`;if(issue)r+=` (${issue})`;if(pages)r+=`, ${pages}`;r+='.';}
+    if(doi)r+=` DOI: ${doi}.`;
+    return r;
+  }
+  if(style==='bibtex'){
+    const key=(authors[0]?.last||'Unknown').toLowerCase().replace(/\s/g,'')+yr;
+    const auBib=authors.map(a=>(a.last||'')+(a.first?', '+a.first:'')).join(' and ');
+    let b=`@article{${key},\n  author  = {${auBib}},\n  title   = {{${title}}},\n`;
+    if(journal)b+=`  journal = {${journal}},\n`;
+    if(yr)b+=`  year    = {${yr}},\n`;
+    if(volume)b+=`  volume  = {${volume}},\n`;
+    if(issue)b+=`  number  = {${issue}},\n`;
+    if(pages)b+=`  pages   = {${pages}},\n`;
+    if(doi)b+=`  doi     = {${doi}},\n`;
+    b+=`}`;
+    return b;
+  }
+  return '';
+}
+
+// ── PROGRESS
+function showProg(p,m){
+  document.getElementById('progWrap').classList.add('show');
+  document.getElementById('progFill').style.width=p+'%';
+  document.getElementById('progLog').textContent=m;
+}
+function hideProg(){document.getElementById('progWrap').classList.remove('show');}
+
+// ── UTIL
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// init
+renderSaved();
+</script>
+</body>
+</html>

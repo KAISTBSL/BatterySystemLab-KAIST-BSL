@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>과제 관리 · BSL Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080e1a;--surface:#0d1b2e;--surface2:#112240;--surface3:#162a4a;
+  --border:rgba(102,204,255,0.12);--border2:rgba(102,204,255,0.25);
+  --accent:#007acc;--accent2:#66ccff;
+  --text:#dde2ef;--text2:#7a90b0;--text3:#3a5070;
+  --success:#3ecf8e;--warn:#f4a832;--danger:#f45c5c;--blue:#3b82f6;
+  --mono:'JetBrains Mono',monospace;--sans:'Pretendard',-apple-system,sans-serif;
+  --r:8px;--r2:14px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(102,204,255,0.018) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(102,204,255,0.018) 1px,transparent 1px);background-size:52px 52px}
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 35% at 50% -5%,rgba(59,130,246,0.05) 0%,transparent 60%)}
+header{position:sticky;top:0;z-index:200;background:rgba(8,14,26,0.92);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);height:64px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 2rem}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-badge{background:linear-gradient(135deg,#3b82f6,#93c5fd);color:#080e1a;
+  font-family:var(--mono);font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;letter-spacing:1px}
+.logo-title{font-size:14px;font-weight:600;color:var(--text)}
+.logo-sub{font-size:11px;color:var(--text3);font-family:var(--mono)}
+.header-right{display:flex;align-items:center;gap:8px}
+.user-badge{display:flex;align-items:center;gap:7px;background:rgba(62,207,142,0.1);
+  border:1px solid rgba(62,207,142,0.25);padding:5px 13px;border-radius:30px}
+.user-badge-dot{width:7px;height:7px;border-radius:50%;background:var(--success);flex-shrink:0;box-shadow:0 0 6px rgba(62,207,142,0.6)}
+.user-badge-name{font-family:var(--mono);font-size:12px;color:var(--success);letter-spacing:.5px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--border2);
+  color:var(--text2);padding:6px 14px;border-radius:7px;font-size:13px;cursor:pointer;text-decoration:none;transition:all .18s}
+.back-btn:hover{border-color:var(--accent2);color:var(--accent2);background:rgba(102,204,255,0.06)}
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--surface2);
+  border:1px solid var(--border2);border-radius:10px;padding:10px 18px;font-size:13px;color:var(--text);
+  display:flex;align-items:center;gap:10px;box-shadow:0 8px 30px rgba(0,0,0,0.4);
+  opacity:0;transform:translateY(10px);transition:all .25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.ok i{color:var(--success)}.toast.err i{color:var(--danger)}.toast.loading i{color:var(--warn)}
+/* LOADING */
+.loading-overlay{position:fixed;inset:0;z-index:500;background:rgba(8,14,26,0.7);backdrop-filter:blur(4px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;opacity:0;pointer-events:none;transition:opacity .2s}
+.loading-overlay.show{opacity:1;pointer-events:all}
+.spinner{width:36px;height:36px;border:3px solid var(--border2);border-top-color:var(--accent2);border-radius:50%;animation:spin .7s linear infinite}
+.loading-text{font-family:var(--mono);font-size:12px;color:var(--text2);letter-spacing:1px}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* LAYOUT */
+.main-wrap{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:2rem 2rem 5rem}
+/* TOOLBAR */
+.toolbar{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;flex-wrap:wrap}
+.add-proj-btn{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#1e4a8a,#3b82f6);
+  border:none;color:white;padding:9px 18px;border-radius:var(--r);font-size:13px;font-weight:700;
+  font-family:var(--sans);cursor:pointer;transition:all .18s}
+.add-proj-btn:hover{opacity:.85;transform:translateY(-1px)}
+.search-input{flex:1;min-width:180px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);
+  color:var(--text);font-family:var(--sans);font-size:13px;padding:8px 14px;outline:none;transition:border-color .18s}
+.search-input:focus{border-color:rgba(59,130,246,0.5)}
+.search-input::placeholder{color:var(--text3)}
+.filter-btns{display:flex;gap:6px}
+.filt-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text2);
+  padding:7px 14px;border-radius:20px;font-size:12px;font-family:var(--mono);cursor:pointer;transition:all .18s}
+.filt-btn:hover{border-color:var(--border2);color:var(--text)}
+.filt-btn.active{background:rgba(59,130,246,0.15);border-color:rgba(59,130,246,0.4);color:#93c5fd}
+/* STATS ROW */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.5rem}
+.stat-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px 18px}
+.stat-box-num{font-family:var(--mono);font-size:1.6em;font-weight:600;color:var(--text);line-height:1}
+.stat-box-label{font-size:11px;color:var(--text2);margin-top:4px}
+/* PROJECT LIST */
+.proj-list{display:flex;flex-direction:column;gap:10px}
+.proj-row{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);
+  padding:1.2rem 1.6rem;display:grid;grid-template-columns:1fr auto;gap:0 1.5rem;
+  align-items:center;transition:all .2s;cursor:pointer;position:relative}
+.proj-row:hover{border-color:var(--border2);transform:translateY(-1px);box-shadow:0 6px 24px rgba(0,0,0,0.25)}
+.proj-row.status-ongoing{border-left:3px solid var(--accent2)}
+.proj-row.status-fin{border-left:3px solid var(--danger)}
+.proj-badge-wrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:.45em}
+.proj-badge{font-family:var(--mono);font-size:.72em;background:rgba(102,204,255,0.1);color:var(--accent2);
+  border:1px solid rgba(102,204,255,0.2);padding:2px 10px;border-radius:20px}
+.proj-status-tag{font-family:var(--mono);font-size:.7em;font-weight:600;padding:2px 9px;border-radius:20px}
+.ongoing-tag{background:rgba(62,207,142,0.14);color:var(--success);border:1px solid rgba(62,207,142,0.25)}
+.fin-tag{background:rgba(244,92,92,0.12);color:var(--danger);border:1px solid rgba(244,92,92,0.22)}
+.proj-type-tag{font-family:var(--mono);font-size:.68em;padding:2px 8px;border-radius:20px}
+.gov-tag{background:rgba(167,139,250,0.12);color:#c4b5fd;border:1px solid rgba(167,139,250,0.2)}
+.indus-tag{background:rgba(244,168,50,0.12);color:#fcd34d;border:1px solid rgba(244,168,50,0.2)}
+.proj-title-text{font-size:.97em;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:.25em}
+.proj-sub-text{font-size:.82em;color:var(--text3);line-height:1.4}
+.proj-right-col{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;min-width:190px}
+.proj-counterpart-wrap{text-align:right}
+.proj-meta-label{font-family:var(--mono);font-size:.68em;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:3px}
+.proj-meta-value{font-size:.82em;color:var(--text2)}
+.proj-period-tag{font-family:var(--mono);font-size:.72em;padding:3px 12px;border-radius:20px;white-space:nowrap}
+.ongoing-period{background:rgba(102,204,255,0.1);color:var(--accent2);border:1px solid rgba(102,204,255,0.2)}
+.fin-period{background:rgba(244,92,92,0.1);color:var(--danger);border:1px solid rgba(244,92,92,0.2)}
+.proj-actions{display:flex;gap:6px;margin-top:4px}
+.action-btn{background:none;border:1px solid var(--border);color:var(--text3);padding:4px 10px;
+  border-radius:6px;font-size:11px;font-family:var(--mono);cursor:pointer;transition:all .15s}
+.action-btn:hover{border-color:var(--accent2);color:var(--accent2)}
+.action-btn.del:hover{border-color:var(--danger);color:var(--danger)}
+.no-projs{text-align:center;padding:60px 24px;color:var(--text3);font-size:13px}
+@media(max-width:700px){.proj-row{grid-template-columns:1fr}.proj-right-col{flex-direction:row;align-items:center;margin-top:.7rem;min-width:0}}
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.72);
+  backdrop-filter:blur(6px);align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r2);
+  padding:28px;width:620px;max-width:92vw;position:relative;animation:fadeUp .25s ease;max-height:90vh;overflow-y:auto}
+.modal-close{position:absolute;top:12px;right:16px;background:none;border:none;
+  color:rgba(255,255,255,0.35);font-size:1.3em;cursor:pointer;transition:color .15s}
+.modal-close:hover{color:white}
+.modal h3{font-size:15px;font-weight:600;margin-bottom:18px;color:var(--text)}
+.modal-author-info{display:flex;align-items:center;gap:8px;background:rgba(62,207,142,0.07);
+  border:1px solid rgba(62,207,142,0.18);border-radius:var(--r);padding:7px 12px;margin-bottom:16px;
+  font-size:12px;color:var(--text2)}
+.modal-author-info i{color:var(--success)}
+.modal-author-info strong{color:var(--success)}
+.form-row{margin-bottom:14px}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+.form-label{font-size:11px;font-family:var(--mono);color:var(--text2);letter-spacing:.5px;
+  text-transform:uppercase;display:block;margin-bottom:5px}
+.form-input,.form-select,.form-textarea{width:100%;background:var(--surface2);border:1px solid var(--border2);
+  border-radius:var(--r);color:var(--text);font-family:var(--sans);font-size:13px;padding:9px 12px;
+  outline:none;transition:border-color .18s;box-sizing:border-box}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:rgba(59,130,246,0.5);box-shadow:0 0 0 3px rgba(59,130,246,0.07)}
+.form-select{cursor:pointer;appearance:none}
+.form-select option{background:var(--surface)}
+.form-textarea{resize:vertical;min-height:80px}
+.modal-actions{display:flex;gap:10px;margin-top:20px}
+.btn-save{flex:1;padding:10px;background:linear-gradient(135deg,#1e4a8a,#3b82f6);border:none;
+  border-radius:var(--r);color:white;font-size:13px;font-weight:700;font-family:var(--sans);cursor:pointer;transition:opacity .18s}
+.btn-save:hover{opacity:.85}
+.btn-delete{padding:10px 14px;background:rgba(244,92,92,0.12);border:1px solid rgba(244,92,92,0.25);
+  border-radius:var(--r);color:var(--danger);font-size:13px;cursor:pointer;transition:all .18s}
+.btn-delete:hover{background:rgba(244,92,92,0.2)}
+.btn-cancel{padding:10px 16px;background:none;border:1px solid var(--border2);border-radius:var(--r);
+  color:var(--text2);font-size:13px;cursor:pointer;transition:all .18s}
+.btn-cancel:hover{border-color:var(--danger);color:var(--danger)}
+/* DETAIL MODAL */
+.detail-modal{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r2);
+  padding:28px;width:680px;max-width:92vw;position:relative;animation:fadeUp .25s ease;max-height:90vh;overflow-y:auto}
+.detail-title{font-size:16px;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:8px}
+.detail-sub{font-size:13px;color:var(--text3);margin-bottom:20px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.detail-item{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:12px 16px}
+.detail-item-label{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.8px;text-transform:uppercase;margin-bottom:5px}
+.detail-item-value{font-size:13px;color:var(--text);line-height:1.5}
+.detail-desc-box{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:16px}
+.detail-desc-box p{font-size:13px;color:var(--text2);line-height:1.75;white-space:pre-wrap}
+.detail-actions{display:flex;gap:10px;margin-top:6px}
+.btn-edit{flex:1;padding:9px;background:linear-gradient(135deg,#1e4a8a,#3b82f6);border:none;
+  border-radius:var(--r);color:white;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .18s}
+.btn-edit:hover{opacity:.85}
+footer{position:relative;z-index:1;background:rgba(8,14,26,0.95);border-top:1px solid var(--border);
+  padding:1.2rem 2rem;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--text3)}
+footer a{color:var(--text2);text-decoration:none}
+footer a:hover{color:var(--accent2)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div><div class="loading-text">Firestore 연결 중...</div>
+</div>
+<div class="toast" id="toast"><i class="fa fa-circle-check"></i><span id="toastMsg"></span></div>
+
+<header>
+  <a href="admin.html" class="logo">
+    <div class="logo-badge">BSL</div>
+    <div><div class="logo-title">과제 관리</div><div class="logo-sub">Projects · Firestore</div></div>
+  </a>
+  <div class="header-right">
+    <div class="user-badge" id="userBadge" style="display:none">
+      <div class="user-badge-dot"></div>
+      <span class="user-badge-name" id="userBadgeName"></span>
+    </div>
+    <a href="admin.html" class="back-btn" id="backBtn"><i class="fa fa-arrow-left"></i> 대시보드</a>
+  </div>
+</header>
+
+<div class="main-wrap">
+  <div class="toolbar">
+    <button class="add-proj-btn" onclick="openAddModal()"><i class="fa fa-plus"></i> 과제 추가</button>
+    <input type="text" class="search-input" id="searchInput" placeholder="과제명, 기관, 주관기관 검색..." oninput="renderList()">
+    <div class="filter-btns">
+      <button class="filt-btn active" data-f="all" onclick="setFilter('all')">전체</button>
+      <button class="filt-btn" data-f="gov" onclick="setFilter('gov')">정부과제</button>
+      <button class="filt-btn" data-f="indus" onclick="setFilter('indus')">기업과제</button>
+      <button class="filt-btn" data-f="ongoing" onclick="setFilter('ongoing')">진행중</button>
+      <button class="filt-btn" data-f="fin" onclick="setFilter('fin')">종료</button>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-box"><div class="stat-box-num" id="st-total">0</div><div class="stat-box-label">전체 과제</div></div>
+    <div class="stat-box"><div class="stat-box-num" id="st-ongoing" style="color:var(--success)">0</div><div class="stat-box-label">진행중</div></div>
+    <div class="stat-box"><div class="stat-box-num" id="st-fin" style="color:var(--danger)">0</div><div class="stat-box-label">종료</div></div>
+    <div class="stat-box"><div class="stat-box-num" id="st-gov" style="color:#c4b5fd">0</div><div class="stat-box-label">정부과제</div></div>
+  </div>
+
+  <div class="proj-list" id="projList"></div>
+</div>
+
+<!-- 추가/수정 MODAL -->
+<div class="modal-bg" id="editModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeEditModal()">&times;</button>
+    <h3 id="editModalTitle">과제 추가</h3>
+    <div class="modal-author-info">
+      <i class="fa fa-user-circle"></i>
+      <span><strong id="modalAuthorName"></strong>으로 등록됩니다</span>
+    </div>
+    <div class="form-row">
+      <label class="form-label">과제명 *</label>
+      <input type="text" class="form-input" id="fTitle" placeholder="과제 제목 전체">
+    </div>
+    <div class="form-row">
+      <label class="form-label">세부 사업명 / 유형</label>
+      <input type="text" class="form-input" id="fSub" placeholder="예) 2026년도 민관공동기술사업화R&D">
+    </div>
+    <div class="form-row-3">
+      <div>
+        <label class="form-label">상태 *</label>
+        <select class="form-select" id="fStatus">
+          <option value="ongoing">진행중</option>
+          <option value="fin">종료</option>
+        </select>
+      </div>
+      <div>
+        <label class="form-label">과제 유형 *</label>
+        <select class="form-select" id="fType">
+          <option value="gov">정부과제</option>
+          <option value="indus">기업과제</option>
+        </select>
+      </div>
+      <div>
+        <label class="form-label">주관기관 (뱃지)</label>
+        <input type="text" class="form-input" id="fBadge" placeholder="예) 에코캡, KAIST">
+      </div>
+    </div>
+    <div class="form-row-2">
+      <div>
+        <label class="form-label">시작일 *</label>
+        <input type="date" class="form-input" id="fStart">
+      </div>
+      <div>
+        <label class="form-label">종료일 *</label>
+        <input type="date" class="form-input" id="fEnd">
+      </div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">협력기관 (Counterpart)</label>
+      <input type="text" class="form-input" id="fCounterpart" placeholder="예) 에코캡 · 퓨쳐이브이 · GIVET">
+    </div>
+    <div class="form-row">
+      <label class="form-label">총 연구비 (선택)</label>
+      <input type="text" class="form-input" id="fBudget" placeholder="예) 5억 원 / 3년">
+    </div>
+    <div class="form-row">
+      <label class="form-label">과제 개요 (선택)</label>
+      <textarea class="form-textarea" id="fDesc" placeholder="과제의 목표, 내용, 특이사항 등을 자유롭게 입력하세요."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-save" onclick="saveProject()">저장</button>
+      <button class="btn-delete" id="editDeleteBtn" onclick="deleteProject()" style="display:none">삭제</button>
+      <button class="btn-cancel" onclick="closeEditModal()">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- 상세보기 MODAL -->
+<div class="modal-bg" id="detailModal">
+  <div class="detail-modal">
+    <button class="modal-close" onclick="closeDetailModal()">&times;</button>
+    <div id="detailContent"></div>
+    <div class="detail-actions">
+      <button class="btn-edit" onclick="switchToEdit()">수정하기</button>
+      <button class="btn-cancel" onclick="closeDetailModal()">닫기</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>© 2025 Battery System Laboratory — Firestore 실시간 동기화</span>
+  <a href="admin.html" id="footerBack"><i class="fa fa-th-large"></i> 대시보드로</a>
+</footer>
+
+<script type="module">
+import { initializeApp }                      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, doc,
+         onSnapshot, addDoc, updateDoc,
+         deleteDoc, serverTimestamp }         from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey:"AIzaSyCyTqv6CIDSLqt4bFGXXQF12UtxmCI-teE",
+  authDomain:"bsladmin.firebaseapp.com",
+  projectId:"bsladmin",
+  storageBucket:"bsladmin.firebasestorage.app",
+  messagingSenderId:"790486750368",
+  appId:"1:790486750368:web:b442d205314b67bd0165c5"
+};
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+// 접속자
+const urlParams  = new URLSearchParams(location.search);
+const currentUser = urlParams.get('user') || sessionStorage.getItem('bsl_admin_user') || '(미확인)';
+(function initUser(){
+  if (currentUser && currentUser !== '(미확인)') {
+    document.getElementById('userBadge').style.display = 'flex';
+    document.getElementById('userBadgeName').textContent = currentUser;
+  }
+  document.getElementById('modalAuthorName').textContent = currentUser;
+  const href = 'admin.html?user=' + encodeURIComponent(currentUser);
+  document.getElementById('backBtn').href   = href;
+  document.getElementById('footerBack').href = href;
+})();
+
+// 상태
+let projects = [], editingId = null, viewingId = null, currentFilter = 'all';
+
+// 토스트
+function showToast(msg, type='ok'){
+  const t=document.getElementById('toast');
+  t.querySelector('i').className=type==='ok'?'fa fa-circle-check':type==='err'?'fa fa-circle-xmark':'fa fa-spinner fa-spin';
+  t.className=`toast ${type}`;
+  document.getElementById('toastMsg').textContent=msg;
+  t.classList.add('show');
+  if(type!=='loading')setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// Firestore 구독
+const overlay = document.getElementById('loadingOverlay');
+overlay.classList.add('show');
+onSnapshot(collection(db,'projects'), snap => {
+  projects = snap.docs.map(d=>({id:d.id,...d.data()}));
+  // 시작일 내림차순 정렬
+  projects.sort((a,b)=>(b.startDate||'').localeCompare(a.startDate||''));
+  overlay.classList.remove('show');
+  renderList(); updateStats();
+}, err => {
+  overlay.classList.remove('show');
+  showToast('Firestore 오류: '+err.message,'err');
+});
+
+// 필터
+window.setFilter = function(f){
+  currentFilter=f;
+  document.querySelectorAll('.filt-btn').forEach(b=>b.classList.toggle('active',b.dataset.f===f));
+  renderList();
+};
+window.renderList = function(){
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  let list = [...projects];
+  if(currentFilter==='gov')    list=list.filter(p=>p.type==='gov');
+  else if(currentFilter==='indus') list=list.filter(p=>p.type==='indus');
+  else if(currentFilter==='ongoing') list=list.filter(p=>p.status==='ongoing');
+  else if(currentFilter==='fin') list=list.filter(p=>p.status==='fin');
+  if(q) list=list.filter(p=>(p.title+p.sub+p.counterpart+p.badge+'').toLowerCase().includes(q));
+  const el=document.getElementById('projList');
+  if(!list.length){el.innerHTML='<div class="no-projs"><i class="fa fa-flask" style="font-size:2em;opacity:.2;display:block;margin-bottom:8px"></i>과제가 없습니다.</div>';return;}
+  el.innerHTML=list.map(p=>{
+    const isOngoing = p.status==='ongoing';
+    const typeTag = p.type==='gov'
+      ? `<span class="proj-type-tag gov-tag">정부과제</span>`
+      : `<span class="proj-type-tag indus-tag">기업과제</span>`;
+    return `<div class="proj-row status-${p.status}" onclick="openDetailModal('${p.id}')">
+      <div>
+        <div class="proj-badge-wrap">
+          ${p.badge?`<span class="proj-badge">${esc(p.badge)}</span>`:''}
+          <span class="proj-status-tag ${isOngoing?'ongoing-tag':'fin-tag'}">${isOngoing?'진행중':'종료'}</span>
+          ${typeTag}
+        </div>
+        <div class="proj-title-text">${esc(p.title)}</div>
+        ${p.sub?`<div class="proj-sub-text">${esc(p.sub)}</div>`:''}
+      </div>
+      <div class="proj-right-col">
+        ${p.counterpart?`<div class="proj-counterpart-wrap">
+          <div class="proj-meta-label">Counterpart</div>
+          <div class="proj-meta-value">${esc(p.counterpart)}</div>
+        </div>`:''}
+        ${(p.startDate&&p.endDate)?`<span class="proj-period-tag ${isOngoing?'ongoing-period':'fin-period'}">${p.startDate.replace(/-/g,'.')} – ${p.endDate.replace(/-/g,'.')}</span>`:''}
+        <div class="proj-actions" onclick="event.stopPropagation()">
+          <button class="action-btn" onclick="openEditModal('${p.id}')"><i class="fa fa-pen"></i> 수정</button>
+          <button class="action-btn del" onclick="confirmDelete('${p.id}')"><i class="fa fa-trash"></i> 삭제</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+};
+
+function updateStats(){
+  document.getElementById('st-total').textContent   = projects.length;
+  document.getElementById('st-ongoing').textContent = projects.filter(p=>p.status==='ongoing').length;
+  document.getElementById('st-fin').textContent     = projects.filter(p=>p.status==='fin').length;
+  document.getElementById('st-gov').textContent     = projects.filter(p=>p.type==='gov').length;
+}
+
+// 추가 모달
+window.openAddModal = function(){
+  editingId=null;
+  document.getElementById('editModalTitle').textContent='과제 추가';
+  document.getElementById('fTitle').value='';
+  document.getElementById('fSub').value='';
+  document.getElementById('fStatus').value='ongoing';
+  document.getElementById('fType').value='gov';
+  document.getElementById('fBadge').value='';
+  document.getElementById('fStart').value='';
+  document.getElementById('fEnd').value='';
+  document.getElementById('fCounterpart').value='';
+  document.getElementById('fBudget').value='';
+  document.getElementById('fDesc').value='';
+  document.getElementById('editDeleteBtn').style.display='none';
+  document.getElementById('modalAuthorName').textContent=currentUser;
+  document.getElementById('editModal').classList.add('open');
+  setTimeout(()=>document.getElementById('fTitle').focus(),100);
+};
+
+window.openEditModal = function(id){
+  const p=projects.find(x=>x.id===id); if(!p)return;
+  editingId=id;
+  document.getElementById('editModalTitle').textContent='과제 수정';
+  document.getElementById('fTitle').value=p.title||'';
+  document.getElementById('fSub').value=p.sub||'';
+  document.getElementById('fStatus').value=p.status||'ongoing';
+  document.getElementById('fType').value=p.type||'gov';
+  document.getElementById('fBadge').value=p.badge||'';
+  document.getElementById('fStart').value=p.startDate||'';
+  document.getElementById('fEnd').value=p.endDate||'';
+  document.getElementById('fCounterpart').value=p.counterpart||'';
+  document.getElementById('fBudget').value=p.budget||'';
+  document.getElementById('fDesc').value=p.desc||'';
+  document.getElementById('editDeleteBtn').style.display='';
+  document.getElementById('modalAuthorName').textContent=currentUser+' (수정)';
+  document.getElementById('editModal').classList.add('open');
+};
+window.closeEditModal = ()=>document.getElementById('editModal').classList.remove('open');
+document.getElementById('editModal').addEventListener('click',e=>{if(e.target===document.getElementById('editModal'))window.closeEditModal();});
+
+window.saveProject = async function(){
+  const title=document.getElementById('fTitle').value.trim();
+  if(!title){alert('과제명을 입력해 주세요.');return;}
+  const existing=editingId?projects.find(x=>x.id===editingId):null;
+  const data={
+    title,
+    sub:document.getElementById('fSub').value.trim(),
+    status:document.getElementById('fStatus').value,
+    type:document.getElementById('fType').value,
+    badge:document.getElementById('fBadge').value.trim(),
+    startDate:document.getElementById('fStart').value,
+    endDate:document.getElementById('fEnd').value,
+    counterpart:document.getElementById('fCounterpart').value.trim(),
+    budget:document.getElementById('fBudget').value.trim(),
+    desc:document.getElementById('fDesc').value.trim(),
+    author:existing?.author||currentUser,
+    createdAt:existing?.createdAt||new Date().toLocaleDateString('ko-KR'),
+    updatedBy:currentUser,
+    updatedAt:serverTimestamp(),
+  };
+  showToast('저장 중...','loading');
+  try{
+    if(editingId) await updateDoc(doc(db,'projects',editingId),data);
+    else await addDoc(collection(db,'projects'),data);
+    showToast('저장 완료!','ok');
+    window.closeEditModal();
+  }catch(e){showToast('저장 실패: '+e.message,'err');}
+};
+
+window.deleteProject = async function(){
+  if(!editingId||!confirm('이 과제를 삭제할까요?'))return;
+  showToast('삭제 중...','loading');
+  try{
+    await deleteDoc(doc(db,'projects',editingId));
+    showToast('삭제 완료','ok');
+    window.closeEditModal();
+  }catch(e){showToast('삭제 실패: '+e.message,'err');}
+};
+
+window.confirmDelete = async function(id){
+  if(!confirm('이 과제를 삭제할까요?'))return;
+  showToast('삭제 중...','loading');
+  try{
+    await deleteDoc(doc(db,'projects',id));
+    showToast('삭제 완료','ok');
+  }catch(e){showToast('삭제 실패: '+e.message,'err');}
+};
+
+// 상세보기 모달
+window.openDetailModal = function(id){
+  const p=projects.find(x=>x.id===id); if(!p)return;
+  viewingId=id;
+  const isOngoing=p.status==='ongoing';
+  const typeLabel=p.type==='gov'?'정부과제':'기업과제';
+  document.getElementById('detailContent').innerHTML=`
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+      ${p.badge?`<span class="proj-badge">${esc(p.badge)}</span>`:''}
+      <span class="proj-status-tag ${isOngoing?'ongoing-tag':'fin-tag'}">${isOngoing?'진행중':'종료'}</span>
+      <span class="proj-type-tag ${p.type==='gov'?'gov-tag':'indus-tag'}">${typeLabel}</span>
+    </div>
+    <div class="detail-title">${esc(p.title)}</div>
+    ${p.sub?`<div class="detail-sub">${esc(p.sub)}</div>`:''}
+    <div class="detail-grid">
+      <div class="detail-item">
+        <div class="detail-item-label">기간</div>
+        <div class="detail-item-value">${p.startDate||'—'} ~ ${p.endDate||'—'}</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-item-label">Counterpart</div>
+        <div class="detail-item-value">${esc(p.counterpart)||'—'}</div>
+      </div>
+      ${p.budget?`<div class="detail-item">
+        <div class="detail-item-label">연구비</div>
+        <div class="detail-item-value">${esc(p.budget)}</div>
+      </div>`:''}
+      <div class="detail-item">
+        <div class="detail-item-label">등록</div>
+        <div class="detail-item-value">${esc(p.author||'—')} · ${esc(p.createdAt||'—')}</div>
+      </div>
+    </div>
+    ${p.desc?`<div class="detail-desc-box">
+      <div class="detail-item-label" style="margin-bottom:8px">과제 개요</div>
+      <p>${esc(p.desc)}</p>
+    </div>`:''}
+  `;
+  document.getElementById('detailModal').classList.add('open');
+};
+window.closeDetailModal = ()=>document.getElementById('detailModal').classList.remove('open');
+document.getElementById('detailModal').addEventListener('click',e=>{if(e.target===document.getElementById('detailModal'))window.closeDetailModal();});
+window.switchToEdit = function(){
+  window.closeDetailModal();
+  setTimeout(()=>window.openEditModal(viewingId),150);
+};
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+</script>
+</body>
+</html>
