@@ -149,13 +149,52 @@
     .cat-cell.sw  { border-left:3px solid #a78bfa !important; color:#c4b5fd; }
     .cat-cell.bat { border-left:3px solid #f4a832 !important; color:#fcd34d; }
 
+    /* ── SPEC CATEGORY TABS (match table categories) ── */
+    .spec-tabs {
+      display:flex; flex-wrap:wrap; gap:10px;
+      margin:1.2em 0 1.6em;
+    }
+    .spec-tab {
+      font-family:var(--mono); font-size:12px; font-weight:500;
+      letter-spacing:.8px; text-transform:uppercase;
+      padding:11px 20px; border-radius:30px; cursor:pointer;
+      background:var(--surface); color:var(--text2);
+      border:1px solid var(--border);
+      display:flex; align-items:center; gap:9px;
+      transition:color .2s, background .2s, border-color .2s, transform .2s, box-shadow .2s;
+    }
+    .spec-tab i { font-size:11px; opacity:.85; }
+    .spec-tab .tab-count {
+      font-size:10px; padding:1px 8px; border-radius:20px;
+      background:rgba(102,204,255,0.10); color:var(--text2);
+      border:1px solid var(--border);
+    }
+    .spec-tab:hover { color:var(--text); border-color:var(--border2); transform:translateY(-1px); }
+    .spec-tab.active.ea {
+      color:#dbeafe; background:rgba(59,130,246,0.16); border-color:rgba(59,130,246,0.55);
+      box-shadow:0 4px 18px rgba(59,130,246,0.18);
+    }
+    .spec-tab.active.sc {
+      color:#d1fae5; background:rgba(62,207,142,0.16); border-color:rgba(62,207,142,0.55);
+      box-shadow:0 4px 18px rgba(62,207,142,0.18);
+    }
+    .spec-tab.active.sw {
+      color:#ede9fe; background:rgba(167,139,250,0.16); border-color:rgba(167,139,250,0.55);
+      box-shadow:0 4px 18px rgba(167,139,250,0.18);
+    }
+    .spec-tab.active .tab-count { background:rgba(255,255,255,0.12); color:#fff; border-color:transparent; }
+
+    /* ── SPEC PANELS (one visible at a time) ── */
+    .spec-panel { display:none; flex-direction:column; gap:12px; }
+    .spec-panel.active { display:flex; }
+
     /* ── SPEC CARDS ── */
     .spec-list { display:flex; flex-direction:column; gap:12px; }
 
     .spec-card {
       background:#ffffff; border:1px solid rgba(0,0,0,0.08);
       border-radius:var(--r); overflow:hidden;
-      display:flex; align-items:stretch;
+      display:flex; align-items:stretch; min-height:256px;
       transition:transform .22s, border-color .22s, box-shadow .22s;
       animation:fadeInUp .6s ease-in-out backwards;
     }
@@ -171,23 +210,25 @@
     .spec-card.bat { border-left:3px solid #f4a832; }
     .spec-card.hw  { border-left:3px solid #007acc; }
 
-    .spec-card:nth-child(1){animation-delay:.04s}
-    .spec-card:nth-child(2){animation-delay:.08s}
-    .spec-card:nth-child(3){animation-delay:.12s}
-    .spec-card:nth-child(4){animation-delay:.16s}
-    .spec-card:nth-child(5){animation-delay:.20s}
-    .spec-card:nth-child(6){animation-delay:.24s}
-    .spec-card:nth-child(7){animation-delay:.28s}
-    .spec-card:nth-child(8){animation-delay:.32s}
+    /* staggered entrance (applies to whichever card lands in each slot) */
+    .spec-card:nth-of-type(1){animation-delay:.04s}
+    .spec-card:nth-of-type(2){animation-delay:.08s}
+    .spec-card:nth-of-type(3){animation-delay:.12s}
+    .spec-card:nth-of-type(4){animation-delay:.16s}
+    .spec-card:nth-of-type(5){animation-delay:.20s}
+    .spec-card:nth-of-type(6){animation-delay:.24s}
+    .spec-card:nth-of-type(7){animation-delay:.28s}
+    .spec-card:nth-of-type(8){animation-delay:.32s}
 
     .spec-img {
-      width:240px; min-width:240px; height:220px;
-      overflow:hidden; flex-shrink:0; background:#f4f6f9;
+      width:250px; min-width:250px;
+      padding:26px 22px; flex-shrink:0; background:#f4f6f9;
       display:flex; align-items:center; justify-content:center;
       border-right:1px solid rgba(0,0,0,0.06);
     }
     .spec-img img {
-      width:100%; height:100%; object-fit:cover;
+      width:100%; height:100%; object-fit:contain;
+      border-radius:10px; box-shadow:0 3px 12px rgba(0,0,0,0.10);
       display:block; transition:transform .3s;
     }
     .spec-card:hover .spec-img img { transform:scale(1.04); }
@@ -239,8 +280,9 @@
     @keyframes fadeInUp   { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
 
     @media(max-width:700px){
-      .spec-card  { flex-direction:column; }
-      .spec-img   { width:100%; min-width:0; height:180px; }
+      .spec-card  { flex-direction:column; min-height:0; }
+      .spec-img   { width:100%; min-width:0; padding:20px; }
+      .spec-img img { height:200px; }
     }
   </style>
 </head>
@@ -293,9 +335,9 @@
         <tbody>
           <tr class="row-ea">
             <td rowspan="5" class="cat-cell ea">Experiment &amp; Analysis</td>
-            <td>Data Logger</td><td>GL840</td>
+            <td>Data Logger</td><td>GL840, GL860</td>
           </tr>
-          <tr class="row-ea"><td>Potentiostat</td><td>BCS-915</td></tr>
+          <tr class="row-ea"><td>Potentiostat(Battery Cycler)</td><td>BCS-915, BTS-4008Q</td></tr>
           <tr class="row-ea"><td>Constant Temperature Chamber</td><td>S-CTC150R1</td></tr>
           <tr class="row-ea"><td>DC Power Supply</td><td>DP30-03TP</td></tr>
           <tr class="row-ea"><td>Battery Jig</td><td>Model for cylindrical cell</td></tr>
@@ -319,10 +361,10 @@
 
           <tr class="row-bat">
             <td rowspan="4" class="cat-cell bat">Battery</td>
-            <td>Cylindrical Cell — <b>SAMSUNG SDI</b></td><td>INR2170050G, INR1865035E, INR1865030Q</td>
+            <td>Cylindrical Cell — <b>SAMSUNG SDI</b></td><td>INR2170050G, INR2170048X, INR2170050E, INR1865035E, INR1865030Q</td>
           </tr>
           <tr class="row-bat"><td>Cylindrical Cell — <b>LG EnergySolution</b></td><td>INR18650MJ1</td></tr>
-          <tr class="row-bat"><td>Pouch Cell — <b>SK on</b></td><td>E-GMP (IONIQ5)</td></tr>
+          <tr class="row-bat"><td>Pouch Cell — <b>SK on</b></td><td>E-GMP (IONIQ5), Small Pouch Cell</td></tr>
           <tr class="row-bat"><td>Prismatic Cell — <b>EVE Energy</b></td><td>EVE LF230 (X-PACK)</td></tr>
         </tbody>
       </table>
@@ -334,7 +376,217 @@
       <div class="section-line"></div>
     </div>
 
+    <!-- Category selector -->
+    <div class="spec-tabs">
+      <button class="spec-tab ea active" data-cat="ea"><i class="fa fa-flask"></i> Experiment &amp; Analysis <span class="tab-count">5</span></button>
+      <button class="spec-tab sc" data-cat="sc"><i class="fa fa-shield-halved"></i> Safety Control <span class="tab-count">5</span></button>
+      <button class="spec-tab sw" data-cat="sw"><i class="fa fa-microchip"></i> Software &amp; Hardware Testing <span class="tab-count">5</span></button>
+    </div>
+
     <div class="spec-list">
+
+      <!-- ══════════ PANEL 1 · EXPERIMENT & ANALYSIS ══════════ -->
+      <div class="spec-panel active" data-cat="ea">
+
+      <!-- Data Logger -->
+      <div class="spec-card ea">
+        <div class="spec-img"><img src="images/E_Datalogger.jpg" alt="Data Logger"></div>
+        <div class="spec-body">
+          <div class="spec-title">Data Logger</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Jeju Eco-Friendly Smart Vehicle Laboratory</div>
+          <div class="spec-model">GL840</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Functions:</b> Trigger / Alarm / Pulse input / Calculation / Search / Backup / Check-sum / Scaling</li>
+            <li><b>Power Supply:</b> AC 100–240 V / DC 8.5–24 V / Dual 7.2 V 2900 mAh Battery Packs</li>
+            <li><b>Measurement Range:</b> Voltage (20 mV–100 V), Thermocouple &amp; RTD (100–2000 °C), Humidity (0–100 % RH)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Potentiostat -->
+      <div class="spec-card ea">
+        <div class="spec-img"><img src="images/E_Poten.jpg" alt="Potentiostat"></div>
+        <div class="spec-body">
+          <div class="spec-title">Battery Cycler(Biologic)</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Mobility Hall</div>
+          <div class="spec-model">BCS-915 (8-channel)</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Voltage:</b> 0–9 V, Resolution 150 μV / Measurement 40 μV (18 bit)</li>
+            <li><b>Accuracy:</b> ±0.01% of value ±0.3 mV, Slew rate 3 kV/s</li>
+            <li><b>Current:</b> ±15 A per channel (5 ranges: 10 A – 1 mA)</li>
+            <li><b>Resolution:</b> Control 80 nA / Measurement 20 nA (18 bit)</li>
+            <li><b>Accuracy:</b> 0.05% of value ±0.015% FSR | Parallel up to ±120 A</li>
+            <li><b>EIS:</b> 8 channels, 10 kHz – 10 mHz | Acquisition time: 1 ms</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Potentiostat -->
+      <div class="spec-card ea">
+        <div class="spec-img"><img src="images/E_C4008.png" alt="Potentiostat"></div>
+        <div class="spec-body">
+          <div class="spec-title">Battery Cycler(NEWARE)</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Mobility Hall</div>
+          <div class="spec-model">BTS-4008Q</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Voltage:</b> 25 mV – 5 V (Discharge min 2 V), Accuracy ±0.02% FS</li>
+            <li><b>Current:</b> 4 ranges (300 mA / 3 A / 6 A / 15 A), Accuracy ±0.02% FS</li>
+            <li><b>Power:</b> 75 W per channel | AC 220 V input, 860 W</li>
+            <li><b>Resolution:</b> AD 24 bit / DA 24 bit | 4-wire sensing</li>
+            <li><b>Modes:</b> CC / CV / CP charge &amp; discharge, Pulse, DCIR</li>
+            <li><b>System:</b> 8 ch/cabinet, Cycles 1–65535 | Ethernet TCP/IP</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Constant Temperature Chamber -->
+      <div class="spec-card ea">
+        <div class="spec-img"><img src="images/E_Chamber.jpg" alt="Constant Temperature Chamber"></div>
+        <div class="spec-body">
+          <div class="spec-title">Constant Temperature Chamber</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Mobility Hall</div>
+          <div class="spec-model">S-CTC150R1</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Max Temp Range:</b> −25 ℃ – 150 ℃</li>
+            <li><b>Operating Range:</b> −20 ℃ – 120 ℃</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- DC Power Supply -->
+      <div class="spec-card ea">
+        <div class="spec-img"><img src="images/E_Power.jpg" alt="DC Power Supply"></div>
+        <div class="spec-body">
+          <div class="spec-title">DC Power Supply</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
+          <div class="spec-model">DP30-03TP (3-Channel)</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Voltage:</b> 0–30 V (Resolution: 100 mV)</li>
+            <li><b>Current:</b> 0–3 A (1ch &amp; 2ch, Resolution: 10 mA)</li>
+            <li><b>Power:</b> Max Output 180 W | Input: 115/230 V ±10%, 50/60 Hz</li>
+            <li><b>Line Fluctuation:</b> ±0.02% + 2 mV / 2 mA (for ±10% source voltage change)</li>
+            <li><b>Load Fluctuation:</b> ±0.02% + 5 mV / 5 mA (for 0–100% load variation)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Battery Jig -->
+      <div class="spec-card ea">
+        <div class="spec-img"><img src="images/E_jig.png" alt="Battery Jig"></div>
+        <div class="spec-body">
+          <div class="spec-title">Battery Jig</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
+          <div class="spec-model">For Cylindrical Cell</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Temperature Range:</b> −40 ℃ to 100 ℃</li>
+            <li><b>Max Current:</b> ≥ 30 A per channel</li>
+            <li><b>Material:</b> Bakelite (black) | <b>Config:</b> 1 channel / 1 set</li>
+            <li><b>Cell Compatibility:</b> 18650, 21700, 4680 cells</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ══════════ PANEL 2 · SAFETY CONTROL ══════════ -->
+      </div><!-- /panel ea -->
+      <div class="spec-panel" data-cat="sc">
+
+      <!-- Glove Box -->
+      <div class="spec-card sc">
+        <div class="spec-img"><img src="images/E_Glove.jpg" alt="Glove Box"></div>
+        <div class="spec-body">
+          <div class="spec-title">Glove Box</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
+          <div class="spec-model">RAF-750 Front Door Type</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>External Dimensions:</b> Approx. W700 × D500 × H500 mm (custom order)</li>
+            <li><b>Material:</b> 5T acrylic panel (transparent type)</li>
+            <li><b>Gloves:</b> 1 × Latex glove (front center)</li>
+            <li><b>Gas Valves:</b> 2 × side-mounted gas valves (left/right)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Ion Cluster Cabinet -->
+      <div class="spec-card sc">
+        <div class="spec-img"><img src="images/E_Ion.jpg" alt="Ion Cluster Cabinet"></div>
+        <div class="spec-body">
+          <div class="spec-title">Ion Cluster Cabinet</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Mobility Hall</div>
+          <div class="spec-model">ST-Ion 1001 F</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>External Dimensions:</b> W800 × D550 × H1980 mm</li>
+            <li><b>Structure:</b> Steel plate with epoxy powder coating / Stainless handle</li>
+            <li><b>Door:</b> Polycarbonate window (5T), airtight sealing</li>
+            <li><b>Fan System:</b> AC sirocco fan — low noise &amp; vibration minimized</li>
+            <li><b>Ion Cluster:</b> High-voltage generator for oxidizing/removing harmful gases</li>
+            <li><b>Filter:</b> Carbon composite filter for chemical adsorption and deodorization</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Fume Hood -->
+      <div class="spec-card sc">
+        <div class="spec-img"><img src="images/E_Hood.png" alt="Fume Hood"></div>
+        <div class="spec-body">
+          <div class="spec-title">Fume Hood</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
+          <div class="spec-model">CAFU-02-10</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Type:</b> Arm hood type</li>
+            <li><b>Dimensions:</b> 390 × 390 × 710 mm (Ø 80 × 1300)</li>
+            <li><b>Air Speed &amp; Volume:</b> 9–13 m/s, 600 CMH</li>
+            <li><b>Noise Level:</b> ≤ 55 dB | <b>Power:</b> 220 V, 120 W | <b>Weight:</b> 36 kg</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Vacuum Desiccator -->
+      <div class="spec-card sc">
+        <div class="spec-img"><img src="images/E_decci.png" alt="Vacuum Desiccator"></div>
+        <div class="spec-body">
+          <div class="spec-title">Vacuum Desiccator</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
+          <div class="spec-model">VLHK</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Outer Dimensions:</b> 310 × 332 × 530 mm | <b>Capacity:</b> 30 L | <b>Weight:</b> 23 kg</li>
+            <li><b>Inner Dimensions:</b> 260 × 280 × 410 mm</li>
+            <li><b>Allowable Vacuum:</b> 1 Torr (≈133 Pa)</li>
+            <li><b>Material:</b> Transparent reinforced acrylic, 20t</li>
+            <li><b>Accessories:</b> 1 vacuum gauge, 3 shelves, 2 vacuum valves (Ø 8 mm)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Gast Pump -->
+      <div class="spec-card sc">
+        <div class="spec-img"><img src="images/E_Pump.png" alt="Gast Pump"></div>
+        <div class="spec-body">
+          <div class="spec-title">Gast Pump</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
+          <div class="spec-model">DOA-P704-AC</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Type:</b> Oil-less — no oil replacement required</li>
+            <li><b>Performance:</b> 32 L/min capacity, Max vacuum 25.5 hg, Max pressure 60 psi</li>
+            <li><b>Power:</b> 115 V / 60 Hz, 1/8 HP | <b>Weight:</b> 8.7 kg</li>
+            <li><b>Application:</b> Filtration pump for membranes or glass filters</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ══════════ PANEL 3 · SOFTWARE & HARDWARE TESTING ══════════ -->
+      </div><!-- /panel sc -->
+      <div class="spec-panel" data-cat="sw">
 
       <!-- Computing Server 1 -->
       <div class="spec-card sw">
@@ -371,217 +623,8 @@
         </div>
       </div>
 
-      <!-- Glove Box -->
-      <div class="spec-card sc">
-        <div class="spec-img"><img src="images/E_Glove.jpg" alt="Glove Box"></div>
-        <div class="spec-body">
-          <div class="spec-title">Glove Box</div>
-          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
-          <div class="spec-model">RAF-750 Front Door Type</div>
-          <div class="spec-divider"></div>
-          <ul class="spec-list-inner">
-            <li><b>External Dimensions:</b> Approx. W700 × D500 × H500 mm (custom order)</li>
-            <li><b>Material:</b> 5T acrylic panel (transparent type)</li>
-            <li><b>Gloves:</b> 1 × Latex glove (front center)</li>
-            <li><b>Gas Valves:</b> 2 × side-mounted gas valves (left/right)</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Data Logger -->
-      <div class="spec-card ea">
-        <div class="spec-img"><img src="images/E_Datalogger.jpg" alt="Data Logger"></div>
-        <div class="spec-body">
-          <div class="spec-title">Data Logger</div>
-          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Jeju Eco-Friendly Smart Vehicle Laboratory</div>
-          <div class="spec-model">GL840</div>
-          <div class="spec-divider"></div>
-          <ul class="spec-list-inner">
-            <li><b>Functions:</b> Trigger / Alarm / Pulse input / Calculation / Search / Backup / Check-sum / Scaling</li>
-            <li><b>Power Supply:</b> AC 100–240 V / DC 8.5–24 V / Dual 7.2 V 2900 mAh Battery Packs</li>
-            <li><b>Measurement Range:</b> Voltage (20 mV–100 V), Thermocouple &amp; RTD (100–2000 °C), Humidity (0–100 % RH)</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Potentiostat -->
-      <div class="spec-card ea">
-        <div class="spec-img"><img src="images/E_Poten.jpg" alt="Potentiostat"></div>
-        <div class="spec-body">
-          <div class="spec-title">Potentiostat</div>
-          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Mobility Hall</div>
-          <div class="spec-model">BCS-915 (8-channel)</div>
-          <div class="spec-divider"></div>
-          <ul class="spec-list-inner">
-            <li><b>Voltage:</b> 0–9 V, Resolution 150 μV / Measurement 40 μV (18 bit)</li>
-            <li><b>Accuracy:</b> ±0.01% of value ±0.3 mV, Slew rate 3 kV/s</li>
-            <li><b>Current:</b> ±15 A per channel (5 ranges: 10 A – 1 mA)</li>
-            <li><b>Resolution:</b> Control 80 nA / Measurement 20 nA (18 bit)</li>
-            <li><b>Accuracy:</b> 0.05% of value ±0.015% FSR | Parallel up to ±120 A</li>
-            <li><b>EIS:</b> 8 channels, 10 kHz – 10 mHz | Acquisition time: 1 ms</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- DC Power Supply -->
-      <div class="spec-card ea">
-        <div class="spec-img"><img src="images/E_Power.jpg" alt="DC Power Supply"></div>
-        <div class="spec-body">
-          <div class="spec-title">DC Power Supply</div>
-          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
-          <div class="spec-model">DP30-03TP (3-Channel)</div>
-          <div class="spec-divider"></div>
-          <ul class="spec-list-inner">
-            <li><b>Voltage:</b> 0–30 V (Resolution: 100 mV)</li>
-            <li><b>Current:</b> 0–3 A (1ch &amp; 2ch, Resolution: 10 mA)</li>
-            <li><b>Power:</b> Max Output 180 W | Input: 115/230 V ±10%, 50/60 Hz</li>
-            <li><b>Line Fluctuation:</b> ±0.02% + 2 mV / 2 mA (for ±10% source voltage change)</li>
-            <li><b>Load Fluctuation:</b> ±0.02% + 5 mV / 5 mA (for 0–100% load variation)</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Constant Temperature Chamber -->
-      <div class="spec-card ea">
-        <div class="spec-img"><img src="images/E_Chamber.jpg" alt="Constant Temperature Chamber"></div>
-        <div class="spec-body">
-          <div class="spec-title">Constant Temperature Chamber</div>
-          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Mobility Hall</div>
-          <div class="spec-model">S-CTC150R1</div>
-          <div class="spec-divider"></div>
-          <ul class="spec-list-inner">
-            <li><b>Max Temp Range:</b> −25 ℃ – 150 ℃</li>
-            <li><b>Operating Range:</b> −20 ℃ – 120 ℃</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Ion Cluster Cabinet -->
-      <div class="spec-card sc">
-        <div class="spec-img"><img src="images/E_Ion.jpg" alt="Ion Cluster Cabinet"></div>
-        <div class="spec-body">
-          <div class="spec-title">Ion Cluster Cabinet</div>
-          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Mobility Hall</div>
-          <div class="spec-model">ST-Ion 1001 F</div>
-          <div class="spec-divider"></div>
-          <ul class="spec-list-inner">
-            <li><b>External Dimensions:</b> W800 × D550 × H1980 mm</li>
-            <li><b>Structure:</b> Steel plate with epoxy powder coating / Stainless handle</li>
-            <li><b>Door:</b> Polycarbonate window (5T), airtight sealing</li>
-            <li><b>Fan System:</b> AC sirocco fan — low noise &amp; vibration minimized</li>
-            <li><b>Ion Cluster:</b> High-voltage generator for oxidizing/removing harmful gases</li>
-            <li><b>Filter:</b> Carbon composite filter for chemical adsorption and deodorization</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Samsung INR21700-50G -->
-      <div class="spec-card bat">
-        <div class="spec-img"><img src="images/E_INR21700-50G.jpg" alt="Samsung INR21700-50G"></div>
-        <div class="spec-body">
-          <div class="spec-title">Samsung INR21700-50G Li-ion Battery Cell</div>
-          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
-          <div class="spec-model">INR21700-50G</div>
-          <div class="spec-divider"></div>
-          <ul class="spec-list-inner">
-            <li><b>Standard Capacity:</b> 4,850 mAh (minimum)</li>
-            <li><b>Nominal Voltage:</b> 3.63 V | <b>Charging Voltage:</b> 4.2 V (CC-CV)</li>
-            <li><b>Max Discharge Current:</b> 9,700 mA (cont.) / 14,550 mA (peak)</li>
-            <li><b>Cell Type:</b> 21700 cylindrical — high-energy density for EV and power tools</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Samsung INR18650-35E -->
-      <div class="spec-card bat">
-        <div class="spec-img"><img src="images/E_INR18650-35E.jpg" alt="Samsung INR18650-35E"></div>
-        <div class="spec-body">
-          <div class="spec-title">Samsung INR18650-35E Li-ion Battery Cell</div>
-          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
-          <div class="spec-model">INR18650-35E</div>
-          <div class="spec-divider"></div>
-          <ul class="spec-list-inner">
-            <li><b>Standard Capacity:</b> 3,350 mAh | <b>Nominal Voltage:</b> 3.6 V</li>
-            <li><b>Discharge Cut-off:</b> 2.65 V | <b>Max Charge Current:</b> 2,000 mA</li>
-            <li><b>Max Discharge Current:</b> 8,000 mA (cont.) / 13,000 mA (peak)</li>
-            <li><b>Operating Temp:</b> Charge 0–45 °C / Discharge −10–60 °C</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- E-GMP -->
-      <div class="spec-card bat">
-        <div class="spec-img"><img src="images/E_EGMP.jpg" alt="E-GMP Battery Pack"></div>
-        <div class="spec-body">
-          <div class="spec-title">E-GMP 4th Generation Battery Pack</div>
-          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Mobility Hall</div>
-          <div class="spec-model">SK On · E-GMP (IONIQ5)</div>
-          <div class="spec-divider"></div>
-          <ul class="spec-list-inner">
-            <li><b>Total Capacity:</b> 84.0 kWh | <b>Energy Density:</b> 670 Wh/L</li>
-            <li><b>Max Driving Range:</b> 485 km (per full charge)</li>
-            <li><b>Fast-Charging Time:</b> Within 18 minutes (ultra-fast)</li>
-            <li><b>Chemistry:</b> Nickel-rich NCM | <b>Platform:</b> E-GMP</li>
-            <li><b>Application:</b> IONIQ 5, EV6, GV60</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- EVE LF230 -->
-      <div class="spec-card bat">
-        <div class="spec-img"><img src="images/E_LF230.jpg" alt="EVE LF230"></div>
-        <div class="spec-body">
-          <div class="spec-title">EVE LF230 LiFePO<sub>4</sub> Battery Cell</div>
-          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Mobility Hall</div>
-          <div class="spec-model">LF230 Prismatic LiFePO<sub>4</sub></div>
-          <div class="spec-divider"></div>
-          <ul class="spec-list-inner">
-            <li><b>Nominal Capacity:</b> 230 Ah | <b>Nominal Voltage:</b> 3.2 V</li>
-            <li><b>Cycle Life:</b> ≈ 4,000 cycles (0.5C charge/discharge)</li>
-            <li><b>Dimensions:</b> 173.9 × 53.8 × 207.2 mm | <b>Weight:</b> 4.14 ± 0.12 kg</li>
-            <li><b>Application:</b> Electric vehicles, buses, and energy storage systems</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- LM5170EVM-BIDIR -->
-      <div class="spec-card hw">
-        <div class="spec-img"><img src="images/E_BIDIR.png" alt="LM5170EVM-BIDIR"></div>
-        <div class="spec-body">
-          <div class="spec-title">Texas Instruments LM5170EVM-BIDIR</div>
-          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
-          <div class="spec-model">LM5170EVM-BIDIR</div>
-          <div class="spec-divider"></div>
-          <ul class="spec-list-inner">
-            <li><b>Buck Mode:</b> 48 V port 6–75 V; 12 V port regulated at 14.5 V</li>
-            <li><b>Boost Mode:</b> 12 V port 3–48 V; 48 V port regulated at 50.5 V</li>
-            <li><b>Max DC Current:</b> 60 A input/output on 12 V port</li>
-            <li><b>Control:</b> Built-in analog voltage loop; optional MCU-based digital loop</li>
-            <li><b>Multi-Phase:</b> Supports interleaved 3-/4-/6-/8-phase daisy-chain operation</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- BQ76952EVM -->
-      <div class="spec-card hw">
-        <div class="spec-img"><img src="images/E_BQ.png" alt="BQ76952EVM"></div>
-        <div class="spec-body">
-          <div class="spec-title">Texas Instruments BQ76952EVM</div>
-          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
-          <div class="spec-model">BQ76952EVM</div>
-          <div class="spec-divider"></div>
-          <ul class="spec-list-inner">
-            <li><b>Supported Cells:</b> 3 to 16 Li-ion or LiFePO₄ cells</li>
-            <li><b>Included Module:</b> Pre-assembled circuit module for 16-cell configuration</li>
-            <li><b>Communication:</b> USB interface adapter; 4-pin connector available</li>
-            <li><b>Simulation:</b> Built-in resistor-based cell simulator powered by external supply</li>
-            <li><b>Firmware &amp; GUI:</b> Preloaded firmware, GUI, and demonstration files</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- C2000 Launchpad -->
-      <div class="spec-card hw">
+      <!-- C2000 Launchpad (MCU Development Board) -->
+      <div class="spec-card sw">
         <div class="spec-img"><img src="images/E_C2000.png" alt="C2000 Launchpad"></div>
         <div class="spec-body">
           <div class="spec-title">C2000 Launchpad</div>
@@ -598,75 +641,43 @@
         </div>
       </div>
 
-      <!-- Battery Jig -->
-      <div class="spec-card ea">
-        <div class="spec-img"><img src="images/E_jig.png" alt="Battery Jig"></div>
+      <!-- BQ76952EVM (EVM) -->
+      <div class="spec-card sw">
+        <div class="spec-img"><img src="images/E_BQ.png" alt="BQ76952EVM"></div>
         <div class="spec-body">
-          <div class="spec-title">Battery Jig</div>
+          <div class="spec-title">Texas Instruments BQ76952EVM</div>
           <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
-          <div class="spec-model">For Cylindrical Cell</div>
+          <div class="spec-model">BQ76952EVM</div>
           <div class="spec-divider"></div>
           <ul class="spec-list-inner">
-            <li><b>Temperature Range:</b> −40 ℃ to 100 ℃</li>
-            <li><b>Max Current:</b> ≥ 30 A per channel</li>
-            <li><b>Material:</b> Bakelite (black) | <b>Config:</b> 1 channel / 1 set</li>
-            <li><b>Cell Compatibility:</b> 18650, 21700, 4680 cells</li>
+            <li><b>Supported Cells:</b> 3 to 16 Li-ion or LiFePO₄ cells</li>
+            <li><b>Included Module:</b> Pre-assembled circuit module for 16-cell configuration</li>
+            <li><b>Communication:</b> USB interface adapter; 4-pin connector available</li>
+            <li><b>Simulation:</b> Built-in resistor-based cell simulator powered by external supply</li>
+            <li><b>Firmware &amp; GUI:</b> Preloaded firmware, GUI, and demonstration files</li>
           </ul>
         </div>
       </div>
 
-      <!-- Gast Pump -->
-      <div class="spec-card sc">
-        <div class="spec-img"><img src="images/E_Pump.png" alt="Gast Pump"></div>
+      <!-- LM5170EVM-BIDIR (EVM) -->
+      <div class="spec-card sw">
+        <div class="spec-img"><img src="images/E_BIDIR.png" alt="LM5170EVM-BIDIR"></div>
         <div class="spec-body">
-          <div class="spec-title">Gast Pump</div>
+          <div class="spec-title">Texas Instruments LM5170EVM-BIDIR</div>
           <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
-          <div class="spec-model">DOA-P704-AC</div>
+          <div class="spec-model">LM5170EVM-BIDIR</div>
           <div class="spec-divider"></div>
           <ul class="spec-list-inner">
-            <li><b>Type:</b> Oil-less — no oil replacement required</li>
-            <li><b>Performance:</b> 32 L/min capacity, Max vacuum 25.5 hg, Max pressure 60 psi</li>
-            <li><b>Power:</b> 115 V / 60 Hz, 1/8 HP | <b>Weight:</b> 8.7 kg</li>
-            <li><b>Application:</b> Filtration pump for membranes or glass filters</li>
+            <li><b>Buck Mode:</b> 48 V port 6–75 V; 12 V port regulated at 14.5 V</li>
+            <li><b>Boost Mode:</b> 12 V port 3–48 V; 48 V port regulated at 50.5 V</li>
+            <li><b>Max DC Current:</b> 60 A input/output on 12 V port</li>
+            <li><b>Control:</b> Built-in analog voltage loop; optional MCU-based digital loop</li>
+            <li><b>Multi-Phase:</b> Supports interleaved 3-/4-/6-/8-phase daisy-chain operation</li>
           </ul>
         </div>
       </div>
 
-      <!-- Vacuum Desiccator -->
-      <div class="spec-card sc">
-        <div class="spec-img"><img src="images/E_decci.png" alt="Vacuum Desiccator"></div>
-        <div class="spec-body">
-          <div class="spec-title">Vacuum Desiccator</div>
-          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
-          <div class="spec-model">VLHK</div>
-          <div class="spec-divider"></div>
-          <ul class="spec-list-inner">
-            <li><b>Outer Dimensions:</b> 310 × 332 × 530 mm | <b>Capacity:</b> 30 L | <b>Weight:</b> 23 kg</li>
-            <li><b>Inner Dimensions:</b> 260 × 280 × 410 mm</li>
-            <li><b>Allowable Vacuum:</b> 1 Torr (≈133 Pa)</li>
-            <li><b>Material:</b> Transparent reinforced acrylic, 20t</li>
-            <li><b>Accessories:</b> 1 vacuum gauge, 3 shelves, 2 vacuum valves (Ø 8 mm)</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Fume Hood -->
-      <div class="spec-card sc">
-        <div class="spec-img"><img src="images/E_Hood.png" alt="Fume Hood"></div>
-        <div class="spec-body">
-          <div class="spec-title">Fume Hood</div>
-          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
-          <div class="spec-model">CAFU-02-10</div>
-          <div class="spec-divider"></div>
-          <ul class="spec-list-inner">
-            <li><b>Type:</b> Arm hood type</li>
-            <li><b>Dimensions:</b> 390 × 390 × 710 mm (Ø 80 × 1300)</li>
-            <li><b>Air Speed &amp; Volume:</b> 9–13 m/s, 600 CMH</li>
-            <li><b>Noise Level:</b> ≤ 55 dB | <b>Power:</b> 220 V, 120 W | <b>Weight:</b> 36 kg</li>
-          </ul>
-        </div>
-      </div>
-
+      </div><!-- /panel sw -->
     </div><!-- /spec-list -->
   </main>
 
@@ -689,6 +700,21 @@
       <p>&copy; 2025 Battery System Laboratory | All Rights Reserved</p>
     </div>
   </footer>
+  <script>
+    (function () {
+      var tabs   = document.querySelectorAll('.spec-tab');
+      var panels = document.querySelectorAll('.spec-panel');
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          var cat = tab.getAttribute('data-cat');
+          tabs.forEach(function (t) { t.classList.toggle('active', t === tab); });
+          panels.forEach(function (p) {
+            p.classList.toggle('active', p.getAttribute('data-cat') === cat);
+          });
+        });
+      });
+    })();
+  </script>
 
 </body>
 </html>
