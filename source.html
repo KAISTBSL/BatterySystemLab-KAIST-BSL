@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Sources · Battery System Laboratory</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:      #0c1828;
+      --surface: #132338;
+      --surface2:#192e4a;
+      --surface3:#1e3a5e;
+      --border:  rgba(102,204,255,0.16);
+      --border2: rgba(102,204,255,0.30);
+      --accent:  #007acc;
+      --accent2: #66ccff;
+      --text:    #dde2ef;
+      --text2:   #96a8c8;
+      --text3:   #4a6080;
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'Pretendard', -apple-system, sans-serif;
+      --r: 14px;
+    }
+    html { scroll-behavior: smooth; }
+    body { margin:0; font-family:var(--sans); line-height:1.6; background:var(--bg); color:var(--text); min-height:100vh; }
+    body::before {
+      content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+      background-image:
+        linear-gradient(rgba(102,204,255,0.032) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(102,204,255,0.032) 1px,transparent 1px);
+      background-size:52px 52px;
+    }
+    body::after {
+      content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+      background:radial-gradient(ellipse 80% 40% at 50% -5%,rgba(0,122,204,0.14) 0%,transparent 65%);
+    }
+
+    /* HEADER */
+    header {
+      position:sticky; top:0; z-index:200;
+      background:rgba(12,24,40,0.90); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+      border-bottom:1px solid var(--border);
+      color:white; display:flex; flex-wrap:wrap;
+      justify-content:space-between; align-items:center;
+      padding:0 2em; min-height:72px;
+    }
+    .logo { font-weight:bold; display:flex; align-items:center; gap:10px; font-size:1.5em; }
+    .logo-icon { width:80px; height:80px; object-fit:contain; }
+    .logo-link { text-decoration:none; color:white; font-weight:700; font-size:1em; transition:color .2s; }
+    .logo-link:hover { color:var(--accent2); }
+    nav { display:flex; align-items:center; gap:2px; padding-bottom:8px; }
+    nav a { color:rgba(255,255,255,0.72); text-decoration:none; margin-left:18px; font-size:.93em; font-weight:400; position:relative; cursor:pointer; transition:color .2s; }
+    nav a:hover { color:var(--accent2); }
+    nav a.current { color:var(--accent2); }
+    nav a::after { content:""; position:absolute; left:0; bottom:-4px; width:0; height:2px; background:var(--accent2); border-radius:2px; transition:width .3s ease; }
+    nav a:hover::after, nav a.current::after { width:100%; }
+
+    /* HERO */
+    .hero {
+      position:relative; z-index:1;
+      background: linear-gradient(rgba(8,16,30,0.70),rgba(12,24,40,0.50)), url("images/background.png") no-repeat center/cover;
+      height:44vh; min-height:250px;
+      display:flex; flex-direction:column; justify-content:center; align-items:center;
+      text-align:center; color:white; overflow:hidden;
+    }
+    .hero::after { content:''; position:absolute; bottom:0; left:0; right:0; height:100px; background:linear-gradient(transparent,var(--bg)); pointer-events:none; z-index:2; }
+    .hero-logo { max-height:68px; margin-bottom:.9em; opacity:.85; animation:fadeInDown 1s ease-out; filter:drop-shadow(0 0 16px rgba(102,204,255,0.2)); }
+    .hero-eyebrow { font-family:var(--mono); font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--accent2); background:rgba(102,204,255,0.08); border:1px solid rgba(102,204,255,0.2); padding:4px 14px; border-radius:30px; margin-bottom:.9em; animation:fadeInDown .8s ease-out; display:inline-block; }
+    .hero h1 { font-size:2.4em; font-weight:700; margin-bottom:.25em; animation:fadeInDown 1.1s ease-out; background:linear-gradient(120deg,#fff 0%,var(--accent2) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .hero p { font-size:1em; color:rgba(255,255,255,0.55); font-weight:300; animation:fadeInUp 1.4s ease-out; }
+
+    /* FILTER TABS (functions like subtabs but filters in-page) */
+    .filter-container {
+      position:relative; z-index:1;
+      display:flex; justify-content:center; align-items:center; gap:6px; flex-wrap:wrap;
+      padding:1.4em 2em 1.2em; border-bottom:1px solid var(--border);
+    }
+    .filter-btn {
+      background:none; border:none; text-decoration:none;
+      color:var(--text2); font-size:.9em; font-weight:500; font-family:var(--mono);
+      letter-spacing:1px; text-transform:uppercase; padding:.55em 1.2em; cursor:pointer;
+      position:relative; transition:color .2s; border-radius:8px 8px 0 0;
+      display:flex; align-items:center; gap:8px;
+    }
+    .filter-btn::after { content:""; position:absolute; bottom:-1px; left:50%; transform:translateX(-50%); width:0; height:2px; background:var(--accent2); border-radius:2px; transition:width .3s; }
+    .filter-btn:hover { color:var(--accent2); }
+    .filter-btn.active { color:var(--accent2); }
+    .filter-btn.active::after { width:75%; }
+    .filter-count {
+      font-size:.78em; color:var(--text3); background:rgba(102,204,255,0.08);
+      border:1px solid var(--border); border-radius:20px; padding:1px 8px;
+      transition:color .2s, border-color .2s;
+    }
+    .filter-btn.active .filter-count { color:var(--accent2); border-color:var(--border2); }
+    .filter-btn:focus-visible { outline:2px solid var(--accent2); outline-offset:3px; }
+
+    /* MAIN */
+    main { position:relative; z-index:1; padding:2.2em 2em 5em; max-width:1180px; margin:auto; }
+
+    .section-label {
+      font-family:var(--mono); font-size:10px; font-weight:500;
+      letter-spacing:2px; text-transform:uppercase; color:var(--accent2);
+      background:rgba(102,204,255,0.08); border:1px solid rgba(102,204,255,0.18);
+      padding:3px 12px; border-radius:20px; display:inline-block; margin-bottom:10px;
+    }
+
+    /* NAS NOTICE BANNER */
+    .notice-bar {
+      display:flex; align-items:flex-start; gap:14px;
+      background:var(--surface); border:1px solid var(--border); border-radius:var(--r);
+      padding:1.1em 1.4em; margin-bottom:1.8em;
+      animation:fadeInUp .6s ease-in-out backwards;
+    }
+    .notice-icon {
+      width:36px; height:36px; min-width:36px; border-radius:9px;
+      background:rgba(102,204,255,0.10); border:1px solid var(--border2);
+      display:flex; align-items:center; justify-content:center; color:var(--accent2); font-size:.95em;
+    }
+    .notice-text { font-size:.87em; color:var(--text2); line-height:1.65; }
+    .notice-text strong { color:var(--text); }
+
+    /* PANELS (one category visible at a time) */
+    .resource-panel { display:none; }
+    .resource-panel.active { display:block; animation:fadeInUp .5s ease-in-out; }
+
+    /* RESOURCE GRID */
+    .resource-grid {
+      display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr));
+      gap:22px;
+    }
+    .resource-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--r); overflow:hidden;
+      display:flex; flex-direction:column;
+      animation:fadeInUp .7s ease-in-out backwards;
+      transition:border-color .2s, transform .2s;
+    }
+    .resource-card:hover { border-color:var(--border2); transform:translateY(-3px); }
+
+    .resource-thumb {
+      position:relative; width:100%; aspect-ratio:16/9; overflow:hidden;
+      display:flex; align-items:center; justify-content:center;
+      background: radial-gradient(circle at 28% 22%, rgba(102,204,255,0.14), transparent 60%), var(--surface2);
+    }
+    .resource-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+    .thumb-icon { font-size:2.4em; color:var(--border2); }
+    .resource-badge {
+      position:absolute; top:10px; left:10px; font-family:var(--mono); font-size:9.5px;
+      letter-spacing:1px; text-transform:uppercase; padding:4px 10px; border-radius:20px;
+      backdrop-filter:blur(6px); background:rgba(12,24,40,0.72); border:1px solid var(--border2); color:var(--accent2);
+    }
+
+    .resource-body { padding:1.25em 1.35em 1.4em; display:flex; flex-direction:column; gap:.65em; flex:1; }
+    .resource-title { font-size:1.02em; font-weight:700; color:var(--text); line-height:1.4; }
+    .resource-desc { font-size:.86em; color:var(--text2); line-height:1.6; flex:1; }
+    .resource-meta {
+      display:flex; flex-wrap:wrap; gap:.7em 1em; font-family:var(--mono); font-size:.73em;
+      color:var(--text3); padding-top:.6em; border-top:1px solid var(--border);
+    }
+    .resource-meta span { display:flex; align-items:center; gap:5px; }
+
+    .resource-links-row { display:flex; gap:.6em; flex-wrap:wrap; margin-top:.3em; }
+    .resource-link {
+      display:inline-flex; align-items:center; justify-content:center; gap:7px;
+      background:var(--accent); color:#fff; font-size:.83em; font-weight:600;
+      padding:.6em 1em; border-radius:8px; text-decoration:none; transition:background .2s;
+      flex:1;
+    }
+    .resource-link:hover { background:var(--accent2); color:var(--bg); }
+    .resource-link.secondary { background:transparent; border:1px solid var(--border2); color:var(--accent2); flex:none; }
+    .resource-link.secondary:hover { background:rgba(102,204,255,0.1); color:#fff; }
+    .resource-link:focus-visible { outline:2px solid var(--accent2); outline-offset:2px; }
+
+    /* CONFERENCE POSTERS — image-first gallery (no file links, just image + date/topic) */
+    .poster-grid {
+      display:grid; grid-template-columns:repeat(3, 1fr);
+      gap:28px;
+    }
+    .poster-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--r); overflow:hidden;
+      display:flex; flex-direction:column;
+      animation:fadeInUp .7s ease-in-out backwards;
+      transition:border-color .2s, transform .2s;
+    }
+    .poster-card:hover { border-color:var(--border2); transform:translateY(-3px); }
+    .poster-thumb {
+      position:relative; width:100%; aspect-ratio:3/4; overflow:hidden;
+      display:flex; align-items:center; justify-content:center;
+      background: radial-gradient(circle at 28% 22%, rgba(102,204,255,0.14), transparent 60%), var(--surface2);
+    }
+    .poster-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+    .poster-thumb .thumb-icon { font-size:3.4em; }
+    .poster-caption { padding:1.1em 1.2em 1.3em; }
+    .poster-title { font-size:1em; font-weight:700; color:var(--text); line-height:1.45; margin-bottom:.5em; }
+    .poster-meta { font-family:var(--mono); font-size:.75em; color:var(--text3); display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+
+    @media(max-width:940px){ .poster-grid { grid-template-columns:repeat(2,1fr); } }
+    @media(max-width:560px){ .poster-grid { grid-template-columns:1fr; } }
+
+    /* PAGINATION */
+    .pagination { display:flex; justify-content:center; align-items:center; gap:8px; margin-top:2.4em; flex-wrap:wrap; }
+    .page-btn {
+      width:38px; height:38px; border-radius:9px; cursor:pointer;
+      background:var(--surface2); border:1px solid var(--border); color:var(--text2);
+      font-family:var(--mono); font-size:.85em; display:flex; align-items:center; justify-content:center;
+      transition:border-color .2s, color .2s, background .2s;
+    }
+    .page-btn:hover { border-color:var(--border2); color:var(--accent2); }
+    .page-btn.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+    .page-btn:focus-visible { outline:2px solid var(--accent2); outline-offset:2px; }
+
+    /* FOOTER */
+    footer { position:relative; z-index:1; background:var(--surface); border-top:1px solid var(--border); color:white; padding:2.5em 3em; font-size:.92em; }
+    .footer-container { display:flex; flex-wrap:wrap; gap:2em; }
+    .footer-left h3  { margin-top:0; color:var(--accent2); font-size:1em; margin-bottom:.6em; }
+    .footer-left p   { color:var(--text2); font-size:.9em; line-height:1.7; }
+    .footer-right    { flex:1; min-width:250px; padding-top:.5em; }
+    .footer-right p  { color:var(--text2); font-size:.9em; line-height:2; margin:0; }
+    .footer-right a  { color:var(--accent2); text-decoration:none; }
+    .footer-right a:hover { color:white; }
+    .footer-bottom { text-align:center; border-top:1px solid var(--border); margin-top:1.5em; padding-top:1em; font-size:.82em; color:var(--text3); }
+
+    @keyframes fadeInDown { from{opacity:0;transform:translateY(-24px)}to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeInUp   { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation:none !important; transition:none !important; }
+    }
+
+    @media(max-width:768px){
+      main { padding:2em 1.2em 4em; }
+      .notice-bar { flex-direction:column; align-items:flex-start; }
+      .resource-links-row { flex-direction:column; }
+      .resource-link.secondary { flex:1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      <a href="index.html" class="logo-link">Battery System Laboratory</a>
+      <img src="images/NEWLOGO.png" alt="Lab Logo" class="logo-icon">
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="member.html">Member</a>
+      <a href="publication.html">Publication</a>
+      <a href="research.html">Research</a>
+      <a href="counterpart.html">Counterpart</a>
+      <a href="project.html">Project</a>
+      <a href="equipment.html">Equipment</a>
+      <a href="news.html">Board</a>
+      <a href="source.html" class="current">Sources</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <img src="https://mo.kaist.ac.kr/wp-content/uploads/2022/08/logo_new-1-e1661933714657.png"
+         alt="KAIST Mobility Logo" class="hero-logo">
+    <div class="hero-eyebrow">Battery System Laboratory</div>
+    <h1>Research Sources</h1>
+    <p>Open Materials from BSL</p>
+  </section>
+
+  <!-- FILTER TABS -->
+  <div class="filter-container">
+    <button class="filter-btn active" data-filter="lecture" onclick="filterResources('lecture', this)">
+      <i class="fa-solid fa-chalkboard-user"></i> Lecture Materials <span class="filter-count" id="count-lecture">0</span>
+    </button>
+    <button class="filter-btn" data-filter="dataset" onclick="filterResources('dataset', this)">
+      <i class="fa-solid fa-database"></i> Datasets <span class="filter-count" id="count-dataset">0</span>
+    </button>
+    <button class="filter-btn" data-filter="poster" onclick="filterResources('poster', this)">
+      <i class="fa-solid fa-image"></i> Conference Posters <span class="filter-count" id="count-poster">0</span>
+    </button>
+  </div>
+
+  <main>
+
+    <!-- NAS ACCESS NOTICE -->
+    <div class="notice-bar">
+      <div class="notice-icon"><i class="fa-solid fa-server"></i></div>
+      <div class="notice-text">
+        <strong>Large files are hosted on the lab NAS.</strong>
+        Datasets and lecture recordings are too large to host on this page directly — each card below links out to
+        the corresponding folder on the lab NAS. Access requires the KAIST campus network or lab VPN;
+        contact the lab manager for credentials if a link doesn't load.
+      </div>
+    </div>
+
+    <!-- ============ LECTURE MATERIALS ============ -->
+    <section class="resource-panel active" data-panel="lecture">
+    <div class="resource-grid">
+    <!--
+      <div class="resource-card" data-category="lecture">
+        <div class="resource-thumb">
+           Replace with: <img src="images/sources/lecture-01.jpg" alt="..."> 
+          <i class="fa-solid fa-chalkboard-user thumb-icon"></i>
+          <div class="resource-badge">Lecture</div>
+        </div>
+        <div class="resource-body">
+          <div class="resource-title">ME491: Electrochemical Energy Storage — Lec.03</div>
+          <p class="resource-desc">Lecture slides on intercalation electrode thermodynamics and open-circuit voltage modeling, with worked examples.</p>
+          <div class="resource-meta">
+            <span><i class="fa-regular fa-calendar"></i> 2025 Fall</span>
+            <span><i class="fa-regular fa-file-pdf"></i> PDF · 42p</span>
+          </div>
+          <div class="resource-links-row">
+            <a href="#" class="resource-link" target="_blank" rel="noopener"><i class="fa-solid fa-folder-open"></i> Open on NAS</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="resource-card" data-category="lecture">
+        <div class="resource-thumb">
+          <i class="fa-solid fa-chalkboard-user thumb-icon"></i>
+          <div class="resource-badge">Lecture</div>
+        </div>
+        <div class="resource-body">
+          <div class="resource-title">Battery Aging &amp; Degradation Mechanisms — Short Course</div>
+          <p class="resource-desc">Guest-lecture material from the 2025 KAIST Battery Winter School, covering calendar and cycle aging mechanisms.</p>
+          <div class="resource-meta">
+            <span><i class="fa-regular fa-calendar"></i> 2025.01</span>
+            <span><i class="fa-solid fa-video"></i> PDF + Video · 1.2GB</span>
+          </div>
+          <div class="resource-links-row">
+            <a href="#" class="resource-link" target="_blank" rel="noopener"><i class="fa-solid fa-folder-open"></i> Open on NAS</a>
+          </div>
+        </div>
+      </div>
+-->
+    </div>
+    <div class="pagination" id="pagination-lecture"></div>
+    </section>
+
+    <!-- ============ DATASETS ============ -->
+    <section class="resource-panel" data-panel="dataset">
+    <div class="resource-grid">
+<!--
+      <div class="resource-card" data-category="dataset">
+        <div class="resource-thumb">
+          <i class="fa-solid fa-database thumb-icon"></i>
+          <div class="resource-badge">Dataset</div>
+        </div>
+        <div class="resource-body">
+          <div class="resource-title">18650 Cylindrical Cell Cycling Dataset (2022–2025)</div>
+          <p class="resource-desc">Long-term cycling data for NMC811/graphite 18650 cells at 3 temperatures and 4 C-rates, with periodic RPT and EIS scans.</p>
+          <div class="resource-meta">
+            <span><i class="fa-regular fa-calendar"></i> Updated 2025.12</span>
+            <span><i class="fa-regular fa-file"></i> CSV / MAT</span>
+            <span><i class="fa-solid fa-battery-full"></i> 340 cells</span>
+          </div>
+          <div class="resource-links-row">
+            <a href="https://gofile.me/7rWQu/4QupxXga5" class="resource-link" target="_blank" rel="noopener"><i class="fa-solid fa-folder-open"></i> Access on NAS</a>
+            <a href="#" class="resource-link secondary" target="_blank" rel="noopener"><i class="fa-regular fa-file-lines"></i> README</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="resource-card" data-category="dataset">
+        <div class="resource-thumb">
+          <i class="fa-solid fa-database thumb-icon"></i>
+          <div class="resource-badge">Dataset</div>
+        </div>
+        <div class="resource-body">
+          <div class="resource-title">Transition Metal Dissolution ICP-MS Dataset</div>
+          <p class="resource-desc">Dissolved Mn/Ni/Co concentrations from cycled NMC cathodes measured via ICP-MS, paired with capacity-fade curves.</p>
+          <div class="resource-meta">
+            <span><i class="fa-regular fa-calendar"></i> 2024.09</span>
+            <span><i class="fa-regular fa-file-excel"></i> XLSX</span>
+            <span><i class="fa-solid fa-vial"></i> 86 samples</span>
+          </div>
+          <div class="resource-links-row">
+            <a href="#" class="resource-link" target="_blank" rel="noopener"><i class="fa-solid fa-folder-open"></i> Access on NAS</a>
+          </div>
+        </div>
+      </div>
+-->
+    </div>
+    <div class="pagination" id="pagination-dataset"></div>
+    </section>
+
+    <!-- ============ CONFERENCE POSTERS ============ -->
+    <section class="resource-panel" data-panel="poster">
+    <div class="poster-grid">
+
+      <div class="poster-card">
+        <div class="poster-thumb">
+          <img src="images/Conf_2026KSAE_1.jpg" alt="...">
+        </div>
+        <div class="poster-caption">
+          <div class="poster-title">Comparitive Study of Isolated and Non-isolated Converter-based Active Cell Balancing Topologies for Lithium-ion Batteries</div>
+          <div class="poster-meta"><i class="fa-regular fa-calendar"></i> 2026.05 · KSAE 2026 Spring</div>
+        </div>
+      </div>
+
+      <div class="poster-card">
+        <div class="poster-thumb">
+          <img src="images/Conf_2026KSAE_2.jpg" alt="...">
+        </div>
+        <div class="poster-caption">
+          <div class="poster-title">Electrochemical Behavior Analysis of 2D Lithium-Metal Batteries under Passive Cell Balancing Circuits</div>
+          <div class="poster-meta"><i class="fa-regular fa-calendar"></i> 2026.05 · KSAE 2026 Spring</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="pagination" id="pagination-poster"></div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-left">
+        <h3>Battery System Laboratory</h3>
+        <p>KAIST, CCS Graduate School of Mobility<br>
+           193, Munji-ro, Yuseong-gu, Daejeon, 34051, Republic of Korea</p>
+        <p style="margin-top:.5em"><strong style="color:var(--text)">Location:</strong> Faculty Wing, F440</p>
+      </div>
+      <div class="footer-right">
+        <p><strong style="color:var(--text)">Phone:</strong> +82 042-350-1762</p>
+        <p><strong style="color:var(--text)">Email:</strong>
+          <a href="mailto:yoonklee@kaist.ac.kr">yoonklee@kaist.ac.kr</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Battery System Laboratory | All Rights Reserved</p>
+    </div>
+  </footer>
+
+  <script>
+    const PAGE_SIZE = 9;
+    const panelState = {}; // { lecture: { items:[], pageCount:n, currentPage:n }, ... }
+
+    // Tally each category's card count into the filter tab badges
+    function updateCounts() {
+      document.getElementById('count-lecture').textContent =
+        document.querySelectorAll('[data-panel="lecture"] .resource-card').length;
+      document.getElementById('count-dataset').textContent =
+        document.querySelectorAll('[data-panel="dataset"] .resource-card').length;
+      document.getElementById('count-poster').textContent =
+        document.querySelectorAll('[data-panel="poster"] .poster-card').length;
+    }
+
+    // Show only the selected category's panel (pagination state per panel is preserved)
+    function filterResources(category, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      document.querySelectorAll('.resource-panel').forEach(panel => {
+        panel.classList.toggle('active', panel.dataset.panel === category);
+      });
+    }
+
+    // Split a panel's cards into pages of PAGE_SIZE and build the "1 2 3" page buttons
+    function setupPagination(panelKey) {
+      const panel = document.querySelector('.resource-panel[data-panel="' + panelKey + '"]');
+      const grid = panel.querySelector('.resource-grid, .poster-grid');
+      const items = Array.from(grid.children);
+      const pageCount = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
+      panelState[panelKey] = { items, pageCount, currentPage: 1 };
+      renderPaginationControls(panelKey);
+      showPage(panelKey, 1);
+    }
+
+    function showPage(panelKey, page) {
+      const state = panelState[panelKey];
+      state.currentPage = page;
+      state.items.forEach((item, idx) => {
+        const itemPage = Math.floor(idx / PAGE_SIZE) + 1;
+        item.style.display = (itemPage === page) ? '' : 'none';
+      });
+      const paginationEl = document.getElementById('pagination-' + panelKey);
+      if (paginationEl) {
+        paginationEl.querySelectorAll('.page-btn').forEach(btn => {
+          btn.classList.toggle('active', parseInt(btn.dataset.page, 10) === page);
+        });
+      }
+    }
+
+    function renderPaginationControls(panelKey) {
+      const state = panelState[panelKey];
+      const paginationEl = document.getElementById('pagination-' + panelKey);
+      if (!paginationEl) return;
+      paginationEl.innerHTML = '';
+      if (state.pageCount <= 1) return; // hide pagination bar when everything fits on one page
+      for (let p = 1; p <= state.pageCount; p++) {
+        const btn = document.createElement('button');
+        btn.className = 'page-btn' + (p === 1 ? ' active' : '');
+        btn.type = 'button';
+        btn.textContent = p;
+        btn.dataset.page = p;
+        btn.addEventListener('click', () => showPage(panelKey, p));
+        paginationEl.appendChild(btn);
+      }
+    }
+
+    updateCounts();
+    ['lecture', 'dataset', 'poster'].forEach(setupPagination);
+  </script>
+
+</body>
+</html>
