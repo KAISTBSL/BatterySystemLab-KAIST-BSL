@@ -74,11 +74,11 @@
     /* ═══════════════════════════════════════════
        HERO  —  배경 영상(MV1~MV4) 순차 재생 + 무한 루프
        레이어 순서(아래 → 위)
-         0  .hero-video-layer   영상 2장(A/B 교대)
-         1  .hero::before       기본 어둡기 그라데이션
-         2  .hero-dim           클립 전환용 딤(암전)
-         3  .hero::after        하단 페이드
-         4  #partners-banner    파트너 배너
+         0  .hero-video      영상 (엘리먼트 1개, src만 교체)
+         1  .hero::before    기본 어둡기 그라데이션
+         2  .hero-dim        클립 전환용 암전
+         3  .hero::after     하단 페이드
+         4  #partners-banner 파트너 배너
          5  텍스트 / 버튼
     ═══════════════════════════════════════════ */
     .hero {
@@ -89,16 +89,14 @@
       text-align: center; color: white; padding: 2em; overflow: hidden;
     }
 
-    /* 영상 레이어 */
-    .hero-video-layer { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
     .hero-video {
-      position: absolute; inset: 0; width: 100%; height: 100%;
-      object-fit: cover; display: block;
-      opacity: 0; transition: opacity 180ms linear;
+      position: absolute; inset: 0; z-index: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; display: block; pointer-events: none;
+      background: #08101e;
     }
-    .hero-video.is-active { opacity: 1; }
 
-    /* 기본 어둡기 오버레이 (기존 배경 그라데이션을 분리한 것) */
+    /* 기본 어둡기 오버레이 */
     .hero::before {
       content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
       background: linear-gradient(rgba(8,16,30,0.72), rgba(12,24,40,0.52));
@@ -129,7 +127,7 @@
 
     /* 모션 최소화 설정 시 영상 대신 정지 이미지 */
     @media (prefers-reduced-motion: reduce) {
-      .hero-video-layer, .hero-dim { display: none; }
+      .hero-video, .hero-dim { display: none; }
       .hero { background: linear-gradient(rgba(8,16,30,0.70), rgba(12,24,40,0.48)), url("images/background.png") no-repeat center/cover; }
       .hero::before { display: none; }
     }
@@ -349,13 +347,16 @@
 
   <section class="hero">
 
-    <!-- ─── 배경 영상 레이어 (MV1 → MV2 → MV3 → MV4 → 반복) ─── -->
-    <div class="hero-video-layer">
-      <video id="heroVidA" class="hero-video" autoplay muted loop playsinline
-          preload="auto" aria-hidden="true" tabindex="-1"></video>
-      <video id="heroVidB" class="hero-video" muted playsinline
-          preload="auto" aria-hidden="true" tabindex="-1"></video>
-    </div>
+    <!-- ─── 배경 영상 (MV1 → MV2 → MV3 → MV4 → 반복) ───
+         ⚠ loop 속성을 절대 넣지 마세요.
+            loop이 걸리면 ended 이벤트가 발생하지 않아
+            첫 클립만 무한 반복되고 다음으로 넘어가지 않습니다. -->
+    <video id="heroVideo" class="hero-video"
+           src="videos/MV1.mp4"
+           autoplay muted playsinline preload="auto"
+           poster="images/background.png"
+           aria-hidden="true" tabindex="-1"></video>
+
     <!-- 클립 전환 시 암전되는 딤 레이어 -->
     <div class="hero-dim" id="heroDim"></div>
 
@@ -611,12 +612,18 @@
     // HERO BACKGROUND VIDEO SEQUENCER
     //
     //  MV1 → MV2 → MV3 → MV4 → MV1 → …  (무한 반복)
-    //  클립이 끝나기 직전에 화면이 어두워지고(딤),
-    //  암전 상태에서 다음 클립으로 교체된 뒤 다시 밝아집니다.
+    //  클립이 끝나기 직전 화면이 어두워지고, 암전 상태에서
+    //  src를 교체한 뒤 재생이 실제로 시작되면 다시 밝아집니다.
+    //
+    //  설계 메모
+    //   • <video>는 딱 1개. 전환이 암전에 가려지므로 2개가 불필요하고,
+    //     숨은 엘리먼트가 ended를 잘못 발생시키는 문제도 사라집니다.
+    //   • 다음 클립은 DOM 밖의 downloader 객체로 미리 받아둡니다.
+    //   • loop 속성 금지 — loop이 걸리면 ended가 발생하지 않습니다.
     //
     //  ▸ 파일 경로/개수는 HERO_CLIPS 배열만 고치면 됩니다.
-    //  ▸ 딤 지속시간은 DIM_MS + CSS의 --hero-dim-ms 를
-    //    같은 값으로 맞춰야 합니다.
+    //  ▸ 딤 지속시간은 DIM_MS 와 CSS의 --hero-dim-ms 를 같은 값으로.
+    //  ▸ 콘솔에서 heroVideoDebug() 를 호출하면 현재 상태를 볼 수 있습니다.
     // ═════════════════════════════════════════════════
     (function initHeroVideo() {
       const HERO_CLIPS = [
@@ -625,109 +632,105 @@
         'videos/MV3.mp4',
         'videos/MV4.mp4'
       ];
-      const DIM_MS   = 600;   // 암전 지속시간 (CSS --hero-dim-ms 와 동일하게)
-      const LEAD_SEC = 0.6;   // 클립 종료 몇 초 전부터 어두워질지
+      const DIM_MS   = 600;    // 암전 지속시간 (CSS --hero-dim-ms 와 동일하게)
+      const LEAD_SEC = 0.6;    // 클립 종료 몇 초 전부터 어두워질지
+      const STUCK_MS = 4000;   // 전환이 이 시간 안에 안 끝나면 강제 복구
 
-      const vids = [
-        document.getElementById('heroVidA'),
-        document.getElementById('heroVidB')
-      ];
-      const dim = document.getElementById('heroDim');
-      if (!vids[0] || !vids[1] || !dim) return;
+      const video = document.getElementById('heroVideo');
+      const dim   = document.getElementById('heroDim');
+      if (!video || !dim) return;
 
-      // 모션 최소화 설정이면 영상 재생 자체를 하지 않음
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      // 데이터 절약 모드면 정지 이미지로 대체
-      const saveData = navigator.connection && navigator.connection.saveData;
-      if (reduceMotion || saveData) return;
+      // 모션 최소화 설정이면 CSS가 영상을 숨기므로 재생하지 않음
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-      let slot = 0;        // 현재 화면에 보이는 video 엘리먼트 index (0 | 1)
-      let clip = 0;        // 현재 재생 중인 클립 index
-      let switching = false;
-      let paused = false;  // 화면 밖 / 탭 비활성으로 일시정지된 상태
+      let idx = 0;             // 현재 클립 index
+      let switching = false;   // 전환 진행 중 여부
+      let stuckTimer = null;
 
-      const nextClipIndex = i => (i + 1) % HERO_CLIPS.length;
+      video.loop = false;      // 안전장치: loop이 켜지면 ended가 오지 않음
+      video.muted = true;      // 자동재생 정책 충족
+      video.playsInline = true;
 
-      function safePlay(v) {
-        const p = v.play();
-        if (p && typeof p.catch === 'function') p.catch(() => {});
+      const nextIndex = i => (i + 1) % HERO_CLIPS.length;
+
+      // DOM 밖 다운로더 — 다음 클립을 브라우저 캐시에 미리 올려둠
+      const downloader = document.createElement('video');
+      downloader.muted = true;
+      downloader.preload = 'auto';
+      function prefetch(i) {
+        try { downloader.src = HERO_CLIPS[i]; downloader.load(); } catch (e) {}
       }
 
-      // 클립 종료 직전 딤 시작
-      function onTimeUpdate(e) {
-        const v = e.target;
-        if (switching || paused || !v.classList.contains('is-active')) return;
-        if (!isFinite(v.duration) || v.duration === 0) return;
-        if (v.duration - v.currentTime <= LEAD_SEC) dim.classList.add('is-on');
+      // play() 거부 시 첫 사용자 조작까지 대기했다가 재시도
+      function play() {
+        const p = video.play();
+        if (p && typeof p.catch === 'function') {
+          p.catch(() => {
+            const retry = () => { video.play().catch(() => {}); };
+            ['pointerdown', 'touchstart', 'keydown', 'scroll'].forEach(ev =>
+              window.addEventListener(ev, retry, { once: true, passive: true })
+            );
+          });
+        }
       }
 
-      function onEnded() {
+      function loadClip(i) {
+        idx = i;
+        video.src = HERO_CLIPS[i];
+        video.load();
+        play();
+        prefetch(nextIndex(i));
+      }
+
+      function finishSwitch() {
+        if (stuckTimer) { clearTimeout(stuckTimer); stuckTimer = null; }
+        dim.classList.remove('is-on');
+        switching = false;
+      }
+
+      function advance() {
         if (switching) return;
         switching = true;
+
+        const alreadyDark = dim.classList.contains('is-on');
         dim.classList.add('is-on');
 
-        const nextSlot = (slot + 1) % 2;
-        const nextIdx  = nextClipIndex(clip);
-        const nextVid  = vids[nextSlot];
+        // 버퍼링 등으로 playing이 오지 않아도 화면이 검게 굳지 않도록
+        stuckTimer = window.setTimeout(finishSwitch, STUCK_MS);
 
-        // 다음 클립은 이미 로드되어 있음 — 암전 뒤에서 미리 재생 시작
-        try { nextVid.currentTime = 0; } catch (err) {}
-        safePlay(nextVid);
-
-        window.setTimeout(() => {
-          const prevVid = vids[slot];
-          prevVid.classList.remove('is-active');
-          nextVid.classList.add('is-active');
-          prevVid.pause();
-
-          // 비워진 엘리먼트에 그 다음 클립을 미리 적재
-          prevVid.src = HERO_CLIPS[nextClipIndex(nextIdx)];
-          prevVid.load();
-
-          slot = nextSlot;
-          clip = nextIdx;
-          switching = false;
-          dim.classList.remove('is-on');
-        }, DIM_MS);
+        // 완전히 어두워진 뒤 교체 (이미 어두우면 즉시)
+        window.setTimeout(() => loadClip(nextIndex(idx)), alreadyDark ? 0 : DIM_MS);
       }
 
-      // 영상 로드 실패 시: 다음 클립으로 건너뜀 (파일 하나가 없어도 멈추지 않도록)
-      function onError(e) {
-        if (e.target.classList.contains('is-active')) onEnded();
-      }
-
-      vids.forEach(v => {
-        v.muted = true;
-        v.playsInline = true;
-        v.setAttribute('muted', '');
-        v.addEventListener('timeupdate', onTimeUpdate);
-        v.addEventListener('ended', onEnded);
-        v.addEventListener('error', onError);
+      // 클립 종료 직전 미리 어두워지기 시작
+      video.addEventListener('timeupdate', () => {
+        if (switching) return;
+        const d = video.duration;
+        if (!isFinite(d) || d === 0) return;
+        if (d - video.currentTime <= LEAD_SEC) dim.classList.add('is-on');
       });
 
-      // ── 초기 구동 ──
-      vids[0].src = HERO_CLIPS[0];
-      vids[0].classList.add('is-active');
-      vids[0].load();
-      safePlay(vids[0]);
+      video.addEventListener('ended', advance);
 
-      if (HERO_CLIPS.length > 1) {
-        vids[1].src = HERO_CLIPS[1];
-        vids[1].load();
-      }
+      // 파일이 없거나 코덱을 못 읽으면 건너뛰고 다음으로
+      video.addEventListener('error', () => {
+        console.warn('[hero] 재생 실패:', HERO_CLIPS[idx]);
+        advance();
+      });
 
-      // 자동재생이 차단된 경우 첫 사용자 조작에서 재생 시작
-      const kickstart = () => {
-        if (vids[slot].paused && !paused) safePlay(vids[slot]);
-      };
-      ['pointerdown', 'keydown', 'touchstart'].forEach(evt =>
-        window.addEventListener(evt, kickstart, { once: true, passive: true })
-      );
+      // 새 클립이 실제로 그려지기 시작하면 다시 밝아짐
+      video.addEventListener('playing', () => { if (switching) finishSwitch(); });
+
+      // ended 이벤트가 유실되는 드문 경우를 대비한 감시
+      window.setInterval(() => {
+        if (switching || document.hidden) return;
+        if (video.ended) advance();
+      }, 1000);
 
       // 탭이 백그라운드로 가면 정지 (배터리 · 트래픽 절약)
       document.addEventListener('visibilitychange', () => {
-        if (document.hidden) { paused = true; vids[slot].pause(); }
-        else { paused = false; if (!switching) safePlay(vids[slot]); }
+        if (document.hidden) video.pause();
+        else if (!switching) play();
       });
 
       // 히어로가 화면 밖으로 스크롤되면 정지
@@ -736,15 +739,30 @@
         new IntersectionObserver(entries => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
-              paused = false;
-              if (!switching && !document.hidden) safePlay(vids[slot]);
+              if (!switching && !document.hidden) play();
             } else {
-              paused = true;
-              vids[slot].pause();
+              video.pause();
             }
           });
         }, { threshold: 0.05 }).observe(hero);
       }
+
+      // 시작
+      loadClip(0);
+
+      // 콘솔 진단용
+      window.heroVideoDebug = () => ({
+        재생중인파일: video.currentSrc,
+        클립번호: idx + 1,
+        전체클립수: HERO_CLIPS.length,
+        길이: video.duration,
+        현재위치: video.currentTime,
+        멈춤: video.paused,
+        준비상태: video.readyState,
+        loop속성: video.loop,
+        전환중: switching,
+        에러코드: video.error && video.error.code
+      });
     })();
 
     // ─── Hero scroll ───
