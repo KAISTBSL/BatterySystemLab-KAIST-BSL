@@ -7,6 +7,10 @@
   <link rel="icon" href="images/kaistlogo.ico">
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- 첫 클립 우선 로딩 -->
+  <link rel="preload" as="video" href="videos/MV1.mp4" type="video/mp4">
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -27,6 +31,9 @@
       --mono: 'JetBrains Mono', monospace;
       --serif:'Noto Serif KR', serif;
       --sans: 'Pretendard', -apple-system, sans-serif;
+
+      /* 히어로 영상 전환 타이밍 — JS의 DIM_MS와 반드시 동일하게 유지 */
+      --hero-dim-ms: 600ms;
     }
 
     html { scroll-behavior: smooth; }
@@ -64,32 +71,74 @@
     nav a::after { content: ""; position: absolute; left: 0; bottom: -4px; width: 0; height: 2px; background: var(--accent2); border-radius: 2px; transition: width 0.3s ease; }
     nav a:hover::after { width: 100%; }
 
-    /* HERO */
+    /* ═══════════════════════════════════════════
+       HERO  —  배경 영상(MV1~MV4) 순차 재생 + 무한 루프
+       레이어 순서(아래 → 위)
+         0  .hero-video-layer   영상 2장(A/B 교대)
+         1  .hero::before       기본 어둡기 그라데이션
+         2  .hero-dim           클립 전환용 딤(암전)
+         3  .hero::after        하단 페이드
+         4  #partners-banner    파트너 배너
+         5  텍스트 / 버튼
+    ═══════════════════════════════════════════ */
     .hero {
       position: relative; z-index: 1;
-      background: linear-gradient(rgba(8,16,30,0.70), rgba(12,24,40,0.48)), url("images/background.png") no-repeat center/cover;
+      /* 영상 로딩 전·재생 불가 시 보이는 기본 배경 */
+      background: #08101e url("images/background.png") no-repeat center/cover;
       height: 78vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
       text-align: center; color: white; padding: 2em; overflow: hidden;
     }
+
+    /* 영상 레이어 */
+    .hero-video-layer { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+    .hero-video {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      opacity: 0; transition: opacity 180ms linear;
+    }
+    .hero-video.is-active { opacity: 1; }
+
+    /* 기본 어둡기 오버레이 (기존 배경 그라데이션을 분리한 것) */
+    .hero::before {
+      content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background: linear-gradient(rgba(8,16,30,0.72), rgba(12,24,40,0.52));
+    }
+
+    /* 클립 사이 암전 딤 */
+    .hero-dim {
+      position: absolute; inset: 0; z-index: 2; pointer-events: none;
+      background: #050b16; opacity: 0;
+      transition: opacity var(--hero-dim-ms) ease-in-out;
+    }
+    .hero-dim.is-on { opacity: 1; }
+
     .hero::after {
       content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 120px;
-      background: linear-gradient(transparent, var(--bg)); pointer-events: none; z-index: 2;
+      background: linear-gradient(transparent, var(--bg)); pointer-events: none; z-index: 3;
     }
-    .hero-logo { max-height: 80px; margin-bottom: 1.2em; opacity: 0.85; animation: fadeInDown 1s ease-out; filter: drop-shadow(0 0 20px rgba(102,204,255,0.2)); }
-    .hero-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent2); background: rgba(102,204,255,0.08); border: 1px solid rgba(102,204,255,0.2); padding: 5px 16px; border-radius: 30px; margin-bottom: 1em; animation: fadeInDown 0.8s ease-out; display: inline-block; }
-    .hero h1 { font-family: var(--serif); font-size: 3em; font-weight: 600; margin-bottom: 0.3em; animation: fadeInDown 1.1s ease-out; line-height: 1.2; background: linear-gradient(120deg, #ffffff 0%, var(--accent2) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .hero p { font-size: 1.1em; margin-bottom: 1.8em; animation: fadeInUp 1.4s ease-out; color: rgba(255,255,255,0.65); font-weight: 300; letter-spacing: 0.3px; }
-    .hero-cta-group { display: flex; flex-direction: column; align-items: center; gap: 10px; animation: fadeInUp 1.7s ease-out; position: relative; z-index: 3; }
+
+    .hero-logo { position: relative; z-index: 5; max-height: 80px; margin-bottom: 1.2em; opacity: 0.85; animation: fadeInDown 1s ease-out; filter: drop-shadow(0 0 20px rgba(102,204,255,0.2)); }
+    .hero-eyebrow { position: relative; z-index: 5; font-family: var(--mono); font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent2); background: rgba(102,204,255,0.08); border: 1px solid rgba(102,204,255,0.2); padding: 5px 16px; border-radius: 30px; margin-bottom: 1em; animation: fadeInDown 0.8s ease-out; display: inline-block; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+    .hero h1 { position: relative; z-index: 5; font-family: var(--serif); font-size: 3em; font-weight: 600; margin-bottom: 0.3em; animation: fadeInDown 1.1s ease-out; line-height: 1.2; background: linear-gradient(120deg, #ffffff 0%, var(--accent2) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero > p { position: relative; z-index: 5; font-size: 1.1em; margin-bottom: 1.8em; animation: fadeInUp 1.4s ease-out; color: rgba(255,255,255,0.72); font-weight: 300; letter-spacing: 0.3px; text-shadow: 0 2px 12px rgba(0,0,0,0.5); }
+    .hero-cta-group { display: flex; flex-direction: column; align-items: center; gap: 10px; animation: fadeInUp 1.7s ease-out; position: relative; z-index: 5; }
     .hero a.explore-btn { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #080e1a; padding: 0.75em 2em; border-radius: 30px; text-decoration: none; font-weight: 700; font-size: 0.95em; transition: all 0.25s; letter-spacing: 0.3px; box-shadow: 0 4px 20px rgba(0,122,204,0.3); }
     .hero a.explore-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(102,204,255,0.35); }
-    #adminBtn { margin-top: 2px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: rgba(255,255,255,0.4); padding: 0.4em 1.2em; border-radius: 30px; font-size: 0.78em; cursor: pointer; transition: all 0.25s; display: inline-flex; align-items: center; gap: 6px; font-family: var(--sans); letter-spacing: 0.3px; }
-    #adminBtn:hover { background: rgba(255,255,255,0.14); color: rgba(255,255,255,0.85); border-color: rgba(255,255,255,0.4); }
+    #adminBtn { margin-top: 2px; background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.20); color: rgba(255,255,255,0.5); padding: 0.4em 1.2em; border-radius: 30px; font-size: 0.78em; cursor: pointer; transition: all 0.25s; display: inline-flex; align-items: center; gap: 6px; font-family: var(--sans); letter-spacing: 0.3px; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+    #adminBtn:hover { background: rgba(255,255,255,0.16); color: rgba(255,255,255,0.9); border-color: rgba(255,255,255,0.45); }
+
+    /* 모션 최소화 설정 시 영상 대신 정지 이미지 */
+    @media (prefers-reduced-motion: reduce) {
+      .hero-video-layer, .hero-dim { display: none; }
+      .hero { background: linear-gradient(rgba(8,16,30,0.70), rgba(12,24,40,0.48)), url("images/background.png") no-repeat center/cover; }
+      .hero::before { display: none; }
+    }
 
     @keyframes fadeInDown { from { opacity: 0; transform: translateY(-24px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeInUp   { from { opacity: 0; transform: translateY(24px);  } to { opacity: 1; transform: translateY(0); } }
 
     /* PARTNERS BANNER */
-    #partners-banner { position: absolute; bottom: -1px; left: 0; width: 100%; background: rgba(13,27,46,0.92); border-top: 1px solid var(--border); overflow: hidden; padding: 0.55em 0; z-index: 3; }
+    #partners-banner { position: absolute; bottom: -1px; left: 0; width: 100%; background: rgba(13,27,46,0.92); border-top: 1px solid var(--border); overflow: hidden; padding: 0.55em 0; z-index: 4; }
     .partner-track { display: flex; align-items: center; gap: 3em; white-space: nowrap; width: max-content; animation: scrollLoop 80s linear infinite; }
     .partner-item { display: flex; align-items: center; gap: 0.4em; font-size: 1em; font-weight: 700; opacity: 0.6; transition: opacity 0.3s; color: var(--text2); }
     .partner-item:hover { opacity: 1; color: var(--accent2); }
@@ -299,6 +348,17 @@
   </header>
 
   <section class="hero">
+
+    <!-- ─── 배경 영상 레이어 (MV1 → MV2 → MV3 → MV4 → 반복) ─── -->
+    <div class="hero-video-layer">
+      <video id="heroVidA" class="hero-video" autoplay muted loop playsinline
+          preload="auto" aria-hidden="true" tabindex="-1"></video>
+      <video id="heroVidB" class="hero-video" muted playsinline
+          preload="auto" aria-hidden="true" tabindex="-1"></video>
+    </div>
+    <!-- 클립 전환 시 암전되는 딤 레이어 -->
+    <div class="hero-dim" id="heroDim"></div>
+
     <img src="https://mo.kaist.ac.kr/wp-content/uploads/2022/08/logo_new-1-e1661933714657.png" alt="KAIST Mobility Logo" class="hero-logo">
     <div class="hero-eyebrow">KAIST · CCS Graduate School of Mobility</div>
     <h1>Battery System Laboratory</h1>
@@ -547,6 +607,146 @@
   </div>
 
   <script>
+    // ═════════════════════════════════════════════════
+    // HERO BACKGROUND VIDEO SEQUENCER
+    //
+    //  MV1 → MV2 → MV3 → MV4 → MV1 → …  (무한 반복)
+    //  클립이 끝나기 직전에 화면이 어두워지고(딤),
+    //  암전 상태에서 다음 클립으로 교체된 뒤 다시 밝아집니다.
+    //
+    //  ▸ 파일 경로/개수는 HERO_CLIPS 배열만 고치면 됩니다.
+    //  ▸ 딤 지속시간은 DIM_MS + CSS의 --hero-dim-ms 를
+    //    같은 값으로 맞춰야 합니다.
+    // ═════════════════════════════════════════════════
+    (function initHeroVideo() {
+      const HERO_CLIPS = [
+        'videos/MV1.mp4',
+        'videos/MV2.mp4',
+        'videos/MV3.mp4',
+        'videos/MV4.mp4'
+      ];
+      const DIM_MS   = 600;   // 암전 지속시간 (CSS --hero-dim-ms 와 동일하게)
+      const LEAD_SEC = 0.6;   // 클립 종료 몇 초 전부터 어두워질지
+
+      const vids = [
+        document.getElementById('heroVidA'),
+        document.getElementById('heroVidB')
+      ];
+      const dim = document.getElementById('heroDim');
+      if (!vids[0] || !vids[1] || !dim) return;
+
+      // 모션 최소화 설정이면 영상 재생 자체를 하지 않음
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      // 데이터 절약 모드면 정지 이미지로 대체
+      const saveData = navigator.connection && navigator.connection.saveData;
+      if (reduceMotion || saveData) return;
+
+      let slot = 0;        // 현재 화면에 보이는 video 엘리먼트 index (0 | 1)
+      let clip = 0;        // 현재 재생 중인 클립 index
+      let switching = false;
+      let paused = false;  // 화면 밖 / 탭 비활성으로 일시정지된 상태
+
+      const nextClipIndex = i => (i + 1) % HERO_CLIPS.length;
+
+      function safePlay(v) {
+        const p = v.play();
+        if (p && typeof p.catch === 'function') p.catch(() => {});
+      }
+
+      // 클립 종료 직전 딤 시작
+      function onTimeUpdate(e) {
+        const v = e.target;
+        if (switching || paused || !v.classList.contains('is-active')) return;
+        if (!isFinite(v.duration) || v.duration === 0) return;
+        if (v.duration - v.currentTime <= LEAD_SEC) dim.classList.add('is-on');
+      }
+
+      function onEnded() {
+        if (switching) return;
+        switching = true;
+        dim.classList.add('is-on');
+
+        const nextSlot = (slot + 1) % 2;
+        const nextIdx  = nextClipIndex(clip);
+        const nextVid  = vids[nextSlot];
+
+        // 다음 클립은 이미 로드되어 있음 — 암전 뒤에서 미리 재생 시작
+        try { nextVid.currentTime = 0; } catch (err) {}
+        safePlay(nextVid);
+
+        window.setTimeout(() => {
+          const prevVid = vids[slot];
+          prevVid.classList.remove('is-active');
+          nextVid.classList.add('is-active');
+          prevVid.pause();
+
+          // 비워진 엘리먼트에 그 다음 클립을 미리 적재
+          prevVid.src = HERO_CLIPS[nextClipIndex(nextIdx)];
+          prevVid.load();
+
+          slot = nextSlot;
+          clip = nextIdx;
+          switching = false;
+          dim.classList.remove('is-on');
+        }, DIM_MS);
+      }
+
+      // 영상 로드 실패 시: 다음 클립으로 건너뜀 (파일 하나가 없어도 멈추지 않도록)
+      function onError(e) {
+        if (e.target.classList.contains('is-active')) onEnded();
+      }
+
+      vids.forEach(v => {
+        v.muted = true;
+        v.playsInline = true;
+        v.setAttribute('muted', '');
+        v.addEventListener('timeupdate', onTimeUpdate);
+        v.addEventListener('ended', onEnded);
+        v.addEventListener('error', onError);
+      });
+
+      // ── 초기 구동 ──
+      vids[0].src = HERO_CLIPS[0];
+      vids[0].classList.add('is-active');
+      vids[0].load();
+      safePlay(vids[0]);
+
+      if (HERO_CLIPS.length > 1) {
+        vids[1].src = HERO_CLIPS[1];
+        vids[1].load();
+      }
+
+      // 자동재생이 차단된 경우 첫 사용자 조작에서 재생 시작
+      const kickstart = () => {
+        if (vids[slot].paused && !paused) safePlay(vids[slot]);
+      };
+      ['pointerdown', 'keydown', 'touchstart'].forEach(evt =>
+        window.addEventListener(evt, kickstart, { once: true, passive: true })
+      );
+
+      // 탭이 백그라운드로 가면 정지 (배터리 · 트래픽 절약)
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) { paused = true; vids[slot].pause(); }
+        else { paused = false; if (!switching) safePlay(vids[slot]); }
+      });
+
+      // 히어로가 화면 밖으로 스크롤되면 정지
+      if ('IntersectionObserver' in window) {
+        const hero = document.querySelector('.hero');
+        new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              paused = false;
+              if (!switching && !document.hidden) safePlay(vids[slot]);
+            } else {
+              paused = true;
+              vids[slot].pause();
+            }
+          });
+        }, { threshold: 0.05 }).observe(hero);
+      }
+    })();
+
     // ─── Hero scroll ───
     document.querySelector('.hero a.explore-btn').addEventListener('click', function(e) {
       e.preventDefault();
