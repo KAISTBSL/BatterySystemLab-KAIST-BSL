@@ -149,6 +149,45 @@
     .card-images.square img { aspect-ratio:1/1; }
     .card-images img:hover { opacity:.85; }
 
+    /* ── RELATED STATS + ACCORDION ── */
+    .card-stats { display:flex; align-items:center; gap:10px; margin-top:1.2em; flex-wrap:wrap; }
+    .stat-pill {
+      font-family:var(--mono); font-size:.78em; color:var(--text2);
+      background:var(--surface2); border:1px solid var(--border);
+      padding:5px 14px; border-radius:20px; display:flex; align-items:center; gap:6px;
+    }
+    .stat-pill b { color:var(--text); font-weight:700; }
+    .card-expand-btn {
+      margin-left:auto; width:34px; height:34px; border-radius:50%; flex-shrink:0;
+      background:rgba(102,204,255,0.12); border:1px solid var(--border2);
+      color:var(--accent2); cursor:pointer; display:flex; align-items:center; justify-content:center;
+      transition:background .2s;
+    }
+    .card-expand-btn:hover { background:rgba(102,204,255,0.2); }
+    .card-expand-btn i { transition:transform .25s; }
+    .card-expand-btn.open i { transform:rotate(180deg); }
+    #tab-ai .card-expand-btn  { color:var(--green); border-color:rgba(62,207,142,0.3); background:rgba(62,207,142,0.1); }
+    #tab-ai .card-expand-btn:hover { background:rgba(62,207,142,0.2); }
+    #tab-od .card-expand-btn  { color:var(--gold); border-color:rgba(244,168,50,0.3); background:rgba(244,168,50,0.1); }
+    #tab-od .card-expand-btn:hover { background:rgba(244,168,50,0.2); }
+
+    .card-related { margin-top:1.2em; padding-top:1.2em; border-top:1px solid var(--border); display:grid; gap:1.4em; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); }
+    .card-related[hidden] { display:none; }
+    .related-group h4 { font-family:var(--mono); font-size:.72em; letter-spacing:1px; text-transform:uppercase; color:var(--text3); margin-bottom:.7em; }
+    .related-group ul { list-style:none; padding:0; }
+    .related-group li { font-size:.85em; color:var(--text2); padding:.4em 0; border-bottom:1px solid rgba(102,204,255,0.06); line-height:1.5; }
+    .related-group li:last-child { border-bottom:none; }
+    .related-group li a { color:var(--accent2); text-decoration:none; }
+    .related-group li a:hover { text-decoration:underline; }
+    .related-empty { font-size:.83em; color:var(--text3); font-style:italic; }
+    .pub-badge { font-family:var(--mono); font-size:.82em; color:var(--text3); margin-right:.5em; }
+    .pub-type {
+      font-family:var(--mono); font-size:.66em; font-weight:600; letter-spacing:.5px; text-transform:uppercase;
+      padding:1px 8px; border-radius:10px; margin-right:.55em; border:1px solid; white-space:nowrap;
+    }
+    .pub-type.journal { color:var(--accent2); border-color:rgba(102,204,255,0.35); background:rgba(102,204,255,0.08); }
+    .pub-type.conf    { color:var(--purple);  border-color:rgba(167,139,250,0.35); background:rgba(167,139,250,0.08); }
+
     /* divider between cards */
     .research-divider { height:1px; background:var(--border); margin:0 0 1.2em; }
 
@@ -231,7 +270,7 @@
     </div>
 
     <!-- Card 1 -->
-    <div class="research-card">
+    <div class="research-card" data-topic="sp-1">
       <div class="card-title">Electrochemical–Thermal Coupled Modeling of UAV Lithium-Ion Batteries Under Constant-Current and Mission-Profile Operating Conditions</div>
       <div class="card-lead">Lead by <span>Dain Kim</span></div>
       <p class="card-desc">
@@ -245,12 +284,26 @@
       <div class="card-images cols-1 wide">
         <img src="images/NEW_R1-1.png" alt="Research Image">
       </div>
+
+      <div class="card-stats">
+        <span class="stat-pill"><i class="fa fa-file-lines"></i> 논문 <b data-count="papers">1</b></span>
+        <span class="stat-pill"><i class="fa fa-scroll"></i> 특허 <b data-count="patents">0</b></span>
+        <span class="stat-pill"><i class="fa fa-diagram-project"></i> 프로젝트 <b data-count="projects">0</b></span>
+        <button class="card-expand-btn" aria-expanded="false" aria-label="관련 성과 펼치기"><i class="fa fa-chevron-down"></i></button>
+      </div>
+      <div class="card-related" hidden>
+        <div class="related-group" data-group="papers"><h4>관련 논문</h4><ul>
+          <li><span class="pub-badge">[55]</span><span class="pub-type conf">Conference</span>Development of an Electrochemical–Thermal Coupled Model Reflecting High C-Rate Drone Operating Conditions</li>
+        </ul></div>
+        <div class="related-group" data-group="patents"><h4>관련 특허</h4><ul><li class="related-empty">등록된 관련 특허가 없습니다.</li></ul></div>
+        <div class="related-group" data-group="projects"><h4>관련 프로젝트</h4><ul><li class="related-empty">등록된 관련 프로젝트가 없습니다.</li></ul></div>
+      </div>
     </div>
 
     <div class="research-divider"></div>
 
     <!-- Card 2 -->
-    <div class="research-card">
+    <div class="research-card" data-topic="sp-2">
       <div class="card-title">Analysis of Lithium Deposition at the Lithium Metal Electrode Interface</div>
       <div class="card-lead">Lead by <span>Yeonghwan Jang</span></div>
       <p class="card-desc">
@@ -264,12 +317,27 @@
       <div class="card-images cols-1 wide">
         <img src="images/NEW_R1-2.png" alt="Research Image">
       </div>
+
+      <div class="card-stats">
+        <span class="stat-pill"><i class="fa fa-file-lines"></i> 논문 <b data-count="papers">2</b></span>
+        <span class="stat-pill"><i class="fa fa-scroll"></i> 특허 <b data-count="patents">0</b></span>
+        <span class="stat-pill"><i class="fa fa-diagram-project"></i> 프로젝트 <b data-count="projects">0</b></span>
+        <button class="card-expand-btn" aria-expanded="false" aria-label="관련 성과 펼치기"><i class="fa fa-chevron-down"></i></button>
+      </div>
+      <div class="card-related" hidden>
+        <div class="related-group" data-group="papers"><h4>관련 논문</h4><ul>
+          <li><span class="pub-badge">[50]</span><span class="pub-type conf">Conference</span>Phase-Field Analysis of Electrochemically Driven Interfacial Instability in Lithium Deposition</li>
+          <li><span class="pub-badge">[38]</span><span class="pub-type conf">Conference</span>Phase-Field Modeling of Lithium Dendrite Growth Morphology Depending on Surface Patterning in Li-Metal Batteries</li>
+        </ul></div>
+        <div class="related-group" data-group="patents"><h4>관련 특허</h4><ul><li class="related-empty">등록된 관련 특허가 없습니다.</li></ul></div>
+        <div class="related-group" data-group="projects"><h4>관련 프로젝트</h4><ul><li class="related-empty">등록된 관련 프로젝트가 없습니다.</li></ul></div>
+      </div>
     </div>
 
     <div class="research-divider"></div>
 
     <!-- Card 3 -->
-    <div class="research-card">
+    <div class="research-card" data-topic="sp-3">
       <div class="card-title">Analysis of Dead-Lithium-Driven Electrochemical Property Evolution in Li-Metal Cells</div>
       <div class="card-lead">Lead by <span>Dain Kim</span></div>
       <p class="card-desc">
@@ -283,12 +351,27 @@
       <div class="card-images cols-1 wide">
         <img src="images/NEW_R1-3.png" alt="Research Image">
       </div>
+
+      <div class="card-stats">
+        <span class="stat-pill"><i class="fa fa-file-lines"></i> 논문 <b data-count="papers">2</b></span>
+        <span class="stat-pill"><i class="fa fa-scroll"></i> 특허 <b data-count="patents">0</b></span>
+        <span class="stat-pill"><i class="fa fa-diagram-project"></i> 프로젝트 <b data-count="projects">0</b></span>
+        <button class="card-expand-btn" aria-expanded="false" aria-label="관련 성과 펼치기"><i class="fa fa-chevron-down"></i></button>
+      </div>
+      <div class="card-related" hidden>
+        <div class="related-group" data-group="papers"><h4>관련 논문</h4><ul>
+          <li><span class="pub-badge">[49]</span><span class="pub-type conf">Conference</span>Electrochemical and Mechanical Impact of Inactive Lithium Layer Growth on Lithium Metal Battery</li>
+          <li><span class="pub-badge">[40]</span><span class="pub-type conf">Conference</span>Electrochemical and Mechanical Impact of Dead Lithium Layer Growth on Lithium Metal Battery</li>
+        </ul></div>
+        <div class="related-group" data-group="patents"><h4>관련 특허</h4><ul><li class="related-empty">등록된 관련 특허가 없습니다.</li></ul></div>
+        <div class="related-group" data-group="projects"><h4>관련 프로젝트</h4><ul><li class="related-empty">등록된 관련 프로젝트가 없습니다.</li></ul></div>
+      </div>
     </div>
 
     <div class="research-divider"></div>
 
     <!-- Card 4 -->
-    <div class="research-card">
+    <div class="research-card" data-topic="sp-4">
       <div class="card-title">Accelerated Battery Degradation Model</div>
       <div class="card-lead">Lead by <span>Yeonghwan Jang</span></div>
       <p class="card-desc">
@@ -303,12 +386,26 @@
       <div class="card-images cols-1 wide">
         <img src="images/NEW_R1-4.png" alt="Research Image">
       </div>
+
+      <div class="card-stats">
+        <span class="stat-pill"><i class="fa fa-file-lines"></i> 논문 <b data-count="papers">0</b></span>
+        <span class="stat-pill"><i class="fa fa-scroll"></i> 특허 <b data-count="patents">1</b></span>
+        <span class="stat-pill"><i class="fa fa-diagram-project"></i> 프로젝트 <b data-count="projects">0</b></span>
+        <button class="card-expand-btn" aria-expanded="false" aria-label="관련 성과 펼치기"><i class="fa fa-chevron-down"></i></button>
+      </div>
+      <div class="card-related" hidden>
+        <div class="related-group" data-group="papers"><h4>관련 논문</h4><ul><li class="related-empty">등록된 관련 논문이 없습니다.</li></ul></div>
+        <div class="related-group" data-group="patents"><h4>관련 특허</h4><ul>
+          <li><span class="pub-badge">[131]</span> 부반응의 반응속도 조절을 통해 가속화된 리튬이온 배터리의 열화 예측 방법 및 이를 이용한 예측 시스템 및 컴퓨터 판독 가능 기록매체</li>
+        </ul></div>
+        <div class="related-group" data-group="projects"><h4>관련 프로젝트</h4><ul><li class="related-empty">등록된 관련 프로젝트가 없습니다.</li></ul></div>
+      </div>
     </div>
 
     <div class="research-divider"></div>
 
     <!-- Card 5 -->
-    <div class="research-card">
+    <div class="research-card" data-topic="sp-5">
       <div class="card-title">Battery Thermal Runaway & Propagation Simulation</div>
       <div class="card-lead">Lead by <span>Dongwook Kim</span></div>
       <p class="card-desc">
@@ -320,6 +417,25 @@
       </ul>
       <div class="card-images cols-1 wide">
         <img src="images/NEW_R1-5.png" alt="Research Image">
+      </div>
+
+      <div class="card-stats">
+        <span class="stat-pill"><i class="fa fa-file-lines"></i> 논문 <b data-count="papers">4</b></span>
+        <span class="stat-pill"><i class="fa fa-scroll"></i> 특허 <b data-count="patents">0</b></span>
+        <span class="stat-pill"><i class="fa fa-diagram-project"></i> 프로젝트 <b data-count="projects">1</b></span>
+        <button class="card-expand-btn" aria-expanded="false" aria-label="관련 성과 펼치기"><i class="fa fa-chevron-down"></i></button>
+      </div>
+      <div class="card-related" hidden>
+        <div class="related-group" data-group="papers"><h4>관련 논문</h4><ul>
+          <li><span class="pub-badge">[52]</span><span class="pub-type conf">Conference</span>Module-Level Thermal Runaway Propagation Analysis Based on ARC test of a Single Cell</li>
+          <li><span class="pub-badge">[51]</span><span class="pub-type conf">Conference</span>CRNN-Based Modeling of SOC-Dependent Thermal Runaway Kinetics and Numerical Analysis of Thermal Runaway Propagation</li>
+          <li><span class="pub-badge">[47]</span><span class="pub-type conf">Conference</span>Thermal Runaway Characteristics Analysis of Cylindrical Lithium-ion LCO Batteries in an Oven Test Using 3D Simulation</li>
+          <li><span class="pub-badge">[45]</span><span class="pub-type conf">Conference</span>Chemical Reaction Neural Network based DSC Analysis for the Thermal Reaction Mechanism of Li-ion Battery NCM333 Cathode</li>
+        </ul></div>
+        <div class="related-group" data-group="patents"><h4>관련 특허</h4><ul><li class="related-empty">등록된 관련 특허가 없습니다.</li></ul></div>
+        <div class="related-group" data-group="projects"><h4>관련 프로젝트</h4><ul>
+          <li><span class="pub-badge">선박해양플랜트연구소(KRISO)</span> 선박용 BESS 화재 예방을 위한 조기 감지 및 경보 기술 조사 분석</li>
+        </ul></div>
       </div>
     </div>
 
@@ -336,7 +452,7 @@
     </div>
 
     <!-- Card 1 -->
-    <div class="research-card">
+    <div class="research-card" data-topic="ai-1">
       <div class="card-title">Aging-Aware Cell Balancing Strategy Integrated with Electrochemical Model</div>
       <div class="card-lead">Lead by <span>Donghae Kim</span></div>
       <p class="card-desc">
@@ -350,12 +466,29 @@
       <div class="card-images cols-1 wide">
         <img src="images/NEW_R2-1.png" alt="Research Image">
       </div>
+
+      <div class="card-stats">
+        <span class="stat-pill"><i class="fa fa-file-lines"></i> 논문 <b data-count="papers">2</b></span>
+        <span class="stat-pill"><i class="fa fa-scroll"></i> 특허 <b data-count="patents">0</b></span>
+        <span class="stat-pill"><i class="fa fa-diagram-project"></i> 프로젝트 <b data-count="projects">1</b></span>
+        <button class="card-expand-btn" aria-expanded="false" aria-label="관련 성과 펼치기"><i class="fa fa-chevron-down"></i></button>
+      </div>
+      <div class="card-related" hidden>
+        <div class="related-group" data-group="papers"><h4>관련 논문</h4><ul>
+          <li><span class="pub-badge">[58]</span><span class="pub-type conf">Conference</span>Comparative Study of Isolated and Non-isolated Converter-based Active Cell Balancing Topologies for Lithium-ion Batteries</li>
+          <li><span class="pub-badge">[44]</span><span class="pub-type conf">Conference</span>Comparative Analysis of Passive, Active Cell Balancing for Cylindrical NCM Battery</li>
+        </ul></div>
+        <div class="related-group" data-group="patents"><h4>관련 특허</h4><ul><li class="related-empty">등록된 관련 특허가 없습니다.</li></ul></div>
+        <div class="related-group" data-group="projects"><h4>관련 프로젝트</h4><ul>
+          <li><span class="pub-badge">에코캡</span> AI 기반 상태, 수명, 고장진단 기술을 적용한 고안전 전기버스 배터리팩 개발</li>
+        </ul></div>
+      </div>
     </div>
 
     <div class="research-divider"></div>
 
     <!-- Card 2 -->
-    <div class="research-card">
+    <div class="research-card" data-topic="ai-2">
       <div class="card-title">PINN for SOH Prediction based on Electrochemical Features</div>
       <div class="card-lead">Lead by <span>Yeonghwan Jang</span></div>
       <p class="card-desc">
@@ -370,12 +503,29 @@
       <div class="card-images cols-1 wide">
         <img src="images/NEW_R2-2.png" alt="Research Image">
       </div>
+
+      <div class="card-stats">
+        <span class="stat-pill"><i class="fa fa-file-lines"></i> 논문 <b data-count="papers">2</b></span>
+        <span class="stat-pill"><i class="fa fa-scroll"></i> 특허 <b data-count="patents">0</b></span>
+        <span class="stat-pill"><i class="fa fa-diagram-project"></i> 프로젝트 <b data-count="projects">1</b></span>
+        <button class="card-expand-btn" aria-expanded="false" aria-label="관련 성과 펼치기"><i class="fa fa-chevron-down"></i></button>
+      </div>
+      <div class="card-related" hidden>
+        <div class="related-group" data-group="papers"><h4>관련 논문</h4><ul>
+          <li><span class="pub-badge">[64]</span><span class="pub-type conf">Conference</span>Physics-Informed Multi-Feature SOH Estimation for Lithium-Ion Batteries</li>
+          <li><span class="pub-badge">[53]</span><span class="pub-type conf">Conference</span>Physics-Informed Neural Networks for Battery SoH Estimation with Degradation-Aware Multi-Feature Inputs</li>
+        </ul></div>
+        <div class="related-group" data-group="patents"><h4>관련 특허</h4><ul><li class="related-empty">등록된 관련 특허가 없습니다.</li></ul></div>
+        <div class="related-group" data-group="projects"><h4>관련 프로젝트</h4><ul>
+          <li><span class="pub-badge">에코캡</span> AI 기반 상태, 수명, 고장진단 기술을 적용한 고안전 전기버스 배터리팩 개발</li>
+        </ul></div>
+      </div>
     </div>
 
     <div class="research-divider"></div>
 
     <!-- Card 3 -->
-    <div class="research-card">
+    <div class="research-card" data-topic="ai-3">
       <div class="card-title">Cell-Level Thermal Monitoring for Second-Life Battery Modules</div>
       <div class="card-lead">Lead by <span>Hyoungbin Seo</span></div>
       <p class="card-desc">
@@ -389,12 +539,29 @@
       <div class="card-images cols-1 wide">
         <img src="images/NEW_R2-3.png" alt="Research Image">
       </div>
+
+      <div class="card-stats">
+        <span class="stat-pill"><i class="fa fa-file-lines"></i> 논문 <b data-count="papers">1</b></span>
+        <span class="stat-pill"><i class="fa fa-scroll"></i> 특허 <b data-count="patents">0</b></span>
+        <span class="stat-pill"><i class="fa fa-diagram-project"></i> 프로젝트 <b data-count="projects">2</b></span>
+        <button class="card-expand-btn" aria-expanded="false" aria-label="관련 성과 펼치기"><i class="fa fa-chevron-down"></i></button>
+      </div>
+      <div class="card-related" hidden>
+        <div class="related-group" data-group="papers"><h4>관련 논문</h4><ul>
+          <li><span class="pub-badge">[60]</span><span class="pub-type conf">Conference</span>Kalman Filter–Based Algorithm Development for Estimating the State-of-Temperature of NCA Lithium-Ion Battery Cells</li>
+        </ul></div>
+        <div class="related-group" data-group="patents"><h4>관련 특허</h4><ul><li class="related-empty">등록된 관련 특허가 없습니다.</li></ul></div>
+        <div class="related-group" data-group="projects"><h4>관련 프로젝트</h4><ul>
+          <li><span class="pub-badge">한국과학기술원(KAIST)</span> AI기반 사용후 배터리 정밀 등급화를 활용한 적용처별 모듈⋅팩 제품화 실증</li>
+          <li><span class="pub-badge">한국과학기술원(KAIST)</span> 생성형 인공지능 기술을 이용한 사용후 배터리 모듈 진단 시스템 개발</li>
+        </ul></div>
+      </div>
     </div>
 
     <div class="research-divider"></div>
 
     <!-- Card 4 -->
-    <div class="research-card">
+    <div class="research-card" data-topic="ai-4">
       <div class="card-title">Driving Scenario-based Dynamic EIS Extraction and Fault Diagnosis</div>
       <div class="card-lead">Lead by <span>Donghae Kim</span></div>
       <p class="card-desc">
@@ -407,12 +574,29 @@
       <div class="card-images cols-1 wide">
         <img src="images/NEW_R2-4.png" alt="Research Image">
       </div>
+
+      <div class="card-stats">
+        <span class="stat-pill"><i class="fa fa-file-lines"></i> 논문 <b data-count="papers">1</b></span>
+        <span class="stat-pill"><i class="fa fa-scroll"></i> 특허 <b data-count="patents">2</b></span>
+        <span class="stat-pill"><i class="fa fa-diagram-project"></i> 프로젝트 <b data-count="projects">0</b></span>
+        <button class="card-expand-btn" aria-expanded="false" aria-label="관련 성과 펼치기"><i class="fa fa-chevron-down"></i></button>
+      </div>
+      <div class="card-related" hidden>
+        <div class="related-group" data-group="papers"><h4>관련 논문</h4><ul>
+          <li><span class="pub-badge">[65]</span><span class="pub-type conf">Conference</span>Wavelet-Based Impedance Extraction from Lithium-ion Battery Operating Data for Real-Time BMS Applications</li>
+        </ul></div>
+        <div class="related-group" data-group="patents"><h4>관련 특허</h4><ul>
+          <li><span class="pub-badge">[135]</span> 주행 데이터 기반의 배터리 임피던스 추정 방법 및 장치</li>
+          <li><span class="pub-badge">[134]</span> 배터리 임피던스 추정 방법 및 장치</li>
+        </ul></div>
+        <div class="related-group" data-group="projects"><h4>관련 프로젝트</h4><ul><li class="related-empty">등록된 관련 프로젝트가 없습니다.</li></ul></div>
+      </div>
     </div>
 
     <div class="research-divider"></div>
 
     <!-- Card 5 -->
-    <div class="research-card">
+    <div class="research-card" data-topic="ai-5">
       <div class="card-title">Global-Local Hybrid Optimization for ECM Parameter Estimation</div>
       <div class="card-lead">Lead by <span>Cheoljin Shin</span></div>
       <p class="card-desc">
@@ -425,6 +609,18 @@
       </ul>
       <div class="card-images cols-1 wide">
         <img src="images/NEW_R2-5.png" alt="Research Image">
+      </div>
+
+      <div class="card-stats">
+        <span class="stat-pill"><i class="fa fa-file-lines"></i> 논문 <b data-count="papers">0</b></span>
+        <span class="stat-pill"><i class="fa fa-scroll"></i> 특허 <b data-count="patents">0</b></span>
+        <span class="stat-pill"><i class="fa fa-diagram-project"></i> 프로젝트 <b data-count="projects">0</b></span>
+        <button class="card-expand-btn" aria-expanded="false" aria-label="관련 성과 펼치기"><i class="fa fa-chevron-down"></i></button>
+      </div>
+      <div class="card-related" hidden>
+        <div class="related-group" data-group="papers"><h4>관련 논문</h4><ul><li class="related-empty">등록된 관련 논문이 없습니다.</li></ul></div>
+        <div class="related-group" data-group="patents"><h4>관련 특허</h4><ul><li class="related-empty">등록된 관련 특허가 없습니다.</li></ul></div>
+        <div class="related-group" data-group="projects"><h4>관련 프로젝트</h4><ul><li class="related-empty">등록된 관련 프로젝트가 없습니다.</li></ul></div>
       </div>
     </div>
 
@@ -441,7 +637,7 @@
     </div>
 
     <!-- Card 1 -->
-    <div class="research-card">
+    <div class="research-card" data-topic="od-1">
       <div class="card-title">Vehicle-Level Battery System Simulation Framework for Integrated Energy Efficiency and Battery Degradation Management</div>
       <div class="card-lead">Lead by <span>Dongmin Kim</span></div>
       <p class="card-desc">
@@ -456,12 +652,34 @@
       <div class="card-images cols-1 wide">
         <img src="images/NEW_R3-1.png" alt="Research Image">
       </div>
+
+      <div class="card-stats">
+        <span class="stat-pill"><i class="fa fa-file-lines"></i> 논문 <b data-count="papers">7</b></span>
+        <span class="stat-pill"><i class="fa fa-scroll"></i> 특허 <b data-count="patents">1</b></span>
+        <span class="stat-pill"><i class="fa fa-diagram-project"></i> 프로젝트 <b data-count="projects">0</b></span>
+        <button class="card-expand-btn" aria-expanded="false" aria-label="관련 성과 펼치기"><i class="fa fa-chevron-down"></i></button>
+      </div>
+      <div class="card-related" hidden>
+        <div class="related-group" data-group="papers"><h4>관련 논문</h4><ul>
+          <li><span class="pub-badge">[24] · 2026</span><span class="pub-type journal">Journal</span><a href="https://doi.org/10.1016/j.etran.2026.100627" target="_blank">Vehicle-Level Modeling of Internal Resistance Degradation and Influential Parameter Analysis in Lithium-Ion Battery Packs Using Real-World Data</a></li>
+          <li><span class="pub-badge">[63]</span><span class="pub-type conf">Conference</span>Physics-informed unsupervised learning for capacity degradation analysis of electric vehicle battery packs</li>
+          <li><span class="pub-badge">[59]</span><span class="pub-type conf">Conference</span>Development of a Battery-in-the-Loop System-Based Real-World Driving Scenario Simulator for Electric Vehicles</li>
+          <li><span class="pub-badge">[48]</span><span class="pub-type conf">Conference</span>Speed Control for Reducing Motor Current Consumption in BEVs under High-Speed Driving: A MATLAB–VISSIM Co-Simulation Study</li>
+          <li><span class="pub-badge">[43]</span><span class="pub-type conf">Conference</span>Development of a Battery-in-the-Loop-Based Simulator for Testing Electric Autonomous Vehicles</li>
+          <li><span class="pub-badge">[42]</span><span class="pub-type conf">Conference</span>Development of a Battery-in-the-Loop System for Battery Performance Testing Under Realistic Driving Environments</li>
+          <li><span class="pub-badge">[41]</span><span class="pub-type conf">Conference</span>Development of a Battery-in-the-Loop System for Battery Performance Testing Under Realistic Driving Environments</li>
+        </ul></div>
+        <div class="related-group" data-group="patents"><h4>관련 특허</h4><ul>
+          <li><span class="pub-badge">[133]</span> 전기차 실제 환경 주행 성능 시뮬레이팅 시스템 및 그 동작 방법</li>
+        </ul></div>
+        <div class="related-group" data-group="projects"><h4>관련 프로젝트</h4><ul><li class="related-empty">등록된 관련 프로젝트가 없습니다.</li></ul></div>
+      </div>
     </div>
 
     <div class="research-divider"></div>
 
     <!-- Card 2 -->
-    <div class="research-card">
+    <div class="research-card" data-topic="od-2">
       <div class="card-title">Microstructure-coupled P2D Model for Cell-Level Performance and Structure Optimization</div>
       <div class="card-lead">Lead by <span>Yeonghwan Jang</span></div>
       <p class="card-desc">
@@ -476,12 +694,24 @@
       <div class="card-images cols-1 wide">
         <img src="images/NEW_R3-2.png" alt="Research Image">
       </div>
+
+      <div class="card-stats">
+        <span class="stat-pill"><i class="fa fa-file-lines"></i> 논문 <b data-count="papers">0</b></span>
+        <span class="stat-pill"><i class="fa fa-scroll"></i> 특허 <b data-count="patents">0</b></span>
+        <span class="stat-pill"><i class="fa fa-diagram-project"></i> 프로젝트 <b data-count="projects">0</b></span>
+        <button class="card-expand-btn" aria-expanded="false" aria-label="관련 성과 펼치기"><i class="fa fa-chevron-down"></i></button>
+      </div>
+      <div class="card-related" hidden>
+        <div class="related-group" data-group="papers"><h4>관련 논문</h4><ul><li class="related-empty">등록된 관련 논문이 없습니다.</li></ul></div>
+        <div class="related-group" data-group="patents"><h4>관련 특허</h4><ul><li class="related-empty">등록된 관련 특허가 없습니다.</li></ul></div>
+        <div class="related-group" data-group="projects"><h4>관련 프로젝트</h4><ul><li class="related-empty">등록된 관련 프로젝트가 없습니다.</li></ul></div>
+      </div>
     </div>
 
     <div class="research-divider"></div>
 
     <!-- Card 3 -->
-    <div class="research-card">
+    <div class="research-card" data-topic="od-3">
       <div class="card-title">Macro-Scale Electrochemical Modeling of Lithium Ion Battery for Fast Charging</div>
       <div class="card-lead">Lead by <span>Jinho Ha</span></div>
       <p class="card-desc">
@@ -494,12 +724,26 @@
       <div class="card-images cols-1 wide">
         <img src="images/NEW_R3-3.png" alt="Research Image">
       </div>
+
+      <div class="card-stats">
+        <span class="stat-pill"><i class="fa fa-file-lines"></i> 논문 <b data-count="papers">1</b></span>
+        <span class="stat-pill"><i class="fa fa-scroll"></i> 특허 <b data-count="patents">0</b></span>
+        <span class="stat-pill"><i class="fa fa-diagram-project"></i> 프로젝트 <b data-count="projects">0</b></span>
+        <button class="card-expand-btn" aria-expanded="false" aria-label="관련 성과 펼치기"><i class="fa fa-chevron-down"></i></button>
+      </div>
+      <div class="card-related" hidden>
+        <div class="related-group" data-group="papers"><h4>관련 논문</h4><ul>
+          <li><span class="pub-badge">[61]</span><span class="pub-type conf">Conference</span>Design of Optimal Fast Charging Protocol Accounting for Temperature and Lithium Plating of Lithium-ion Batteries</li>
+        </ul></div>
+        <div class="related-group" data-group="patents"><h4>관련 특허</h4><ul><li class="related-empty">등록된 관련 특허가 없습니다.</li></ul></div>
+        <div class="related-group" data-group="projects"><h4>관련 프로젝트</h4><ul><li class="related-empty">등록된 관련 프로젝트가 없습니다.</li></ul></div>
+      </div>
     </div>
 
     <div class="research-divider"></div>
 
     <!-- Card 4 -->
-    <div class="research-card">
+    <div class="research-card" data-topic="od-4">
       <div class="card-title">4 Step Multi-Scale EV Design Optimization Framework (Cell-Module-Pack-Marketing)</div>
       <div class="card-lead">Lead by <span>Multi-scale design optimization of electric vehicles by analytical target cascading: From battery cell level to marketing level</span></div>
       <p class="card-desc">
@@ -512,12 +756,27 @@
       <div class="card-images cols-1 wide">
         <img src="images/NEW_R3-4.png" alt="Research Image">
       </div>
+
+      <div class="card-stats">
+        <span class="stat-pill"><i class="fa fa-file-lines"></i> 논문 <b data-count="papers">2</b></span>
+        <span class="stat-pill"><i class="fa fa-scroll"></i> 특허 <b data-count="patents">0</b></span>
+        <span class="stat-pill"><i class="fa fa-diagram-project"></i> 프로젝트 <b data-count="projects">0</b></span>
+        <button class="card-expand-btn" aria-expanded="false" aria-label="관련 성과 펼치기"><i class="fa fa-chevron-down"></i></button>
+      </div>
+      <div class="card-related" hidden>
+        <div class="related-group" data-group="papers"><h4>관련 논문</h4><ul>
+          <li><span class="pub-badge">[13] · 2022</span><span class="pub-type journal">Journal</span><a href="https://doi.org/10.1016/j.jclepro.2022.133235" target="_blank">Multi-scale design optimization of electric vehicles by analytical target cascading: from battery cell level to marketing level</a></li>
+          <li><span class="pub-badge">[9]</span><span class="pub-type conf">Conference</span>Multiscale design optimization of electric vehicles by analytical target cascading: from battery cell level to marketing level</li>
+        </ul></div>
+        <div class="related-group" data-group="patents"><h4>관련 특허</h4><ul><li class="related-empty">등록된 관련 특허가 없습니다.</li></ul></div>
+        <div class="related-group" data-group="projects"><h4>관련 프로젝트</h4><ul><li class="related-empty">등록된 관련 프로젝트가 없습니다.</li></ul></div>
+      </div>
     </div>
 
     <div class="research-divider"></div>
 
     <!-- Card 5 -->
-    <div class="research-card">
+    <div class="research-card" data-topic="od-5">
       <div class="card-title">Autonomous Vehicle Optimization with Shared Autonomous Electric Vehicle(SAEV)</div>
       <div class="card-lead">Lead by <span>Shared autonomous electric vehicle system design and optimization under dynamic battery degradation considering varying load conditions</span></div>
       <p class="card-desc">
@@ -530,6 +789,21 @@
       </ul>
       <div class="card-images cols-1 wide">
         <img src="images/NEW_R3-5.png" alt="Research Image">
+      </div>
+
+      <div class="card-stats">
+        <span class="stat-pill"><i class="fa fa-file-lines"></i> 논문 <b data-count="papers">2</b></span>
+        <span class="stat-pill"><i class="fa fa-scroll"></i> 특허 <b data-count="patents">0</b></span>
+        <span class="stat-pill"><i class="fa fa-diagram-project"></i> 프로젝트 <b data-count="projects">0</b></span>
+        <button class="card-expand-btn" aria-expanded="false" aria-label="관련 성과 펼치기"><i class="fa fa-chevron-down"></i></button>
+      </div>
+      <div class="card-related" hidden>
+        <div class="related-group" data-group="papers"><h4>관련 논문</h4><ul>
+          <li><span class="pub-badge">[18] · 2023</span><span class="pub-type journal">Journal</span><a href="https://doi.org/10.1016/j.jclepro.2023.138795" target="_blank">Shared autonomous electric vehicle system design and optimization under dynamic battery degradation considering varying load conditions</a></li>
+          <li><span class="pub-badge">[46]</span><span class="pub-type conf">Conference</span>Development of a cell–vehicle–operations multi-scale design optimization framework for SAEV</li>
+        </ul></div>
+        <div class="related-group" data-group="patents"><h4>관련 특허</h4><ul><li class="related-empty">등록된 관련 특허가 없습니다.</li></ul></div>
+        <div class="related-group" data-group="projects"><h4>관련 프로젝트</h4><ul><li class="related-empty">등록된 관련 프로젝트가 없습니다.</li></ul></div>
       </div>
     </div>
 
@@ -567,6 +841,15 @@
       btn.classList.add('active');
       document.getElementById(btn.dataset.target).classList.add('active');
       window.scrollTo({ top: document.querySelector('main').offsetTop - 130, behavior:'smooth' });
+    });
+  });
+
+  document.querySelectorAll('.card-expand-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const panel = btn.closest('.research-card').querySelector('.card-related');
+      const isOpen = btn.classList.toggle('open');
+      panel.hidden = !isOpen;
+      btn.setAttribute('aria-expanded', String(isOpen));
     });
   });
 </script>

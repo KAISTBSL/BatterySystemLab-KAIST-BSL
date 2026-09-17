@@ -111,6 +111,17 @@
     }
     .section-line { flex:1; height:1px; background:var(--border); }
 
+    /* ── EQUIPMENT STRUCTURE IMAGE ── */
+    .eq-structure-wrap {
+      background:#e3e8f0; border:1px solid rgba(0,0,0,0.08);
+      border-radius:16px; overflow:hidden; padding:1.2em;
+      box-shadow:0 8px 32px rgba(0,0,0,0.28); margin-bottom:1em;
+      display:flex; justify-content:center;
+    }
+    .eq-structure-wrap img {
+      width:100%; max-width:800px; height:auto; border-radius:10px; display:block;
+    }
+
     /* ── EQUIPMENT TABLE ── */
     .eq-table-wrap {
       background:var(--surface); border:1px solid var(--border);
@@ -170,17 +181,21 @@
       border:1px solid var(--border);
     }
     .spec-tab:hover { color:var(--text); border-color:var(--border2); transform:translateY(-1px); }
-    .spec-tab.active.ea {
+    .spec-tab.active.loc-mh {
       color:#dbeafe; background:rgba(59,130,246,0.16); border-color:rgba(59,130,246,0.55);
       box-shadow:0 4px 18px rgba(59,130,246,0.18);
     }
-    .spec-tab.active.sc {
+    .spec-tab.active.loc-th {
       color:#d1fae5; background:rgba(62,207,142,0.16); border-color:rgba(62,207,142,0.55);
       box-shadow:0 4px 18px rgba(62,207,142,0.18);
     }
-    .spec-tab.active.sw {
+    .spec-tab.active.loc-bsl {
       color:#ede9fe; background:rgba(167,139,250,0.16); border-color:rgba(167,139,250,0.55);
       box-shadow:0 4px 18px rgba(167,139,250,0.18);
+    }
+    .spec-tab.active.loc-jeju {
+      color:#fde9c8; background:rgba(244,168,50,0.16); border-color:rgba(244,168,50,0.55);
+      box-shadow:0 4px 18px rgba(244,168,50,0.18);
     }
     .spec-tab.active .tab-count { background:rgba(255,255,255,0.12); color:#fff; border-color:transparent; }
 
@@ -204,11 +219,17 @@
       box-shadow:0 10px 32px rgba(0,0,0,0.18);
     }
     /* left accent stripe by category */
-    .spec-card.ea  { border-left:3px solid #3b82f6; }
-    .spec-card.sc  { border-left:3px solid #3ecf8e; }
-    .spec-card.sw  { border-left:3px solid #a78bfa; }
-    .spec-card.bat { border-left:3px solid #f4a832; }
-    .spec-card.hw  { border-left:3px solid #007acc; }
+    .spec-card.loc-mh   { border-left:3px solid #3b82f6; }
+    .spec-card.loc-th   { border-left:3px solid #3ecf8e; }
+    .spec-card.loc-bsl  { border-left:3px solid #a78bfa; }
+    .spec-card.loc-jeju { border-left:3px solid #f4a832; }
+
+    .spec-empty {
+      background:var(--surface); border:1px dashed var(--border2);
+      border-radius:var(--r); padding:3em 2em; text-align:center; color:var(--text2);
+    }
+    .spec-empty i { font-size:1.6em; color:var(--text3); margin-bottom:.5em; display:block; }
+    .spec-empty p { font-size:.92em; }
 
     /* staggered entrance (applies to whichever card lands in each slot) */
     .spec-card:nth-of-type(1){animation-delay:.04s}
@@ -318,6 +339,16 @@
 
   <main>
 
+    <!-- EQUIPMENT STRUCTURE -->
+    <div class="section-header">
+      <h2><i class="fa fa-sitemap" style="font-size:10px;opacity:.7"></i> Equipment Structure</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="eq-structure-wrap">
+      <img src="images/Equipment Structure.png" alt="Equipment Structure">
+    </div>
+
     <!-- OVERVIEW TABLE -->
     <div class="section-header">
       <h2><i class="fa fa-list" style="font-size:10px;opacity:.7"></i> Equipment Overview</h2>
@@ -377,36 +408,21 @@
       <div class="section-line"></div>
     </div>
 
-    <!-- Category selector -->
+    <!-- Location selector -->
     <div class="spec-tabs">
-      <button class="spec-tab ea active" data-cat="ea"><i class="fa fa-flask"></i> Experiment &amp; Analysis <span class="tab-count">5</span></button>
-      <button class="spec-tab sc" data-cat="sc"><i class="fa fa-shield-halved"></i> Safety Control <span class="tab-count">5</span></button>
-      <button class="spec-tab sw" data-cat="sw"><i class="fa fa-microchip"></i> Software &amp; Hardware Testing <span class="tab-count">5</span></button>
+      <button class="spec-tab loc-mh active" data-cat="mh"><i class="fa fa-building"></i> Mobility Hall <span class="tab-count">4</span></button>
+      <button class="spec-tab loc-th" data-cat="th"><i class="fa fa-flask"></i> Truth Hall <span class="tab-count">3</span></button>
+      <button class="spec-tab loc-bsl" data-cat="bsl"><i class="fa fa-microchip"></i> BSL Specialized Laboratory <span class="tab-count">10</span></button>
+      <button class="spec-tab loc-jeju" data-cat="jeju"><i class="fa fa-map-marker-alt"></i> Jeju Mobility Center <span class="tab-count">0</span></button>
     </div>
 
     <div class="spec-list">
 
-      <!-- ══════════ PANEL 1 · EXPERIMENT & ANALYSIS ══════════ -->
-      <div class="spec-panel active" data-cat="ea">
-
-      <!-- Data Logger -->
-      <div class="spec-card ea">
-        <div class="spec-img"><img src="images/E_Datalogger.jpg" alt="Data Logger"></div>
-        <div class="spec-body">
-          <div class="spec-title">Data Logger</div>
-          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Jeju Eco-Friendly Smart Vehicle Laboratory</div>
-          <div class="spec-model">GL840</div>
-          <div class="spec-divider"></div>
-          <ul class="spec-list-inner">
-            <li><b>Functions:</b> Trigger / Alarm / Pulse input / Calculation / Search / Backup / Check-sum / Scaling</li>
-            <li><b>Power Supply:</b> AC 100–240 V / DC 8.5–24 V / Dual 7.2 V 2900 mAh Battery Packs</li>
-            <li><b>Measurement Range:</b> Voltage (20 mV–100 V), Thermocouple &amp; RTD (100–2000 °C), Humidity (0–100 % RH)</li>
-          </ul>
-        </div>
-      </div>
+      <!-- ══════════ PANEL 1 · MOBILITY HALL ══════════ -->
+      <div class="spec-panel active" data-cat="mh">
 
       <!-- Potentiostat -->
-      <div class="spec-card ea">
+      <div class="spec-card loc-mh">
         <div class="spec-img"><img src="images/E_Poten.jpg" alt="Potentiostat"></div>
         <div class="spec-body">
           <div class="spec-title">Battery Cycler(Biologic)-8Ch</div>
@@ -425,7 +441,7 @@
       </div>
 
       <!-- Potentiostat -->
-      <div class="spec-card ea">
+      <div class="spec-card loc-mh">
         <div class="spec-img"><img src="images/E_C4008.png" alt="Potentiostat"></div>
         <div class="spec-body">
           <div class="spec-title">Battery Cycler(NEWARE)-40Ch</div>
@@ -444,7 +460,7 @@
       </div>
 
       <!-- Constant Temperature Chamber -->
-      <div class="spec-card ea">
+      <div class="spec-card loc-mh">
         <div class="spec-img"><img src="images/E_Chamber.jpg" alt="Constant Temperature Chamber"></div>
         <div class="spec-body">
           <div class="spec-title">Constant Temperature Chamber</div>
@@ -458,47 +474,31 @@
         </div>
       </div>
 
-      <!-- DC Power Supply -->
-      <div class="spec-card ea">
-        <div class="spec-img"><img src="images/E_Power.jpg" alt="DC Power Supply"></div>
+      <!-- Ion Cluster Cabinet -->
+      <div class="spec-card loc-mh">
+        <div class="spec-img"><img src="images/E_Ion.jpg" alt="Ion Cluster Cabinet"></div>
         <div class="spec-body">
-          <div class="spec-title">DC Power Supply</div>
-          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
-          <div class="spec-model">DP30-03TP (3-Channel)</div>
+          <div class="spec-title">Ion Cluster Cabinet</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Mobility Hall</div>
+          <div class="spec-model">ST-Ion 1001 F</div>
           <div class="spec-divider"></div>
           <ul class="spec-list-inner">
-            <li><b>Voltage:</b> 0–30 V (Resolution: 100 mV)</li>
-            <li><b>Current:</b> 0–3 A (1ch &amp; 2ch, Resolution: 10 mA)</li>
-            <li><b>Power:</b> Max Output 180 W | Input: 115/230 V ±10%, 50/60 Hz</li>
-            <li><b>Line Fluctuation:</b> ±0.02% + 2 mV / 2 mA (for ±10% source voltage change)</li>
-            <li><b>Load Fluctuation:</b> ±0.02% + 5 mV / 5 mA (for 0–100% load variation)</li>
+            <li><b>External Dimensions:</b> W800 × D550 × H1980 mm</li>
+            <li><b>Structure:</b> Steel plate with epoxy powder coating / Stainless handle</li>
+            <li><b>Door:</b> Polycarbonate window (5T), airtight sealing</li>
+            <li><b>Fan System:</b> AC sirocco fan — low noise &amp; vibration minimized</li>
+            <li><b>Ion Cluster:</b> High-voltage generator for oxidizing/removing harmful gases</li>
+            <li><b>Filter:</b> Carbon composite filter for chemical adsorption and deodorization</li>
           </ul>
         </div>
       </div>
 
-      <!-- Battery Jig -->
-      <div class="spec-card ea">
-        <div class="spec-img"><img src="images/E_jig.png" alt="Battery Jig"></div>
-        <div class="spec-body">
-          <div class="spec-title">Battery Jig</div>
-          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
-          <div class="spec-model">For Cylindrical Cell</div>
-          <div class="spec-divider"></div>
-          <ul class="spec-list-inner">
-            <li><b>Temperature Range:</b> −40 ℃ to 100 ℃</li>
-            <li><b>Max Current:</b> ≥ 30 A per channel</li>
-            <li><b>Material:</b> Bakelite (black) | <b>Config:</b> 1 channel / 1 set</li>
-            <li><b>Cell Compatibility:</b> 18650, 21700, 4680 cells</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- ══════════ PANEL 2 · SAFETY CONTROL ══════════ -->
-      </div><!-- /panel ea -->
-      <div class="spec-panel" data-cat="sc">
+      <!-- ══════════ PANEL 2 · TRUTH HALL ══════════ -->
+      </div><!-- /panel mh -->
+      <div class="spec-panel" data-cat="th">
 
       <!-- Glove Box -->
-      <div class="spec-card sc">
+      <div class="spec-card loc-th">
         <div class="spec-img"><img src="images/E_Glove.jpg" alt="Glove Box"></div>
         <div class="spec-body">
           <div class="spec-title">Glove Box</div>
@@ -514,44 +514,8 @@
         </div>
       </div>
 
-      <!-- Ion Cluster Cabinet -->
-      <div class="spec-card sc">
-        <div class="spec-img"><img src="images/E_Ion.jpg" alt="Ion Cluster Cabinet"></div>
-        <div class="spec-body">
-          <div class="spec-title">Ion Cluster Cabinet</div>
-          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Truth Hall</div>
-          <div class="spec-model">ST-Ion 1001 F</div>
-          <div class="spec-divider"></div>
-          <ul class="spec-list-inner">
-            <li><b>External Dimensions:</b> W800 × D550 × H1980 mm</li>
-            <li><b>Structure:</b> Steel plate with epoxy powder coating / Stainless handle</li>
-            <li><b>Door:</b> Polycarbonate window (5T), airtight sealing</li>
-            <li><b>Fan System:</b> AC sirocco fan — low noise &amp; vibration minimized</li>
-            <li><b>Ion Cluster:</b> High-voltage generator for oxidizing/removing harmful gases</li>
-            <li><b>Filter:</b> Carbon composite filter for chemical adsorption and deodorization</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Fume Hood -->
-      <div class="spec-card sc">
-        <div class="spec-img"><img src="images/E_Hood.png" alt="Fume Hood"></div>
-        <div class="spec-body">
-          <div class="spec-title">Fume Hood</div>
-          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
-          <div class="spec-model">CAFU-02-10</div>
-          <div class="spec-divider"></div>
-          <ul class="spec-list-inner">
-            <li><b>Type:</b> Arm hood type</li>
-            <li><b>Dimensions:</b> 390 × 390 × 710 mm (Ø 80 × 1300)</li>
-            <li><b>Air Speed &amp; Volume:</b> 9–13 m/s, 600 CMH</li>
-            <li><b>Noise Level:</b> ≤ 55 dB | <b>Power:</b> 220 V, 120 W | <b>Weight:</b> 36 kg</li>
-          </ul>
-        </div>
-      </div>
-
       <!-- Vacuum Desiccator -->
-      <div class="spec-card sc">
+      <div class="spec-card loc-th">
         <div class="spec-img"><img src="images/E_decci.png" alt="Vacuum Desiccator"></div>
         <div class="spec-body">
           <div class="spec-title">Vacuum Desiccator</div>
@@ -569,11 +533,11 @@
       </div>
 
       <!-- Gast Pump -->
-      <div class="spec-card sc">
+      <div class="spec-card loc-th">
         <div class="spec-img"><img src="images/E_Pump.png" alt="Gast Pump"></div>
         <div class="spec-body">
           <div class="spec-title">Gast Pump</div>
-          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Truth Hall</div>
           <div class="spec-model">DOA-P704-AC</div>
           <div class="spec-divider"></div>
           <ul class="spec-list-inner">
@@ -585,12 +549,80 @@
         </div>
       </div>
 
-      <!-- ══════════ PANEL 3 · SOFTWARE & HARDWARE TESTING ══════════ -->
-      </div><!-- /panel sc -->
-      <div class="spec-panel" data-cat="sw">
+      <!-- ══════════ PANEL 3 · BSL SPECIALIZED LABORATORY ══════════ -->
+      </div><!-- /panel th -->
+      <div class="spec-panel" data-cat="bsl">
+
+      <!-- Data Logger -->
+      <div class="spec-card loc-bsl">
+        <div class="spec-img"><img src="images/E_Datalogger.jpg" alt="Data Logger"></div>
+        <div class="spec-body">
+          <div class="spec-title">Data Logger</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
+          <div class="spec-model">GL840</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Functions:</b> Trigger / Alarm / Pulse input / Calculation / Search / Backup / Check-sum / Scaling</li>
+            <li><b>Power Supply:</b> AC 100–240 V / DC 8.5–24 V / Dual 7.2 V 2900 mAh Battery Packs</li>
+            <li><b>Measurement Range:</b> Voltage (20 mV–100 V), Thermocouple &amp; RTD (100–2000 °C), Humidity (0–100 % RH)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- DC Power Supply -->
+      <div class="spec-card loc-bsl">
+        <div class="spec-img"><img src="images/E_Power.jpg" alt="DC Power Supply"></div>
+        <div class="spec-body">
+          <div class="spec-title">DC Power Supply</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
+          <div class="spec-model">DP30-03TP (3-Channel)</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Voltage:</b> 0–30 V (Resolution: 100 mV)</li>
+            <li><b>Current:</b> 0–3 A (1ch &amp; 2ch, Resolution: 10 mA)</li>
+            <li><b>Power:</b> Max Output 180 W | Input: 115/230 V ±10%, 50/60 Hz</li>
+            <li><b>Line Fluctuation:</b> ±0.02% + 2 mV / 2 mA (for ±10% source voltage change)</li>
+            <li><b>Load Fluctuation:</b> ±0.02% + 5 mV / 5 mA (for 0–100% load variation)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Battery Jig -->
+      <div class="spec-card loc-bsl">
+        <div class="spec-img"><img src="images/E_jig.png" alt="Battery Jig"></div>
+        <div class="spec-body">
+          <div class="spec-title">Battery Jig</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
+          <div class="spec-model">For Cylindrical Cell</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Temperature Range:</b> −40 ℃ to 100 ℃</li>
+            <li><b>Max Current:</b> ≥ 30 A per channel</li>
+            <li><b>Material:</b> Bakelite (black) | <b>Config:</b> 1 channel / 1 set</li>
+            <li><b>Cell Compatibility:</b> 18650, 21700, 4680 cells</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Fume Hood -->
+      <div class="spec-card loc-bsl">
+        <div class="spec-img"><img src="images/E_Hood.png" alt="Fume Hood"></div>
+        <div class="spec-body">
+          <div class="spec-title">Fume Hood</div>
+          <div class="spec-meta"><i class="fa fa-map-marker-alt" style="font-size:10px"></i> Specialized Laboratory</div>
+          <div class="spec-model">CAFU-02-10</div>
+          <div class="spec-divider"></div>
+          <ul class="spec-list-inner">
+            <li><b>Type:</b> Arm hood type</li>
+            <li><b>Dimensions:</b> 390 × 390 × 710 mm (Ø 80 × 1300)</li>
+            <li><b>Air Speed &amp; Volume:</b> 9–13 m/s, 600 CMH</li>
+            <li><b>Noise Level:</b> ≤ 55 dB | <b>Power:</b> 220 V, 120 W | <b>Weight:</b> 36 kg</li>
+          </ul>
+        </div>
+      </div>
 
       <!-- Computing Server 1 -->
-      <div class="spec-card sw">
+      <div class="spec-card loc-bsl">
         <div class="spec-img"><img src="images/E_Server.jpg" alt="Computing Server"></div>
         <div class="spec-body">
           <div class="spec-title">Computing Server</div>
@@ -607,7 +639,7 @@
       </div>
 
       <!-- Computing Server 2 -->
-      <div class="spec-card sw">
+      <div class="spec-card loc-bsl">
         <div class="spec-img"><img src="images/E_Server2.png" alt="Computing Server 2"></div>
         <div class="spec-body">
           <div class="spec-title">Computing Server</div>
@@ -625,7 +657,7 @@
       </div>
 
       <!-- Computing Server 2 -->
-      <div class="spec-card sw">
+      <div class="spec-card loc-bsl">
         <div class="spec-img"><img src="images/E_Intel.jpg" alt="Computing Server 2"></div>
         <div class="spec-body">
           <div class="spec-title">Computing Server</div>
@@ -643,7 +675,7 @@
       </div>
 
       <!-- C2000 Launchpad (MCU Development Board) -->
-      <div class="spec-card sw">
+      <div class="spec-card loc-bsl">
         <div class="spec-img"><img src="images/E_C2000.png" alt="C2000 Launchpad"></div>
         <div class="spec-body">
           <div class="spec-title">C2000 Launchpad</div>
@@ -661,7 +693,7 @@
       </div>
 
       <!-- BQ76952EVM (EVM) -->
-      <div class="spec-card sw">
+      <div class="spec-card loc-bsl">
         <div class="spec-img"><img src="images/E_BQ.png" alt="BQ76952EVM"></div>
         <div class="spec-body">
           <div class="spec-title">Texas Instruments BQ76952EVM</div>
@@ -679,7 +711,7 @@
       </div>
 
       <!-- LM5170EVM-BIDIR (EVM) -->
-      <div class="spec-card sw">
+      <div class="spec-card loc-bsl">
         <div class="spec-img"><img src="images/E_BIDIR.png" alt="LM5170EVM-BIDIR"></div>
         <div class="spec-body">
           <div class="spec-title">Texas Instruments LM5170EVM-BIDIR</div>
@@ -696,7 +728,15 @@
         </div>
       </div>
 
-      </div><!-- /panel sw -->
+      <!-- ══════════ PANEL 4 · JEJU MOBILITY CENTER ══════════ -->
+      </div><!-- /panel bsl -->
+      <div class="spec-panel" data-cat="jeju">
+        <div class="spec-empty">
+          <i class="fa fa-box-open"></i>
+          <p>Jeju Mobility Center 배치 장비가 아직 등록되지 않았습니다.</p>
+        </div>
+      </div><!-- /panel jeju -->
+
     </div><!-- /spec-list -->
   </main>
 
